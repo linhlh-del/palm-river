@@ -1,5 +1,5 @@
 .section {
-  background: #004380;
+  background: #fff;
 }
 
 .container {
@@ -9,24 +9,48 @@
 /* HEADER */
 .header {
   display: grid;
-  grid-template-columns: 36% 1fr;
+  grid-template-columns: 1fr;
   gap: 40px;
-  align-items: center;
+  align-items: flex-start;
   margin: 1.5rem 0;
+  padding: 0 8rem;
+  width: 80%;
+}
+
+.texttitle {
+  /* width: 50%; */
+  display: grid;
+  grid-template-columns: 0.2fr 1fr;
+  gap: 0;
+  align-items: flex-start;
+  align-items: end;
 }
 
 .title {
   font-family: SVN-Mightiest;
-  font-size: 48px;
-  color: #ff5300;
-  padding-left: 200px;
+  font-size: 9rem;
+  color: #004380;
+  letter-spacing: 4px;
+  text-align: left;
+  margin: 0;
+  width: fit-content;
+}
+
+.subtitle {
+  font-family: SVN-Mightiest;
+  font-size: 2.5rem;
+  color: #004380;
+  letter-spacing: 4px;
+  text-align: left;
+  margin: 0;
+  padding-bottom: 1.5rem;
 }
 
 .desc {
-  color: #fff;
+  color: #0063a5;
   line-height: 1.6;
-  padding-right: 400px;
   text-align: left;
+  font-size: 1.5rem;
 }
 /* TAB */
 .tabs {

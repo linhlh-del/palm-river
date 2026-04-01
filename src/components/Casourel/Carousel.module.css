@@ -21,7 +21,7 @@
 
 .list {
   display: flex;
-  gap: 30px;
+  gap: 10rem;
   transition: transform 0.8s ease;
 }
 

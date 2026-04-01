@@ -25,9 +25,7 @@ export default function CSBH() {
       <div className={styles.Content_152_97}>
         {/* TITLE */}
         <div className={styles.Title_152_98}>
-          <span className={styles.ChínhSáchƯuĐãi_152_99}>
-            CHÍNH SÁCH ƯU ĐÃI
-          </span>
+          <span className={styles.title}>CHÍNH SÁCH ƯU ĐÃI</span>
         </div>
 
         {/* LIST ƯU ĐÃI */}

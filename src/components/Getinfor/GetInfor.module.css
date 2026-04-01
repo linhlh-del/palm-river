@@ -3,7 +3,8 @@
   padding: 40px 100px;
   display: flex;
   justify-content: center;
-  background: #fff;
+  /* background: #fff; */
+  background: transparent;
 }
 
 .container {
@@ -11,7 +12,7 @@
   max-width: 1400px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 2rem;
 }
 
 .title {
@@ -34,6 +35,7 @@
   flex-direction: column;
   flex: 1;
   min-width: 250px;
+  gap: 0.75rem;
 }
 
 .inputGroup label {
@@ -41,14 +43,15 @@
   font-size: 16px;
   margin-bottom: 6px;
   color: #0e2046;
+  text-align: left;
 }
 
 .inputGroup input {
   border: none;
   border-bottom: 1px solid #0063a5;
-  height: 40px;
-  font-size: 16px;
-  padding: 5px;
+  height: 2.5rem;
+  font-size: 1rem;
+  padding: 0.3125rem 0.625rem;
   outline: none;
 }
 
@@ -56,7 +59,7 @@
   background: #ff7b1a;
   border: 1px solid #0063a5;
   border-radius: 5px;
-  padding: 10px 20px;
+  padding: 0.625rem 2rem;
   font-family: Montserrat;
   font-weight: 600;
   color: #0063a5;
@@ -72,6 +75,6 @@
   text-align: center;
   font-family: Montserrat;
   font-style: italic;
-  font-size: 18px;
+  font-size: 1.25rem;
   color: #0e2046;
 }

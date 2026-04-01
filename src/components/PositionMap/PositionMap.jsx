@@ -61,17 +61,19 @@ export default function PositionMap() {
       <div className={styles.container}>
         {/* HEADER */}
         <div className={styles.header}>
-          <h2 className={styles.title}>
-            GIAO ĐIỂM <br /> KẾT NỐI
-          </h2>
-          <p className={styles.desc}>
-            Tọa lạc ngay điểm giao thoa chiến lược, kế cận hệ tiện ích thương
-            mại – giải trí – giao thương sôi động của khu đô thị quốc tế The
-            Global City, Masteri Cosmo Central giúp cư dân kết nối mọi trải
-            nghiệm nội khu chỉ trong 5 phút. Mỗi nhịp sống đều đề cao hiệu năng,
-            cân bằng trọn vẹn: sống – làm việc – thư giãn trong cùng một bán
-            kính tiện nghi.
-          </p>
+          <div className={styles.texttitle}>
+            <h2 className={styles.title}>50+</h2>
+            <p className={styles.subtitle}>TIỆN ÍCH CHUẨN QUỐC TẾ</p>
+          </div>
+          <div className={styles.desc}>
+            <p className={styles.desc}>
+              Hệ tiện ích tại Masteri Cosmo Central được quy hoạch đồng bộ trong
+              cùng một không gian sống, nơi các hoạt động vận động, thư giãn và
+              kết nối cộng đồng diễn ra liền mạch. Mỗi tiện ích được bố trí khoa
+              học, tối ưu công năng sử dụng, đáp ứng trọn vẹn nhu cầu sống, làm
+              việc và tái tạo năng lượng của cư dân đô thị hiện đại.
+            </p>
+          </div>
         </div>
 
         {/* TAB */}

@@ -3,15 +3,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 40px 0;
-  gap: 32px;
+  padding: 5rem 0;
+  gap: 2rem;
 }
 
 .title {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 2rem;
 }
 
 .gradientTitle {
@@ -25,7 +25,8 @@
 }
 
 .subTitle {
-  font-family: "SVN-Mightiest", sans-serif;
+  font-family: "SVN-Mightiest";
+  font-weight: 400;
   font-size: 60px;
   color: #004380;
 }
@@ -34,9 +35,9 @@
   max-width: 1200px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.25rem;
   font-family: "Inter", sans-serif;
-  font-size: 24px;
+  font-size: 1.5rem;
   color: #0063a5;
   line-height: 1.5;
 }
@@ -44,12 +45,12 @@
 .carousel {
   width: 100%;
   max-width: 1400px;
-  height: 100vh;
+  height: 100%;
 }
 
 .slideImage {
   width: 100%;
-  height: 600px;
+  height: 50rem;
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;

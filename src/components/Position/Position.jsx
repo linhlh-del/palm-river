@@ -1,7 +1,7 @@
 import React from "react";
 import mapImage from "../../assets/images/map.jpg";
 import "./Position.css";
-
+import GetInfor from "../Getinfor/GetInfor.jsx";
 export default function Position() {
   return (
     <section className="section-position">
@@ -16,7 +16,10 @@ export default function Position() {
           <p className="desc">
             Tọa lạc ngay điểm giao thoa chiến lược, kế cận hệ tiện ích thương
             mại – giải trí – giao thương sôi động của khu đô thị quốc tế The
-            Global City. Giúp cư dân kết nối mọi trải nghiệm chỉ trong 5 phút.
+            Global City, Masteri Cosmo Central giúp cư dân kết nối mọi trải
+            nghiệm nội khu chỉ trong 5 phút. Mỗi nhịp sống đều đề cao hiệu năng,
+            cân bằng trọn vẹn: sống – làm việc – thư giãn trong cùng một bán
+            kính tiện nghi.
           </p>
         </div>
       </div>
@@ -42,19 +45,7 @@ export default function Position() {
         <img src={mapImage} alt="map" />
       </div>
 
-      {/* FORM */}
-      <div className="vitri-form container">
-        <input type="text" placeholder="Số điện thoại*" />
-        <input type="email" placeholder="Email (không bắt buộc)" />
-        <input type="text" placeholder="Họ và tên*" />
-        <button className="btn">NHẬN THÔNG TIN</button>
-        <p className="hotline">Hotline phòng kinh doanh: 087 719 1940</p>
-
-        <p className="note">
-          Để hiểu rõ hơn dự án, vui lòng đăng ký hoặc liên hệ hotline để tham
-          quan.
-        </p>
-      </div>
+      <GetInfor style={{ backgroundColor: "#f8f2eb" }} />
     </section>
   );
 }

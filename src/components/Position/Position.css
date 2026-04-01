@@ -11,20 +11,22 @@
 
 .vitri-header .container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
+  grid-template-columns: 0.6fr 1fr;
+  gap: 2.5rem;
   align-items: center;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 76%;
   margin: auto;
   padding: 0 20px;
 }
 
 .title {
-  font-size: 60px;
+  font-size: 3.75rem;
   font-family: SVN-Mightiest;
+  padding-left: 10rem;
+  text-align: left;
 }
 
 .title span {
@@ -32,18 +34,22 @@
   background: linear-gradient(187deg, #ff5300, #ff994c);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  width: fit-content;
+  text-align: left;
 }
 
 .desc {
   line-height: 1.5;
+  text-align: left;
+  font-size: 1.2rem;
 }
 
 /* CARD */
 .vitri-cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  margin: 40px auto;
+  gap: 1.5rem;
+  margin: 3.75rem auto;
 }
 
 .card {
@@ -52,7 +58,6 @@
   padding: 15px;
   align-items: center;
   font-family: SVN-Mightiest;
-
 }
 
 .left {
@@ -68,7 +73,7 @@
 .minutes {
   font-size: 14px;
 }
-.right{
+.right {
   text-align: left;
 }
 .right p {

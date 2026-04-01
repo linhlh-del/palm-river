@@ -18,42 +18,45 @@
 
 .mainTitle {
   font-family: SVN-Mightiest;
-  font-size: 64px;
-  margin-bottom: 20px;
+  font-size: 3.75rem;
+  margin-bottom: 1.25rem;
 }
 
 .subTitle {
-  font-size: 28px;
+  font-size: 1.75rem;
   font-weight: 700;
-  margin-bottom: 30px;
+  margin-bottom: 1.875rem;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 20px;
+  gap:2.5rem;
 }
 
 .card {
+  display: flex;
+  flex-direction: column;
   border: 1px solid #fff;
-  padding: 12px;
+  padding: 0.5rem;
+  height: 8rem;
 }
 
 .cardTitle {
-  font-size: 14px;
+  padding-top: 0.5rem;
+  font-size: 1.25rem;
   display: block;
 }
 
 .cardPrice {
   font-family: SVN-Mightiest;
-  font-size: 32px;
+  font-size: 3.75rem;
 }
 
 /* SLIDER */
 .slider {
   width: 100%;
   flex: 1;
-  height: 400px;
   overflow: hidden;
   border-radius: 10px;
 }
