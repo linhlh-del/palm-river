@@ -2,7 +2,7 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules"; // <-- import đúng
 import "swiper/css";
-import styles from "./MatBangTang.module.css";
+import "./MatBangTang.css";
 
 export default function MatBangTang() {
   return (
