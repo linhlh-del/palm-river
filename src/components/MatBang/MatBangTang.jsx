@@ -6,7 +6,7 @@ import styles from "./MatBangTang.module.css";
 
 export default function MatBangTang() {
   return (
-    <div className={styles.container}>
+    <div className={styles.container} id="mat-bang-tang">
       <div className={styles.title}>
         <h2 className={styles.gradientTitle}>MẶT BẰNG TẦNG</h2>
         <h3 className={styles.subTitle}>CĂN HỘ ĐIỂN HÌNH</h3>

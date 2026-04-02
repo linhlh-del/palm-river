@@ -197,7 +197,7 @@ export default function CanHo({ onOpenModal }) {
   }, [isZoomOpen]);
 
   return (
-    <section className={styles.section}>
+    <section className={styles.section} id="can-ho">
       <div className={styles.container}>
         {/* ── Title ── */}
         <div className={styles.header}>

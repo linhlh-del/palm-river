@@ -232,7 +232,7 @@
   }
 
   .desc {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     line-height: 1.6;
     letter-spacing: 1px;
     text-align: left;
@@ -240,12 +240,12 @@
 
   .vitri-cards {
     grid-template-columns: repeat(2, 1fr);
-    margin: 1.5rem auto;
+    margin: 0.5rem auto;
     gap: 0.65rem;
   }
 
   .card {
-    padding: 0.5rem;
+    padding: 0.2rem 0.5rem;
   }
 
   .left {

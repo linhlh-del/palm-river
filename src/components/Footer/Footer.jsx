@@ -3,7 +3,7 @@ import styles from "./Footer.module.css";
 
 export default function Footer() {
   return (
-    <div className={styles.footer}>
+    <div className={styles.footer} id="lien-he">
       <div className={styles.container}>
         {/* LEFT */}
         <div className={styles.left}>

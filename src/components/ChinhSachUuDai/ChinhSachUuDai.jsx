@@ -32,7 +32,7 @@ export default function Chinhsachuudai() {
   ];
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} id="ban-hang">
       <div className={styles.container}>
         {/* LEFT CONTENT */}
         <div className={styles.content}>

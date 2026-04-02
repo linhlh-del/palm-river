@@ -177,11 +177,6 @@
   min-width: 6rem;
 }
 
-.tab:hover {
-  background: rgba(255, 255, 255, 0.5);
-  color: #004380;
-}
-
 .active {
   background: #004380;
   color: #fff;
@@ -189,7 +184,7 @@
 
 /* ── IMAGE WRAPPER ── */
 .imageWrapper {
-  position: relative;
+  position: relative; /* ← containing block cho arrow absolute */
   flex: 1;
   height: 100%;
   overflow: hidden;
@@ -218,7 +213,7 @@
   transition: opacity 0.18s ease-out;
 }
 
-/* ── ARROWS ── */
+/* ── ARROWS — absolute, 2 bên ảnh ── */
 .arrow {
   position: absolute;
   top: 50%;
@@ -242,16 +237,18 @@
 .arrow:hover {
   background: rgba(255, 255, 255, 0.95);
 }
+
 .arrow img {
   width: 1.5rem;
   height: 1.5rem;
   object-fit: contain;
 }
+
 .arrowLeft {
-  left: 1.5rem;
+  left: 1rem;
 }
 .arrowRight {
-  right: 1.5rem;
+  right: 1rem;
 }
 
 /* ── DOTS ── */
@@ -334,7 +331,6 @@
   .header p {
     font-size: 1rem;
   }
-
   .aptInfo {
     width: 40%;
     padding: 1.5rem 1.25rem;
@@ -345,15 +341,8 @@
   .specCardValue {
     font-size: 0.9rem;
   }
-
   .imageWrapper {
     min-height: 22rem;
-  }
-  .arrowLeft {
-    left: 1rem;
-  }
-  .arrowRight {
-    right: 1rem;
   }
 }
 
@@ -373,33 +362,30 @@
   .header p {
     font-size: 0.875rem;
   }
-
   .carouselWrapper {
     flex-direction: column;
   }
-
   .aptInfo {
     width: 100%;
     padding: 1.25rem 1rem;
   }
-
   .imageWrapper {
     min-height: 15rem;
   }
 
-  .arrowLeft {
-    left: 1rem;
-    width: 2.5rem;
-    height: 2.5rem;
-  }
-  .arrowRight {
-    right: 1rem;
+  .arrow {
     width: 2.5rem;
     height: 2.5rem;
   }
   .arrow img {
     width: 1.25rem;
     height: 1.25rem;
+  }
+  .arrowLeft {
+    left: 0.75rem;
+  }
+  .arrowRight {
+    right: 0.75rem;
   }
 
   .tab {
@@ -430,7 +416,6 @@
   .header p {
     font-size: 0.75rem;
   }
-
   .aptInfo {
     padding: 1rem 0.75rem;
   }
@@ -451,18 +436,11 @@
   .specCardValue {
     font-size: 0.85rem;
   }
-
   .imageWrapper {
     min-height: 14rem;
   }
 
-  .arrowLeft {
-    left: 0.5rem;
-    width: 2rem;
-    height: 2rem;
-  }
-  .arrowRight {
-    right: 0.5rem;
+  .arrow {
     width: 2rem;
     height: 2rem;
   }
@@ -470,10 +448,15 @@
     width: 1rem;
     height: 1rem;
   }
+  .arrowLeft {
+    left: 0.5rem;
+  }
+  .arrowRight {
+    right: 0.5rem;
+  }
 
   .tab {
-    /* flex: 0 1 calc(50% - 0.25rem); */
-    padding: 0.375rem 0.75rem;
+    padding: 1rem !important;
     font-size: 0.75rem;
   }
 

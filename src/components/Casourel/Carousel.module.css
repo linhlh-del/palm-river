@@ -11,8 +11,9 @@
 .title {
   font-size: 60px;
   color: #004380;
-  margin-bottom: 40px;
+  margin-bottom: 6rem;
   font-family: "SVN-Mightiest";
+  font-weight: 400;
 }
 
 /* Carousel */
@@ -35,7 +36,7 @@
 
 /* Card */
 .card {
-  min-width: 60%;
+  min-width: 80%;
   aspect-ratio: 16 / 9;
   background-size: cover;
   background-position: center;
@@ -57,14 +58,81 @@
   font-size: 24px;
   font-weight: 600;
   color: #004380;
+  margin: 0;
 }
 
-/* Dot */
+/* ════════════════════════════════════════
+   CONTROLS ROW  –  [ ← ]  01/09  [ → ]
+════════════════════════════════════════ */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* Arrow button – transparent, no bg */
+.controls .arrowBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.controls .arrowBtn:hover {
+  opacity: 0.65;
+  transform: scale(1.1);
+}
+
+.controls .arrowBtn:active {
+  transform: scale(0.95);
+}
+
+.controls.arrowImg {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Counter */
 .dot {
-  margin-top: 20px;
-  font-size: 24px;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-family: "SVN-Mightiest", sans-serif;
+  font-weight: 400;
   color: #004380;
-  font-weight: 600;
+  line-height: 1;
+  min-width: 90px;
+  justify-content: center;
+}
+
+.dotCurrent {
+  font-size: 36px;
+  color: #004380;
+}
+
+.dotSep {
+  font-size: 20px;
+  color: #004380;
+  opacity: 0.5;
+  margin: 0 2px;
+}
+
+.dotTotal {
+  font-size: 20px;
+  color: #004380;
+  opacity: 0.5;
 }
 
 /* RESPONSIVE */
@@ -72,31 +140,33 @@
   .wrapper {
     padding: 60px 0;
   }
-
   .title {
     font-size: 48px;
     margin-bottom: 30px;
   }
-
   .list {
     gap: 8rem;
   }
-
   .card {
-    min-width: 70%;
+    min-width: 80%;
     aspect-ratio: 16 / 9;
   }
-
   .overlay {
     padding: 15px;
   }
-
   .overlay p {
     font-size: 20px;
   }
-
-  .dot {
-    font-size: 20px;
+  .dotCurrent {
+    font-size: 30px;
+  }
+  .dotSep,
+  .dotTotal {
+    font-size: 18px;
+  }
+  .arrowImg {
+    width: 28px;
+    height: 28px;
   }
 }
 
@@ -104,31 +174,37 @@
   .wrapper {
     padding: 40px 0;
   }
-
   .title {
     font-size: 36px;
     margin-bottom: 20px;
   }
-
   .list {
-    gap: 5rem;
+    gap: 2rem;
   }
-
   .card {
-    min-width: 85%;
+    min-width: 80%;
     aspect-ratio: 16 / 9;
   }
-
   .overlay {
     padding: 12px;
   }
-
   .overlay p {
     font-size: 16px;
   }
-
-  .dot {
+  .controls {
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .dotCurrent {
+    font-size: 26px;
+  }
+  .dotSep,
+  .dotTotal {
     font-size: 16px;
+  }
+  .arrowImg {
+    width: 24px;
+    height: 24px;
   }
 }
 
@@ -136,31 +212,36 @@
   .wrapper {
     padding: 30px 0;
   }
-
   .title {
     font-size: 1.75rem;
     margin-bottom: 1.5rem;
-    font-weight: 400;
   }
-
   .list {
-    gap: 3rem;
+    gap: 1rem !important;
   }
-
   .card {
-    min-width: 100%;
-    min-height: 300px;
+    min-width: 80% !important;
+    aspect-ratio: 16 / 9;
   }
-
   .overlay {
     padding: 10px;
   }
-
   .overlay p {
     font-size: 14px;
   }
-
-  .dot {
+  .controls {
+    gap: 1.25rem;
+    margin-top: 1.25rem;
+  }
+  .dotCurrent {
+    font-size: 22px;
+  }
+  .dotSep,
+  .dotTotal {
     font-size: 14px;
+  }
+  .arrowImg {
+    width: 20px;
+    height: 20px;
   }
 }

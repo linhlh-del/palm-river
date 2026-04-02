@@ -91,8 +91,8 @@
 }
 
 /* TITLE & DESCRIPTION */
-h2 {
-  font-size: clamp(1.5rem, 4vw, 1.75rem);
+.container h2 {
+  font-size: clamp(1.5rem, 4vw, 1.75rem) !important;
   font-weight: 600;
   margin: 0;
   line-height: 1.3;

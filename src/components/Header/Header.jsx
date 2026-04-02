@@ -7,10 +7,10 @@ import "./Header.css";
 
 const NAV_ITEMS = [
   { label: "TỔNG QUAN", href: "#tong-quan" },
-  { label: "VỊ TRÍ", href: "#vi-tri" },
+  { label: "VỊ TRÍ", href: "#map" },
   { label: "TIỆN ÍCH", href: "#tien-ich" },
-  { label: "MẶT BẰNG", href: "#mat-bang" },
-  { label: "CHÍNH SÁCH", href: "#chinh-sach" },
+  { label: "MẶT BẰNG", href: "#mat-bang-tang" },
+  { label: "CHÍNH SÁCH", href: "#ban-hang" },
   { label: "LIÊN HỆ", href: "#lien-he" },
 ];
 

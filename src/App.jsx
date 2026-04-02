@@ -4,7 +4,6 @@ import "./App.css";
 import Hero from "./components/Hero/Hero.jsx";
 import TongQuan from "./components/TongQuan/TongQuan.jsx";
 import Position from "./components/Position/Position.jsx";
-import TienIch from "./components/TienIch/TienIch.jsx";
 import Carousel from "./components/Casourel/Carousel.jsx";
 import MatbangTang from "./components/MatBang/MatBangTang.jsx";
 import GetInfor from "./components/Getinfor/GetInfor.jsx";
@@ -15,6 +14,7 @@ import Footer from "./components/Footer/Footer.jsx";
 import PositionMap from "./components/PositionMap/PositionMap.jsx";
 import FloatingButtons from "./components/FloatingButtons/FloatingButtons.jsx";
 import PopUp from "./components/PopUp/PopUp.jsx";
+import ScrollDownButton from "./components/ScrollDown/Scrolldownbutton.jsx";
 function App() {
   const [showModal, setShowModal] = useState(false);
   const tongQuanRef = useRef(null);
@@ -59,6 +59,7 @@ function App() {
       <CSBH />
       <Footer />
       <PopUp isOpen={showModal} onClose={closeModal} />
+      <ScrollDownButton />
     </>
   );
 }

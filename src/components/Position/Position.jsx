@@ -4,7 +4,7 @@ import "./Position.css";
 import GetInfor from "../Getinfor/GetInfor.jsx";
 export default function Position() {
   return (
-    <section className="section-position">
+    <section className="section-position" id="map">
       {/* HEADER */}
       <div className="vitri-header">
         <div className="container">

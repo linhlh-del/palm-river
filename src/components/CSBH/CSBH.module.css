@@ -100,11 +100,6 @@
   font-style: italic;
 }
 
-/* Card 1 — highlight viền trái xanh nhạt */
-.Card_152_102 {
-  border-left: 3px solid #5b9bd5;
-}
-
 /* ════════════════════════════════════════
    FORM
 ════════════════════════════════════════ */
@@ -195,6 +190,7 @@
   margin-top: 1.25rem;
   display: flex;
   justify-content: center;
+  text-align: center;
 }
 
 .Btn_152_170 {
@@ -368,7 +364,6 @@
 
   .Btn_152_170 {
     padding: 0.75rem 1.5rem;
-    max-width: 20rem;
   }
 
   .NhậnThôngTin_152_142 {
@@ -419,7 +414,6 @@
   }
 
   .Card_152_102 {
-    border-left: 3px solid #5b9bd5;
     border-bottom: 1px solid rgba(255, 255, 255, 0.35);
   }
 
@@ -471,7 +465,6 @@
 
   .Btn_152_170 {
     padding: 0.65rem 1.25rem;
-    max-width: 18rem;
   }
 
   .NhậnThôngTin_152_142 {

@@ -9,18 +9,6 @@ body {
   line-height: var(--leading-relaxed);
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-primary);
-  font-weight: var(--font-black);
-  color: var(--color-text-dark);
-  line-height: var(--leading-tight);
-}
-
 /* Container dùng chung */
 .container {
   width: 100%;
