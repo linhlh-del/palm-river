@@ -34,7 +34,11 @@ export default function Position() {
             </div>
 
             <div className="right">
-              <p>{item.title}</p>
+              {Array.isArray(item.title) ? (
+                item.title.map((line, i) => <p key={i}>{line}</p>)
+              ) : (
+                <p>{item.title}</p>
+              )}
             </div>
           </div>
         ))}

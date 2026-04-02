@@ -29,3 +29,55 @@
   font-weight: 700;
   font-family: Inter, sans-serif;
 }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .tien-ich-container {
+    height: 500px;
+    transform: scale(0.75);
+    transform-origin: top center;
+  }
+
+  .map-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .map-icon-number {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 768px) {
+  .tien-ich-container {
+    height: 400px;
+    transform: scale(0.65);
+    transform-origin: top center;
+  }
+
+  .map-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .map-icon-number {
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .tien-ich-container {
+    height: 300px;
+    transform: scale(0.5);
+    transform-origin: top center;
+  }
+
+  .map-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .map-icon-number {
+    font-size: 7px;
+  }
+}

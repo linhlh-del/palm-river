@@ -20,6 +20,7 @@
   font-family: SVN-Mightiest;
   font-size: 3.75rem;
   margin-bottom: 1.25rem;
+  text-align: center;
 }
 
 .subTitle {
@@ -31,7 +32,7 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap:2.5rem;
+  gap: 2.5rem;
 }
 
 .card {
@@ -65,4 +66,129 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .wrapper {
+    padding: 50px 60px;
+  }
+
+  .container {
+    gap: 30px;
+  }
+
+  .mainTitle {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .subTitle {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .card {
+    height: 7rem;
+  }
+
+  .cardTitle {
+    font-size: 1.1rem;
+  }
+
+  .cardPrice {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 40px 30px;
+  }
+
+  .container {
+    gap: 25px;
+  }
+
+  .mainTitle {
+    font-size: 2.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .subTitle {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .card {
+    height: 6rem;
+    padding: 0.4rem;
+  }
+
+  .cardTitle {
+    font-size: 1rem;
+    padding-top: 0.4rem;
+  }
+
+  .cardPrice {
+    font-size: 2.5rem;
+  }
+
+  .slider {
+    height: 300px;
+  }
+}
+
+@media (max-width: 600px) {
+  .wrapper {
+    padding: 30px 20px;
+  }
+
+  .container {
+    gap: 20px;
+  }
+
+  .mainTitle {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .subTitle {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .card {
+    height: 5.5rem;
+    padding: 0.3rem;
+    border: 0.5px solid #fff;
+  }
+
+  .cardTitle {
+    font-size: 0.85rem;
+    padding-top: 0.3rem;
+  }
+
+  .cardPrice {
+    font-size: 2rem;
+  }
+
+  .slider {
+    height: 250px;
+  }
 }

@@ -10,7 +10,7 @@ export default function PositionMap() {
   const amenities = [
     {
       id: 1,
-      name: ["Khu phố thương mại SOHO", "Kênh đào nhạc nước"],
+      name: ["Khu phố thương mại SOHO"],
       type: "ngoai-khu",
       position: { top: "55%", left: "60%" },
     },
@@ -28,13 +28,13 @@ export default function PositionMap() {
     },
     {
       id: 4,
-      name: ["Bến Thành", "Nguyễn Huệ"],
+      name: ["Bến Thành"],
       type: "ngoai-khu",
       position: { top: "40%", left: "55%" },
     },
     {
       id: 5,
-      name: ["Sân bay TSN", "Long Thành"],
+      name: ["Sân bay TSN"],
       type: "ngoai-khu",
       position: { top: "35%", left: "50%" },
     },

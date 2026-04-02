@@ -25,9 +25,9 @@
 }
 
 .desc {
-  font-family: Inter;
-  font-size: 14px;
-  line-height: 24px;
+  font-family: "montserrat", sans-serif;
+  font-size: 1rem;
+  line-height: 1.5rem;
 }
 
 /* CENTER + RIGHT */
@@ -68,4 +68,172 @@
   width: 100px;
   height: 40px;
   background: url("/images/logo/logo-oneplus.png") center / contain no-repeat;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .footer {
+    padding: 60px 60px 15px;
+  }
+
+  .container {
+    gap: 30px;
+  }
+
+  .left {
+    max-width: 350px;
+  }
+
+  .logo {
+    width: 160px;
+    height: 80px;
+    margin-bottom: 15px;
+  }
+
+  .desc {
+    font-size: 13px;
+    line-height: 22px;
+  }
+
+  .center h3,
+  .right h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  .center span,
+  .right span {
+    font-size: 13px;
+  }
+
+  .copyright {
+    margin-top: 30px;
+    padding-top: 15px;
+  }
+
+  .logoSmall {
+    width: 80px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 40px 30px 12px;
+  }
+
+  .container {
+    gap: 25px;
+    justify-content: flex-start;
+  }
+
+  .left {
+    max-width: 100%;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .logo {
+    width: 140px;
+    height: 70px;
+    margin: 0 auto 12px auto;
+  }
+
+  .desc {
+    font-size: 0.875rem;
+    line-height: 20px;
+    text-align: center;
+  }
+
+  .center h3,
+  .right h3 {
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+
+  .center,
+  .right {
+    gap: 10px;
+  }
+
+  .center span,
+  .right span {
+    font-size: 12px;
+  }
+
+  .copyright {
+    margin-top: 25px;
+    padding-top: 12px;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .logoSmall {
+    width: 70px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 600px) {
+  .footer {
+    padding: 30px 20px 10px;
+  }
+
+  .container {
+    gap: 20px;
+    flex-direction: column;
+  }
+
+  .left {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .logo {
+    width: 120px;
+    height: 60px;
+    margin: 0 auto 10px auto;
+  }
+
+  .desc {
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    text-align: left;
+  }
+
+  .center h3,
+  .right h3 {
+    font-size: 0.875rem;
+    margin-bottom: 5px;
+  }
+
+  .center,
+  .right {
+    gap: 8px;
+  }
+
+  .center span,
+  .right span {
+    font-size: 11px;
+  }
+
+  .copyright {
+    margin-top: 20px;
+    padding-top: 10px;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .copyright span {
+    font-size: 10px;
+  }
+
+  .logoSmall {
+    width: 60px;
+    height: 24px;
+  }
 }

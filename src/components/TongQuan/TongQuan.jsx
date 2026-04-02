@@ -1,4 +1,5 @@
 // MainContent.jsx
+import React from "react";
 import "./TongQuan.css";
 
 import imgBg from "../../assets/images/main-content-bg.png";
@@ -34,9 +35,9 @@ const INFO_ROWS = [
   },
 ];
 
-export default function TongQuan() {
+const TongQuan = React.forwardRef((props, ref) => {
   return (
-    <section className="mc">
+    <section className="mc" id="tong-quan" ref={ref}>
       <div className="mc__body">
         {/* ── Text block ── */}
         <div className="mc__text">
@@ -114,4 +115,7 @@ export default function TongQuan() {
       />
     </section>
   );
-}
+});
+
+TongQuan.displayName = "TongQuan";
+export default TongQuan;

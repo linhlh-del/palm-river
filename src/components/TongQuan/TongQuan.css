@@ -183,6 +183,9 @@
     grid-template-columns: 12px 1fr;
     padding: 14px 0;
   }
+  .mc__bg {
+    min-height: 15.625rem;
+  }
 
   .mc__row-left {
     display: none;
