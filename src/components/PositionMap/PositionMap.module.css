@@ -58,7 +58,6 @@
   max-width: 100%;
   font-family: "Reddit Sans", Helvetica, sans-serif;
   color: #004380;
-  opacity: 0.8;
   text-align: justify;
 }
 
@@ -139,22 +138,22 @@
 
 @keyframes markerRing1 {
   0% {
-    transform: translate(-50%, -50%) scale(1);
+    transform: scale(1);
     opacity: 0.6;
   }
   100% {
-    transform: translate(-50%, -50%) scale(2.4);
+    transform: scale(2.4);
     opacity: 0;
   }
 }
 
 @keyframes markerRing2 {
   0% {
-    transform: translate(-50%, -50%) scale(1);
+    transform: scale(1);
     opacity: 0.35;
   }
   100% {
-    transform: translate(-50%, -50%) scale(3);
+    transform: scale(3);
     opacity: 0;
   }
 }
@@ -187,12 +186,12 @@
 }
 
 .marker::before {
-  background: rgba(255, 106, 0, 0.3);
+  background: rgba(255, 106, 0, 1);
   animation: markerRing1 2s ease-out infinite;
 }
 
 .marker::after {
-  background: rgba(255, 106, 0, 0.18);
+  background: rgba(255, 106, 0, 0.3);
   animation: markerRing2 2s ease-out infinite;
   animation-delay: 0.55s;
 }
@@ -216,10 +215,10 @@
   background: #0063a5;
 }
 .markerNoiKhu::before {
-  background: rgba(0, 99, 165, 0.3);
+  background: rgba(0, 99, 165, 0.5);
 }
 .markerNoiKhu::after {
-  background: rgba(0, 99, 165, 0.18);
+  background: rgba(0, 99, 165, 0.3);
 }
 
 /* ── LIST WRAPPER ──
