@@ -268,14 +268,20 @@
 ════════════════════════════════════════ */
 
 /* Desktop lớn > 1400px: giữ nguyên */
-
+@media (max-width: 1600px) {
+  .hd__nav {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+  }
+}
 /* Large Desktop: 1200px - 1400px */
 @media (max-width: 1400px) {
   .hd {
     padding: 0 60px;
   }
   .hd__nav {
-    gap: 1rem;
+    gap: 2.5rem;
   }
   .hd__nav-link {
     font-size: 0.8rem;
@@ -294,6 +300,9 @@
   .hd__cta {
     padding: 0.5rem 1.25rem;
     font-size: 0.875rem;
+  }
+  .hd__nav {
+    gap: 1.5rem;
   }
 }
 
