@@ -609,7 +609,7 @@
     font-size: 0.85rem;
   }
   .imageWrapper {
-    min-height: 14rem;
+    min-height: 16rem;
   }
   .arrow {
     width: 2rem;
@@ -639,6 +639,11 @@
   }
 }
 
+@media (max-width: 400px) {
+  .imageWrapper {
+    min-height: 15rem;
+  }
+}
 /* ════════════════════════════════════════
    ZOOM MODAL
 ════════════════════════════════════════ */

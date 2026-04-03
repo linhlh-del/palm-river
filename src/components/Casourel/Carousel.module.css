@@ -25,6 +25,24 @@
   box-sizing: border-box;
 }
 
+@media (max-width: 1024px) {
+  .carousel {
+    padding: 0 4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel {
+    padding: 0 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .carousel {
+    padding: 0 1rem;
+  }
+}
+
 .list {
   display: flex;
   gap: 3rem;
@@ -43,6 +61,7 @@
   aspect-ratio: 16 / 9;
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
   display: flex;
   align-items: flex-end;
   transition: transform 0.8s ease;
@@ -153,7 +172,8 @@
   }
   .card {
     min-width: clamp(360px, 70vw, 720px);
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 3 / 2;
+    background-size: contain;
   }
   .overlay {
     padding: 15px;
@@ -187,7 +207,8 @@
   }
   .card {
     min-width: clamp(300px, 75vw, 600px);
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 4 / 3;
+    background-size: contain;
   }
   .overlay {
     padding: 12px;
@@ -225,7 +246,8 @@
   }
   .card {
     min-width: 80vw;
-    aspect-ratio: 16 / 9;
+    background-size: contain;
+    aspect-ratio: 4 / 3;
   }
   .overlay {
     padding: 10px;
