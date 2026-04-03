@@ -159,7 +159,7 @@
 /* ════════════════════════════════════════
    RESPONSIVE
 ════════════════════════════════════════ */
-@media (max-width: 1200px) {
+/* @media (max-width: 1200px) {
   .carousel {
     padding: 0 2rem;
     overflow: visible;
@@ -181,9 +181,19 @@
   .controls {
     display: none;
   }
-}
+} */
+/* @media (max-width: 1200px) {
+  .carousel {
+    padding: 0 2rem;
+    overflow: hidden; 
+  }
+  .card {
+    min-width: clamp(340px, 70vw, 700px);
+    aspect-ratio: 16 / 9;
+  }
+} */
 
-@media (max-width: 1024px) {
+/* @media (max-width: 1024px) {
   .wrapper {
     padding: 60px 0;
   }
@@ -192,12 +202,7 @@
     margin-bottom: 30px;
   }
   .list {
-    gap: 2.5rem;
-  }
-  .card {
-    min-width: clamp(360px, 70vw, 720px);
-    aspect-ratio: 3 / 2;
-    background-size: contain;
+    gap: 1.5rem;
   }
   .overlay {
     padding: 15px;
@@ -216,6 +221,101 @@
     width: 28px;
     height: 28px;
   }
+} */
+
+/* @media (max-width: 768px) {
+  .wrapper {
+    padding: 40px 0;
+  }
+  .title {
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+  .list {
+    gap: 1rem;
+  }
+  .overlay {
+    padding: 12px;
+  }
+  .overlay p {
+    font-size: 16px;
+  }
+  .controls {
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .dotCurrent {
+    font-size: 26px;
+  }
+  .dotSep,
+  .dotTotal {
+    font-size: 16px;
+  }
+  .arrowImg {
+    width: 24px;
+    height: 24px;
+  }
+} */
+
+/* @media (max-width: 600px) {
+  .wrapper {
+    padding: 30px 0;
+  }
+  .title {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .list {
+    gap: 0.5rem;
+  }
+  .overlay {
+    padding: 10px;
+  }
+  .overlay p {
+    font-size: 14px;
+  }
+  .controls {
+    gap: 1.25rem;
+    margin-top: 1.25rem;
+  }
+  .dotCurrent {
+    font-size: 22px;
+  }
+  .dotSep,
+  .dotTotal {
+    font-size: 14px;
+  }
+  .arrowImg {
+    width: 20px;
+    height: 20px;
+  }
+} */
+
+@media (max-width: 1200px) {
+  .carousel {
+    padding: 0 2rem;
+    overflow: hidden;
+  }
+  .card {
+    min-width: clamp(340px, 70vw, 700px);
+  }
+}
+
+@media (max-width: 1024px) {
+  .wrapper {
+    padding: 60px 0;
+  }
+  .title {
+    font-size: 48px;
+    margin-bottom: 30px;
+  }
+  .card {
+    min-width: clamp(300px, 75vw, 640px);
+    aspect-ratio: 16/9;
+  }
+  .overlay p {
+    font-size: 20px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -226,16 +326,12 @@
     font-size: 36px;
     margin-bottom: 20px;
   }
-  .list {
-    gap: 1.5rem;
+  .carousel {
+    padding: 0 1.5rem;
   }
   .card {
-    min-width: clamp(300px, 75vw, 600px);
-    aspect-ratio: 4 / 3;
-    background-size: contain;
-  }
-  .overlay {
-    padding: 12px;
+    min-width: clamp(260px, 80vw, 560px);
+    aspect-ratio: 4/3;
   }
   .overlay p {
     font-size: 16px;
@@ -265,22 +361,21 @@
     font-size: 1.75rem;
     margin-bottom: 1.5rem;
   }
-  .list {
-    gap: 1rem;
+  .carousel {
+    padding: 0 1rem;
   }
   .card {
-    min-width: 80vw;
-    background-size: contain;
-    aspect-ratio: 4 / 3;
-  }
-  .overlay {
-    padding: 10px;
+    min-width: 82vw;
+    aspect-ratio: 4/3;
   }
   .overlay p {
     font-size: 14px;
   }
+  .list {
+    gap: 1.5rem;
+  }
   .controls {
-    gap: 1.25rem;
+    gap: 1rem;
     margin-top: 1.25rem;
   }
   .dotCurrent {

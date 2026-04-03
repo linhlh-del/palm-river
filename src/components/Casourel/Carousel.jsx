@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./Carousel.module.css";
-import arrowIcon from "../../assets/images/arrow-icon.png"; // đổi path nếu cần
+import arrowIcon from "../../assets/images/arrow-icon.png";
 
 const data = [
   { title: "HỆ THỐNG TRƯỜNG HỌC QUỐC TẾ", image: "/images/tienich/1.webp" },
@@ -24,83 +24,71 @@ export default function Carousel() {
   const [index, setIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [slideWidth, setSlideWidth] = useState(0);
-  const [isGridMode, setIsGridMode] = useState(false);
-  const listRef = useRef(null);
   const carouselRef = useRef(null);
+  const listRef = useRef(null);
 
-  /* ── Detect grid mode (responsive) ── */
+  /* ── Tính slideWidth ── */
+  const calcSlideWidth = () => {
+    if (!carouselRef.current) return;
+    const card = carouselRef.current.querySelector(`.${styles.card}`);
+    const list = carouselRef.current.querySelector(`.${styles.list}`);
+    if (card && list) {
+      const gap = parseFloat(window.getComputedStyle(list).gap) || 0;
+      setSlideWidth(card.offsetWidth + gap);
+    }
+  };
+
   useEffect(() => {
-    const checkGridMode = () => {
-      const gridMode = window.innerWidth <= 1200;
-      setIsGridMode(gridMode);
-      if (gridMode) {
-        setIndex(0);
-      }
+    // Đợi DOM render xong mới tính
+    const timer = setTimeout(calcSlideWidth, 100);
+    window.addEventListener("resize", calcSlideWidth);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", calcSlideWidth);
     };
-    checkGridMode();
-    window.addEventListener("resize", checkGridMode);
-    return () => window.removeEventListener("resize", checkGridMode);
   }, []);
 
-  /* ── Tính slide width (carousel mode only) ── */
+  /* ── Auto slide ── */
   useEffect(() => {
-    if (isGridMode) return;
-
-    const calc = () => {
-      if (!carouselRef.current) return;
-      const card = carouselRef.current.querySelector(`.${styles.card}`);
-      const list = carouselRef.current.querySelector(`.${styles.list}`);
-      if (card && list) {
-        const gap = parseFloat(window.getComputedStyle(list).gap) || 0;
-        setSlideWidth(card.offsetWidth + gap);
-      }
-    };
-    calc();
-    window.addEventListener("resize", calc);
-    return () => window.removeEventListener("resize", calc);
-  }, [isGridMode]);
-
-  /* ── Auto slide (carousel mode only) ── */
-  useEffect(() => {
-    if (isGridMode) return;
-
     const id = setInterval(() => setIndex((p) => p + 1), 3000);
     return () => clearInterval(id);
-  }, [isGridMode]);
+  }, []);
 
-  /* ── Wrap-around (carousel mode only) ── */
+  /* ── Wrap-around khi đến clone ── */
   useEffect(() => {
-    if (isGridMode) return;
-
     if (index === data.length) {
       const t = setTimeout(() => {
         setIsTransitioning(false);
         setIndex(0);
       }, 800);
       return () => clearTimeout(t);
-    } else if (index === 0 && !isTransitioning) {
-      setIsTransitioning(true);
     }
-  }, [index, isTransitioning, isGridMode]);
+    if (index === 0 && !isTransitioning) {
+      // Bật lại transition sau khi reset
+      const t = setTimeout(() => setIsTransitioning(true), 50);
+      return () => clearTimeout(t);
+    }
+  }, [index, isTransitioning]);
 
-  /* ── Manual nav ── */
+  /* ── Prev ── */
   const handlePrev = () => {
     setIndex((p) => {
       if (p === 0) {
+        // Nhảy tức thì (không transition) sang clone cuối, rồi lùi về data.length-1
         setIsTransitioning(false);
         setTimeout(() => {
           setIsTransitioning(true);
           setIndex(data.length - 1);
-        }, 0);
-        return 0;
+        }, 50);
+        return data.length; // clone
       }
       return p - 1;
     });
   };
 
+  /* ── Next ── */
   const handleNext = () => setIndex((p) => p + 1);
 
-  /* Số hiển thị – khi index = data.length (clone) → hiện 1 */
   const displayIndex = index >= data.length ? 1 : index + 1;
 
   return (
@@ -112,10 +100,7 @@ export default function Carousel() {
           ref={listRef}
           className={styles.list}
           style={{
-            transform:
-              !isGridMode && slideWidth > 0
-                ? `translateX(-${index * slideWidth}px)`
-                : "translateX(0)",
+            transform: `translateX(-${index * slideWidth}px)`,
             transition: isTransitioning ? "transform 0.8s ease" : "none",
           }}
         >
@@ -142,7 +127,6 @@ export default function Carousel() {
         </div>
       </div>
 
-      {/* ── Controls: prev · counter · next ── */}
       <div className={styles.controls}>
         <button
           className={styles.arrowBtn}
