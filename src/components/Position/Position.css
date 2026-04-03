@@ -47,8 +47,8 @@
 .desc {
   line-height: 1.5;
   text-align: left;
-  font-size: 1.2rem;
-  font-family: "Montserrat", sans-serif;
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
+  font-family: "Reddit Sans", Helvetica, sans-serif;
   color: #fff;
   opacity: 0.8;
   text-align: justify;

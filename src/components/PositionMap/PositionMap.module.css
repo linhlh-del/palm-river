@@ -54,9 +54,9 @@
   text-align: left;
   line-height: 1.5;
   text-align: left;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
   max-width: 100%;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Reddit Sans", Helvetica, sans-serif;
   color: #0063a5;
   opacity: 0.8;
   text-align: justify;
@@ -383,6 +383,7 @@
 @media (min-width: 1084px) and (max-width: 1400px) {
   .header {
     padding: 0 2rem;
+    gap: 1rem;
   }
   .tabs {
     padding: 0 2rem;
@@ -395,7 +396,7 @@
     grid-template-columns: 1fr;
   }
   .title {
-    font-size: 3rem;
+    font-size: 4.5rem;
   }
   .subtitle {
     font-size: 1.2rem;
