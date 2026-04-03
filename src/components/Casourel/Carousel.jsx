@@ -24,11 +24,28 @@ export default function Carousel() {
   const [index, setIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [slideWidth, setSlideWidth] = useState(0);
+  const [isGridMode, setIsGridMode] = useState(false);
   const listRef = useRef(null);
   const carouselRef = useRef(null);
 
-  /* ── Tính slide width ── */
+  /* ── Detect grid mode (responsive) ── */
   useEffect(() => {
+    const checkGridMode = () => {
+      const gridMode = window.innerWidth <= 1200;
+      setIsGridMode(gridMode);
+      if (gridMode) {
+        setIndex(0);
+      }
+    };
+    checkGridMode();
+    window.addEventListener("resize", checkGridMode);
+    return () => window.removeEventListener("resize", checkGridMode);
+  }, []);
+
+  /* ── Tính slide width (carousel mode only) ── */
+  useEffect(() => {
+    if (isGridMode) return;
+
     const calc = () => {
       if (!carouselRef.current) return;
       const card = carouselRef.current.querySelector(`.${styles.card}`);
@@ -41,16 +58,20 @@ export default function Carousel() {
     calc();
     window.addEventListener("resize", calc);
     return () => window.removeEventListener("resize", calc);
-  }, []);
+  }, [isGridMode]);
 
-  /* ── Auto slide ── */
+  /* ── Auto slide (carousel mode only) ── */
   useEffect(() => {
+    if (isGridMode) return;
+
     const id = setInterval(() => setIndex((p) => p + 1), 3000);
     return () => clearInterval(id);
-  }, []);
+  }, [isGridMode]);
 
-  /* ── Wrap-around ── */
+  /* ── Wrap-around (carousel mode only) ── */
   useEffect(() => {
+    if (isGridMode) return;
+
     if (index === data.length) {
       const t = setTimeout(() => {
         setIsTransitioning(false);
@@ -60,7 +81,7 @@ export default function Carousel() {
     } else if (index === 0 && !isTransitioning) {
       setIsTransitioning(true);
     }
-  }, [index, isTransitioning]);
+  }, [index, isTransitioning, isGridMode]);
 
   /* ── Manual nav ── */
   const handlePrev = () => {
@@ -92,7 +113,7 @@ export default function Carousel() {
           className={styles.list}
           style={{
             transform:
-              slideWidth > 0
+              !isGridMode && slideWidth > 0
                 ? `translateX(-${index * slideWidth}px)`
                 : "translateX(0)",
             transition: isTransitioning ? "transform 0.8s ease" : "none",

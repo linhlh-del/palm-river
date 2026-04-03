@@ -32,7 +32,7 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 2.5rem;
+  gap: 5rem;
 }
 
 .card {
@@ -48,12 +48,14 @@
   font-size: 1.25rem;
   display: block;
   color: #fff;
+  text-align: center;
 }
 
 .cardPrice {
   font-family: SVN-Mightiest;
   font-size: 3.75rem;
   color: #fff;
+  text-align: center;
 }
 
 /* ── SLIDER ── */
@@ -119,6 +121,28 @@
 }
 
 /* ── RESPONSIVE ── */
+
+@media (max-width: 1200px) {
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.75rem;
+  }
+  .cardTitle {
+    padding-top: 0.75rem;
+    font-size: 1rem;
+    display: block;
+    color: #fff;
+  }
+
+  .cardPrice {
+    font-family: SVN-Mightiest;
+    font-size: 3rem;
+    color: #fff;
+    text-align: center;
+  }
+}
+
 @media (max-width: 1024px) {
   .wrapper {
     padding: 50px 60px;
