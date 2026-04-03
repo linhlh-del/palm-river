@@ -52,7 +52,7 @@ function HomePage({ onOpenModal }) {
       <Carousel />
       <GetInfor />
       <MatbangTang />
-      <CanHo />
+      <CanHo onOpenModal={onOpenModal} />
       <GetInfor />
       <Chinhsachuudai />
       <CSBH />

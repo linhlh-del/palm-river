@@ -1,24 +1,92 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./GetInfor.module.css";
+import toast from "react-hot-toast";
+
+const SHEET_URL =
+  "https://script.google.com/macros/s/AKfycbzgYpSnaUB7vn7hmXMRuuEUF9J9bPu2UR5VxN2Rbi-AJTlRJAk5yW0aPNf-XDW-Rk95MA/exec";
 
 export default function GetInfor() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
   });
+  const [errors, setErrors] = useState({
+    name: "",
+    phone: "",
+  });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
+    // Clear error when user starts typing
+    setErrors({
+      ...errors,
+      [e.target.name]: "",
+    });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
-    // TODO: call API / gửi data
+    const newErrors = { name: "", phone: "" };
+
+    // Validation
+    if (!form.name.trim()) {
+      newErrors.name = "Vui lòng nhập họ và tên";
+    }
+    if (!form.phone.trim()) {
+      newErrors.phone = "Vui lòng nhập số điện thoại";
+    } else if (!/^[0-9]{9,11}$/.test(form.phone.replace(/\D/g, ""))) {
+      newErrors.phone = "Số điện thoại không hợp lệ (9-11 chữ số)";
+    }
+
+    setErrors(newErrors);
+
+    // If there are errors, don't proceed
+    if (newErrors.name || newErrors.phone) {
+      return;
+    }
+
+    setLoading(true);
+
+    // Thêm dấu ' trước phone number để Google Sheet không bỏ số 0
+    const dataToSend = {
+      ...form,
+      phone: `'${form.phone}`,
+    };
+
+    // Gửi request (fire and forget)
+    try {
+      fetch(SHEET_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataToSend),
+      }).catch(() => {
+        // Bỏ qua lỗi vì mode no-cors không cho phép đọc response
+      });
+
+      // Show success toast
+      toast.success("Gửi thông tin thành công!");
+
+      // Reset form
+      setForm({ name: "", email: "", phone: "" });
+      setErrors({ name: "", phone: "" });
+
+      // Delay navigation to let user see success message
+      setTimeout(() => {
+        navigate("/thank-you");
+      }, 1000);
+    } catch (error) {
+      toast.error("Có lỗi xảy ra, vui lòng thử lại");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -29,7 +97,7 @@ export default function GetInfor() {
         </div>
 
         <form className={styles.form} onSubmit={handleSubmit}>
-          <div className={styles.inputGroup}>
+          <div className={styles.inputGroup} style={{ position: "relative" }}>
             <label>Họ và tên*</label>
             <input
               type="text"
@@ -39,9 +107,22 @@ export default function GetInfor() {
               onChange={handleChange}
               required
             />
+            {errors.name && (
+              <span
+                style={{
+                  color: "#004380",
+                  fontSize: "12px",
+                  position: "absolute",
+                  bottom: "-18px",
+                  left: 0,
+                }}
+              >
+                {errors.name}
+              </span>
+            )}
           </div>
 
-          <div className={styles.inputGroup}>
+          <div className={styles.inputGroup} style={{ position: "relative" }}>
             <label>Email</label>
             <input
               type="email"
@@ -52,7 +133,7 @@ export default function GetInfor() {
             />
           </div>
 
-          <div className={styles.inputGroup}>
+          <div className={styles.inputGroup} style={{ position: "relative" }}>
             <label>Số điện thoại*</label>
             <input
               type="tel"
@@ -62,10 +143,23 @@ export default function GetInfor() {
               onChange={handleChange}
               required
             />
+            {errors.phone && (
+              <span
+                style={{
+                  color: "#004380",
+                  fontSize: "12px",
+                  position: "absolute",
+                  bottom: "-1.25rem",
+                  left: 0,
+                }}
+              >
+                {errors.phone}
+              </span>
+            )}
           </div>
 
-          <button type="submit" className={styles.btn}>
-            NHẬN THÔNG TIN
+          <button type="submit" className={styles.btn} disabled={loading}>
+            {loading ? "ĐANG GỬI..." : "NHẬN THÔNG TIN"}
           </button>
         </form>
 

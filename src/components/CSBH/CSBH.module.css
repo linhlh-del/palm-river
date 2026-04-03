@@ -194,7 +194,7 @@
 }
 
 .Btn_152_170 {
-  background: #ffffff;
+  background: #ff6700;
   border: 1.5px solid #1760ad;
   padding: 0.875rem 2rem;
   cursor: pointer;
@@ -202,10 +202,11 @@
     background 0.25s,
     color 0.25s;
   width: 100%;
-  max-width: 22rem;
+  max-width: 32rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 0.5rem;
 }
 
 .Btn_152_170:hover {
@@ -221,7 +222,7 @@
   width: 100%;
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1760ad;
+  color: #fff;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   transition: color 0.25s;

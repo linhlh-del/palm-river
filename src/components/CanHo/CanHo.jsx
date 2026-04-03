@@ -187,7 +187,7 @@ function preloadImage(src) {
   img.src = src;
 }
 
-function AptInfo({ tab, activeLayoutId, onLayoutChange }) {
+function AptInfo({ tab, activeLayoutId, onLayoutChange, onOpenModal }) {
   const activeLayout = tab.layouts.find((l) => l.id === activeLayoutId);
 
   return (
@@ -376,6 +376,7 @@ export default function CanHo({ onOpenModal }) {
             tab={activeTab}
             activeLayoutId={activeLayoutId}
             onLayoutChange={handleLayoutClick}
+            onOpenModal={onOpenModal}
           />
 
           <div className={styles.carouselRight}>
