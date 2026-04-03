@@ -3,7 +3,6 @@
   padding: 40px 100px;
   display: flex;
   justify-content: center;
-  /* background: #fff; */
   background: transparent;
 }
 
@@ -56,8 +55,8 @@
 }
 
 .btn {
-  background: #0063a5;
-  border: 1px solid #0063a5;
+  background: #ff6700;
+  border: none;
   border-radius: 5px;
   padding: 0.625rem 2rem;
   font-family: Montserrat;
@@ -167,7 +166,7 @@
     height: 2rem;
     background: none;
     opacity: 0.5;
-    padding: 0;;
+    padding: 0;
   }
 
   .btn {

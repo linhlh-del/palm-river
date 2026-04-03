@@ -35,13 +35,13 @@
 }
 
 .title span {
-  display: block;
+  display: inline;
   background: linear-gradient(187deg, #ff5300, #ff994c);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   width: fit-content;
   text-align: center;
-  margin: 0 auto;
+  margin: 0 0.25em;
 }
 
 .desc {
@@ -51,6 +51,7 @@
   font-family: "Montserrat", sans-serif;
   color: #fff;
   opacity: 0.8;
+  text-align: justify;
 }
 
 /* CARD */
@@ -67,7 +68,7 @@
 .card {
   border: 1px solid #004380;
   display: flex;
-  padding: 15px;
+  padding: 1rem;
   align-items: center;
   font-family: SVN-Mightiest;
 }
@@ -91,10 +92,12 @@
 }
 
 .right p {
-  font-size: 16px;
-  margin: 0 0 8px 0;
+  font-family: "Montserrat", Helvetica, sans-serif;
+  font-size: 1rem;
+  margin-bottom: 4px;
   line-height: 1.4;
   word-wrap: break-word;
+  letter-spacing: 0;
 }
 
 .right p:last-child {
@@ -187,7 +190,7 @@
   .desc {
     font-size: 0.95rem;
     line-height: 1.4;
-    text-align: center;
+    text-align: justify;
   }
 
   .vitri-cards {
@@ -226,8 +229,8 @@
   }
 
   .title span {
-    display: block;
-    width: 100%;
+    display: inline;
+    width: auto;
     text-align: center;
   }
 
@@ -235,7 +238,7 @@
     font-size: 0.75rem;
     line-height: 1.6;
     letter-spacing: 1px;
-    text-align: left;
+    text-align: justify;
   }
 
   .vitri-cards {

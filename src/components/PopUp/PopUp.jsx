@@ -1,13 +1,14 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./PopUp.module.css";
 import logoLusso from "../../assets/images/logo-oneplus.png";
 import Toast from "./Toast";
-import ThankYou from "../ThankYou/ThankYou";
 
 const SHEET_URL =
   "https://script.google.com/macros/s/AKfycbzgYpSnaUB7vn7hmXMRuuEUF9J9bPu2UR5VxN2Rbi-AJTlRJAk5yW0aPNf-XDW-Rk95MA/exec";
 
 export default function PopUp({ isOpen, onClose }) {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -16,7 +17,6 @@ export default function PopUp({ isOpen, onClose }) {
   });
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState({ message: "", type: "success" });
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -42,25 +42,16 @@ export default function PopUp({ isOpen, onClose }) {
       // Bỏ qua lỗi vì mode no-cors không cho phép đọc response
     });
 
-    // Hiện Thank You page
-    setIsSubmitted(true);
-    setLoading(false);
-
     // Reset form
     setForm({ name: "", phone: "", email: "", message: "" });
-  };
+    setLoading(false);
 
-  const handleCloseThankYou = () => {
-    setIsSubmitted(false);
+    // Navigate to thank you page
     onClose();
+    navigate("/thank-you");
   };
 
   if (!isOpen) return null;
-
-  // Nếu form đã submit, hiện ThankYou page
-  if (isSubmitted) {
-    return <ThankYou isOpen={isSubmitted} onClose={handleCloseThankYou} />;
-  }
 
   return (
     <>

@@ -55,7 +55,7 @@
 
 .hd__nav-link {
   color: #fff;
-  font-family: "Inter";
+  font-family: "Montserrat", Helvetica, sans-serif;
   font-size: 16px;
   font-weight: 900;
   letter-spacing: 0.5px;
@@ -93,9 +93,9 @@
 
 /* ── Desktop CTA ── */
 .hd__cta {
-  background: #fff;
-  font-family: "Reddit Sans", serif;
-  color: #004380;
+  background: #ff6700;
+  font-family: "Montserrat", Helvetica, sans-serif;
+  color: #fff;
   border: none;
   padding: 0.5rem 2rem;
   border-radius: 4px;
@@ -138,48 +138,56 @@
 ════════════════════════════════════════ */
 .hd__mobile-menu {
   position: fixed;
-  top: 80px; /* ngay dưới header */
+  top: 80px;
+  left: 0;
   right: 0;
   z-index: 199;
-  width: 260px;
-  max-height: 0;
+  width: 100%;
+  height: calc(100vh - 80px);
   overflow: hidden;
 
   background-color: #004380;
-  border-left: 1px solid rgba(211, 167, 105, 0.2);
-  border-bottom: 1px solid rgba(211, 167, 105, 0.2);
-  border-bottom-left-radius: 12px;
 
   display: flex;
   flex-direction: column;
 
+  transform: translateX(100%);
   transition:
-    max-height 0.35s ease,
+    transform 0.35s ease,
     opacity 0.3s ease;
   opacity: 0;
 }
 
 .hd__mobile-menu--open {
-  max-height: 480px;
+  transform: translateX(0);
   opacity: 1;
+}
+
+/* ── Mobile navigation menu ── */
+.hd__mobile-nav {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 
 .hd__mobile-link {
   color: #fff;
   font-family: "Reddit Sans", Helvetica, sans-serif;
-  font-size: 15px;
+  font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: 0.8px;
   text-decoration: none;
-  padding: 16px 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 20px 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   transition:
     background 0.2s ease,
     color 0.2s ease;
 }
 
 .hd__mobile-link:hover {
-  background: rgba(211, 167, 105, 0.1);
+  background: rgba(255, 255, 255, 0.06);
   color: #d3a769;
 }
 
@@ -191,13 +199,14 @@
 .hd__mobile-cta {
   all: unset;
   cursor: pointer;
-  margin: 16px 24px 20px;
-  background: #fff;
+  margin: 1.5rem 2rem;
+  margin-bottom: 4rem;
+  background: #ff6700;
   border-radius: 0.5rem;
-  padding: 12px 24px;
-  color: #004380;
+  padding: 14px 24px;
+  color: #fff;
   font-family: "Reddit Sans", Helvetica, sans-serif;
-  font-size: 14px;
+  font-size: 1rem;
   font-weight: 800;
   letter-spacing: 1px;
   text-align: center;
@@ -208,16 +217,52 @@
   background: #c8954a;
 }
 
-/* Overlay mờ sau menu */
-.hd__overlay {
-  position: fixed;
-  inset: 0;
-  top: 80px;
-  z-index: 198;
-  background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(2px);
+/* Footer info trong menu mobile */
+.hd__mobile-footer {
+  margin-top: auto;
+  padding: 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
 }
 
+.hd__mobile-footer img {
+  width: 120px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.hd__mobile-hotline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.hd__mobile-hotline span {
+  font-family: "Reddit Sans", Helvetica, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.hd__mobile-hotline a {
+  font-family: "Montserrat", Helvetica, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: color 0.2s;
+}
+
+.hd__mobile-hotline a:hover {
+  color: #d3a769;
+}
 /* ════════════════════════════════════════
    RESPONSIVE
 ════════════════════════════════════════ */

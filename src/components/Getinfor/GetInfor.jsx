@@ -70,7 +70,7 @@ export default function GetInfor() {
         </form>
 
         <div className={styles.hotline}>
-          Hotline phòng kinh doanh: 087 719 1940
+          Hotline phòng kinh doanh: 0939 535 111
         </div>
       </div>
     </div>

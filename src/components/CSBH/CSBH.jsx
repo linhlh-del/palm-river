@@ -145,7 +145,7 @@ export default function CSBH() {
               <span
                 className={styles.HotlinePhòngKinhDoanh_087_719_1940_152_144}
               >
-                Hotline phòng kinh doanh: 087 719 1940
+                Hotline phòng kinh doanh: 0939 535 111
               </span>
             </div>
           </div>

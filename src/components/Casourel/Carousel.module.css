@@ -21,22 +21,25 @@
   width: 100%;
   overflow: hidden;
   margin: 0;
-  padding: 0;
+  padding: 0 8rem;
   box-sizing: border-box;
 }
 
 .list {
   display: flex;
-  gap: 10rem;
+  gap: 3rem;
   transition: transform 0.8s ease;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
 
-/* Card */
+/* Card – nhỏ hơn, thoáng hơn ở màn lớn
+   ở 1920px: 42vw = 806px → giới hạn 780px (~40% màn hình)
+   ở 1280px: 42vw = 538px → vừa vặn
+*/
 .card {
-  min-width: 80%;
+  min-width: clamp(400px, 42vw, 780px);
   aspect-ratio: 16 / 9;
   background-size: cover;
   background-position: center;
@@ -72,7 +75,6 @@
   margin-top: 2rem;
 }
 
-/* Arrow button – transparent, no bg */
 .controls .arrowBtn {
   background: none;
   border: none;
@@ -97,7 +99,7 @@
   transform: scale(0.95);
 }
 
-.controls.arrowImg {
+.arrowImg {
   width: 32px;
   height: 32px;
   object-fit: contain;
@@ -135,7 +137,9 @@
   opacity: 0.5;
 }
 
-/* RESPONSIVE */
+/* ════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════ */
 @media (max-width: 1024px) {
   .wrapper {
     padding: 60px 0;
@@ -145,10 +149,10 @@
     margin-bottom: 30px;
   }
   .list {
-    gap: 8rem;
+    gap: 2.5rem;
   }
   .card {
-    min-width: 80%;
+    min-width: clamp(360px, 70vw, 720px);
     aspect-ratio: 16 / 9;
   }
   .overlay {
@@ -179,10 +183,10 @@
     margin-bottom: 20px;
   }
   .list {
-    gap: 2rem;
+    gap: 1.5rem;
   }
   .card {
-    min-width: 80%;
+    min-width: clamp(300px, 75vw, 600px);
     aspect-ratio: 16 / 9;
   }
   .overlay {
@@ -217,10 +221,10 @@
     margin-bottom: 1.5rem;
   }
   .list {
-    gap: 1rem !important;
+    gap: 1rem;
   }
   .card {
-    min-width: 80% !important;
+    min-width: 80vw;
     aspect-ratio: 16 / 9;
   }
   .overlay {

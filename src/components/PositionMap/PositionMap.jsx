@@ -2,17 +2,29 @@ import React, { useState, useEffect, useRef } from "react";
 import styles from "./PositionMap.module.css";
 import mapNgoaiKhu from "../../assets/images/map-cosmo.png";
 
-const ITEMS_PER_COL = 5; // số item mỗi cột
-const COLS_PER_SLIDE = 2; // số cột mỗi slide (mobile)
-const AUTO_SLIDE_MS = 10000; // 10 giây
+const ITEMS_PER_COL = 5;
+const COLS_PER_SLIDE = 2;
+const AUTO_SLIDE_MS = 10000;
 
 export default function PositionMap() {
   const [type, setType] = useState("ngoai-khu");
   const [activeId, setActiveId] = useState(null);
   const [mobileSlide, setMobileSlide] = useState(0);
+  const [mapHeight, setMapHeight] = useState(null);
   const timerRef = useRef(null);
   const touchStartX = useRef(null);
   const touchStartY = useRef(null);
+  const mapRef = useRef(null);
+
+  // ── Đo chiều cao map → giới hạn listWrapper không vượt quá ───────────
+  useEffect(() => {
+    if (!mapRef.current) return;
+    const ro = new ResizeObserver(([entry]) => {
+      setMapHeight(entry.contentRect.height);
+    });
+    ro.observe(mapRef.current);
+    return () => ro.disconnect();
+  }, []);
 
   // ── DATA ──────────────────────────────────────────────────────────────
   const amenities = [
@@ -154,7 +166,6 @@ export default function PositionMap() {
       type: "ngoai-khu",
       position: { top: "65%", left: "24%" },
     },
-    // ── nội khu ──
     {
       id: 24,
       name: ["Hồ bơi vô cực"],
@@ -195,25 +206,22 @@ export default function PositionMap() {
 
   const filtered = amenities.filter((item) => item.type === type);
 
-  // ── Tính slides ────────────────────────────────────────────────────────
-  // Chia filtered thành các "cột" (mỗi cột ITEMS_PER_COL item)
+  // ── Tính slides (mobile) ──────────────────────────────────────────────
   const totalCols = Math.ceil(filtered.length / ITEMS_PER_COL);
-  // Mỗi slide chứa COLS_PER_SLIDE cột → tổng số slide
   const totalSlides = Math.ceil(totalCols / COLS_PER_SLIDE);
 
-  // Build mảng slides: mỗi slide là mảng các cột, mỗi cột là mảng items
   const slides = Array.from({ length: totalSlides }, (_, slideIdx) => {
     const cols = [];
     for (let c = 0; c < COLS_PER_SLIDE; c++) {
       const colIdx = slideIdx * COLS_PER_SLIDE + c;
-      if (colIdx >= totalCols) break; // không thêm cột trắng
+      if (colIdx >= totalCols) break;
       const start = colIdx * ITEMS_PER_COL;
       cols.push(filtered.slice(start, start + ITEMS_PER_COL));
     }
     return cols;
   });
 
-  // ── Auto-slide logic ───────────────────────────────────────────────────
+  // ── Auto-slide (mobile) ───────────────────────────────────────────────
   const startTimer = () => {
     clearInterval(timerRef.current);
     if (totalSlides > 1) {
@@ -223,7 +231,7 @@ export default function PositionMap() {
     }
   };
 
-  // ── Swipe handlers ────────────────────────────────────────────────────
+  // ── Swipe (mobile) ────────────────────────────────────────────────────
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
@@ -233,25 +241,18 @@ export default function PositionMap() {
     if (touchStartX.current === null) return;
     const dx = e.changedTouches[0].clientX - touchStartX.current;
     const dy = e.changedTouches[0].clientY - touchStartY.current;
-    // Chỉ xử lý swipe ngang (dx lớn hơn dy)
     if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
-    if (dx < 0) {
-      // Swipe sang trái → slide tiếp theo
-      setMobileSlide((prev) => Math.min(prev + 1, totalSlides - 1));
-    } else {
-      // Swipe sang phải → slide trước
-      setMobileSlide((prev) => Math.max(prev - 1, 0));
-    }
-    // Reset timer sau khi user tự lướt
+    if (dx < 0) setMobileSlide((prev) => Math.min(prev + 1, totalSlides - 1));
+    else setMobileSlide((prev) => Math.max(prev - 1, 0));
     startTimer();
     touchStartX.current = null;
     touchStartY.current = null;
   };
+
   useEffect(() => {
     setMobileSlide(0);
   }, [type]);
 
-  // Khởi động / restart timer khi totalSlides thay đổi
   useEffect(() => {
     startTimer();
     return () => clearInterval(timerRef.current);
@@ -297,12 +298,18 @@ export default function PositionMap() {
         {/* MAP + LIST */}
         <div className={styles.wrapper}>
           {/* MAP */}
-          <div className={styles.map}>
+          <div className={styles.map} ref={mapRef}>
             <img src={mapNgoaiKhu} alt="map" />
             {filtered.map((item) => (
               <div
                 key={item.id}
-                className={`${styles.marker}${activeId === item.id ? " " + styles.markerActive : ""}${item.type === "noi-khu" ? " " + styles.markerNoiKhu : ""}`}
+                className={[
+                  styles.marker,
+                  activeId === item.id ? styles.markerActive : "",
+                  item.type === "noi-khu" ? styles.markerNoiKhu : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 style={{ top: item.position.top, left: item.position.left }}
                 onMouseEnter={() => setActiveId(item.id)}
                 onMouseLeave={() => setActiveId(null)}
@@ -312,9 +319,14 @@ export default function PositionMap() {
             ))}
           </div>
 
-          {/* LIST */}
-          <div className={styles.listWrapper}>
-            {/* ── Desktop: danh sách thẳng (giữ nguyên) ── */}
+          {/* LIST WRAPPER
+              maxHeight = chiều cao thực của map (đo bằng ResizeObserver)
+              → list không bao giờ làm map nở dài ra                        */}
+          <div
+            className={styles.listWrapper}
+            style={mapHeight ? { maxHeight: mapHeight } : undefined}
+          >
+            {/* ── Desktop + Medium (> 600px): scroll dọc ── */}
             <div className={`${styles.list} ${styles.listDesktop}`}>
               {filtered.map((item) => (
                 <div
@@ -337,7 +349,7 @@ export default function PositionMap() {
               ))}
             </div>
 
-            {/* ── Mobile: slide-based (tự động, không có blank col) ── */}
+            {/* ── Mobile (< 600px): slide + swipe ── */}
             <div
               className={styles.listMobile}
               onTouchStart={handleTouchStart}
@@ -379,7 +391,6 @@ export default function PositionMap() {
                 ))}
               </div>
 
-              {/* Dot indicators */}
               {totalSlides > 1 && (
                 <div className={styles.slideDots}>
                   {Array.from({ length: totalSlides }).map((_, idx) => (
