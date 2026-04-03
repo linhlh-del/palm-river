@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Chinhsachuudai.module.css";
+import arrowIcon from "../../assets/images/arrow-icon.png";
 
 export default function Chinhsachuudai() {
   const images = [
@@ -19,9 +20,13 @@ export default function Chinhsachuudai() {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % images.length);
     }, 3000);
-
     return () => clearInterval(interval);
   }, []);
+
+  const handlePrev = () =>
+    setIndex((prev) => (prev - 1 + images.length) % images.length);
+
+  const handleNext = () => setIndex((prev) => (prev + 1) % images.length);
 
   const data = [
     { title: "CĂN 1PN GIÁ TỪ", price: "7,3 tỷ" },
@@ -37,7 +42,6 @@ export default function Chinhsachuudai() {
         {/* LEFT CONTENT */}
         <div className={styles.content}>
           <h2 className={styles.mainTitle}>CHÍNH SÁCH BÁN HÀNG</h2>
-
           <h3 className={styles.subTitle}>Đơn giá từ 110 triệu/m2</h3>
 
           <div className={styles.grid}>
@@ -53,6 +57,30 @@ export default function Chinhsachuudai() {
         {/* RIGHT SLIDE */}
         <div className={styles.slider}>
           <img src={images[index]} alt="slide" className={styles.image} />
+
+          <button
+            className={`${styles.arrow} ${styles.arrowLeft}`}
+            onClick={handlePrev}
+            aria-label="Ảnh trước"
+          >
+            <img
+              src={arrowIcon}
+              alt=""
+              style={{ transform: "rotate(90deg)" }}
+            />
+          </button>
+
+          <button
+            className={`${styles.arrow} ${styles.arrowRight}`}
+            onClick={handleNext}
+            aria-label="Ảnh tiếp theo"
+          >
+            <img
+              src={arrowIcon}
+              alt=""
+              style={{ transform: "rotate(-90deg)" }}
+            />
+          </button>
         </div>
       </div>
     </div>

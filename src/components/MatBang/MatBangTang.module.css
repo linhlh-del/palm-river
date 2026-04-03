@@ -50,8 +50,8 @@
 }
 
 .fieldLabel {
-  font-family: "Inter", sans-serif;
-  font-size: 0.85rem;
+  font-family: "Montserrat", sans-serif;
+  font-size: 1rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -60,7 +60,7 @@
 
 /* Dropdown Tòa */
 .fieldSelect {
-  font-family: "Inter", sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 0.95rem;
   font-weight: 500;
   color: #004380;
@@ -173,11 +173,11 @@
   }
 
   .title {
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
   .gradientTitle {
-    font-size: 28px;
+    font-size: 24px;
   }
 
   .subTitle {
@@ -351,4 +351,32 @@
     height: 2rem;
     font-size: 1rem;
   }
+}
+
+/* wrapper để chứa select + icon */
+.selectWrap {
+  position: relative;
+  display: inline-block;
+}
+
+/* arrow icon custom */
+.arrowIcon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rem;
+  pointer-events: none;
+}
+
+/* bỏ background arrow default */
+.fieldSelect {
+  background-image: none !important;
+  padding-right: 2rem;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #004380;
 }

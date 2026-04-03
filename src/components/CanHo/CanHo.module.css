@@ -25,6 +25,7 @@
   font-family: "SVN-Mightiest";
   font-size: 3.75rem;
   color: #004380;
+  font-weight: 400 !important;
 }
 
 /* ── TABS ── */
@@ -72,14 +73,13 @@
 .aptInfo {
   width: 38%;
   flex-shrink: 0;
-  background: #fff;
+  background: #004380;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   overflow: hidden;
 }
 
-/* Layout BTNs — thay cho aptTitle khi có 2 layout */
 .layoutBtns {
   display: flex;
   width: 100%;
@@ -92,9 +92,8 @@
   font-size: 1.1rem;
   font-weight: 700;
   color: #004380;
-  background: #f0f6ff;
-  border: none;
-  border-bottom: 2px solid #004380;
+  background: #fff;
+  border: 1px solid #004380;
   padding: 1rem 0;
   cursor: pointer;
   text-transform: uppercase;
@@ -108,23 +107,19 @@
   border-right: 1px solid #b5d4f4;
 }
 
-.layoutBtn:hover {
-  background: #daeeff;
-}
-
 .layoutBtnActive {
-  background: #004380;
+  background: #ff6700;
+  border: none;
   color: #fff;
   border-bottom-color: #004380;
 }
 
-/* aptTitle (khi chỉ có 1 layout) */
 .aptTitle {
   font-family: "Noto Serif Display", serif;
   font-size: 1.6rem;
   font-style: italic;
   font-weight: 600;
-  color: #004380;
+  color: #fff;
   margin: 0;
   padding: 1rem 1.75rem 0;
 }
@@ -132,22 +127,33 @@
 .aptDivider {
   width: 90px;
   height: 1px;
-  background: #004380;
+  background: #fff;
   margin: 0 1.75rem;
 }
 
-/* Giá */
+/* ── GIÁ ── */
 .priceBox {
-  border: 0.5px solid #004380;
+  border: none;
   padding: 0.875rem 1.25rem;
   margin: 0 1.75rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.priceLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
 }
 
 .priceLabel {
   font-family: "Montserrat", sans-serif;
   font-size: 0.7rem;
   font-weight: 500;
-  color: #1760ad;
+  color: #fff;
   letter-spacing: 0.08em;
   margin-bottom: 0.3rem;
 }
@@ -156,16 +162,111 @@
   font-family: "Montserrat", sans-serif;
   font-size: 2rem;
   font-weight: 700;
-  color: #004380;
+  color: #fff;
   margin: 0;
 }
 
-/* Thông số */
+/* ════════════════════════════════════════
+   PRICE TABLE BUTTON
+════════════════════════════════════════ */
+.priceTableBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 0.6rem 0.875rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin: 0;
+  width: auto;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+
+.priceTableBtn:hover {
+  opacity: 0.75;
+}
+
+.priceTableText {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.priceTableBtn img {
+  width: 13px;
+  height: 13px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
+
+@keyframes nudgeLeft {
+  0%,
+  100% {
+    transform: rotate(-90deg) translateX(0);
+    opacity: 1;
+  }
+  40% {
+    transform: rotate(-90deg) translateX(-5px);
+    opacity: 0.4;
+  }
+  60% {
+    transform: rotate(-90deg) translateX(-5px);
+    opacity: 0.4;
+  }
+  80% {
+    transform: rotate(-90deg) translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes nudgeRight {
+  0%,
+  100% {
+    transform: rotate(90deg) translateX(0);
+    opacity: 1;
+  }
+  40% {
+    transform: rotate(90deg) translateX(5px);
+    opacity: 0.4;
+  }
+  60% {
+    transform: rotate(90deg) translateX(5px);
+    opacity: 0.4;
+  }
+  80% {
+    transform: rotate(90deg) translateX(0);
+    opacity: 1;
+  }
+}
+
+.arrowAnimLeft {
+  animation: nudgeLeft 1.6s ease-in-out infinite;
+}
+.arrowAnimLeft2 {
+  animation: nudgeLeft 1.6s ease-in-out infinite 0.18s;
+  opacity: 0.55;
+}
+.arrowAnimRight {
+  animation: nudgeRight 1.6s ease-in-out infinite;
+}
+.arrowAnimRight2 {
+  animation: nudgeRight 1.6s ease-in-out infinite 0.18s;
+  opacity: 0.55;
+}
+
+/* ── THÔNG SỐ ── */
 .specTitle {
   font-family: "Montserrat", sans-serif;
   font-size: 0.7rem;
   font-weight: 500;
-  color: #004380;
+  color: #fff;
   letter-spacing: 0.1em;
   margin: 0 1.75rem;
 }
@@ -180,7 +281,7 @@
 }
 
 .specCard {
-  border: 0.5px solid #004380;
+  border: 0.5px solid #fff;
   padding: 0.6rem 0.75rem;
   display: flex;
   flex-direction: column;
@@ -193,7 +294,7 @@
   font-family: "Montserrat", sans-serif;
   font-size: 0.58rem;
   font-weight: 500;
-  color: #1760ad;
+  color: #fff;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   line-height: 1.5;
@@ -203,7 +304,7 @@
   font-family: "Montserrat", sans-serif;
   font-size: 1rem;
   font-weight: 700;
-  color: #004380;
+  color: #fff;
   line-height: 1.3;
 }
 
@@ -240,7 +341,6 @@
   opacity: 1;
   transition: opacity 0.18s ease-in;
 }
-
 .fadeOut {
   opacity: 0;
   transition: opacity 0.18s ease-out;
@@ -270,13 +370,11 @@
 .arrow:hover {
   background: rgba(255, 255, 255, 0.95);
 }
-
 .arrow img {
   width: 1.5rem;
   height: 1.5rem;
   object-fit: contain;
 }
-
 .arrowLeft {
   left: 1rem;
 }
@@ -299,7 +397,7 @@
 .dots span {
   width: 0.75rem;
   height: 0.75rem;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(152, 189, 221, 0.5);
   border-radius: 50%;
   cursor: pointer;
   transition: 0.3s;
@@ -307,7 +405,7 @@
 }
 
 .dots span:hover {
-  background: #ccc;
+  background: #fff;
 }
 
 .activeDot {
@@ -325,7 +423,7 @@
   font-family: "Montserrat", sans-serif;
   border-radius: 0.5rem;
   font-size: 1.125rem;
-  font-weight: 900;
+  font-weight: 700;
   cursor: pointer;
   animation: buttonJump 1.5s ease-in-out infinite;
   text-transform: uppercase;
@@ -392,20 +490,16 @@
   .header h2 {
     font-size: 2rem;
   }
-
   .carouselWrapper {
     flex-direction: column;
   }
-
   .aptInfo {
     width: 100%;
   }
-
   .layoutBtn {
     font-size: 0.9rem;
     padding: 0.8rem 0;
   }
-
   .aptTitle {
     padding: 1rem 1rem 0;
   }
@@ -415,17 +509,19 @@
   .priceBox {
     margin: 0 1rem;
   }
+  .priceTableBtn {
+    margin: 0;
+    width: auto;
+  }
   .specTitle {
     margin: 0 1rem;
   }
   .specGrid {
     padding: 0 1rem 1rem;
   }
-
   .imageWrapper {
     min-height: 15rem;
   }
-
   .arrow {
     width: 2.5rem;
     height: 2.5rem;
@@ -440,7 +536,6 @@
   .arrowRight {
     right: 0.75rem;
   }
-
   .tab {
     flex: 1;
     padding: 0.75rem 0.5rem;
@@ -465,12 +560,11 @@
   .header h2 {
     font-size: 1.5rem;
   }
-
   .layoutBtn {
     font-size: 0.8rem;
     padding: 0.7rem 0;
+    border: none;
   }
-
   .aptTitle {
     font-size: 1.3rem;
     padding: 0.75rem 0.75rem 0;
@@ -483,6 +577,18 @@
   }
   .priceValue {
     font-size: 1.5rem;
+  }
+  .priceTableBtn {
+    margin: 0;
+    width: auto;
+    padding: 0.6rem 0.5rem;
+  }
+  .priceTableText {
+    font-size: 0.75rem;
+  }
+  .priceTableBtn img {
+    width: 11px;
+    height: 11px;
   }
   .specTitle {
     margin: 0 0.75rem;
@@ -502,11 +608,9 @@
   .specCardValue {
     font-size: 0.85rem;
   }
-
   .imageWrapper {
     min-height: 14rem;
   }
-
   .arrow {
     width: 2rem;
     height: 2rem;
@@ -521,7 +625,6 @@
   .arrowRight {
     right: 0.5rem;
   }
-
   .tab {
     padding: 1rem !important;
     font-size: 0.75rem;

@@ -1,50 +1,63 @@
 import React, { useState, useEffect } from "react";
 import styles from "./MatBangTang.module.css";
-import arrowIcon from "../../assets/images/arrow-icon.png";
+import arrowIcon from "../../assets/images/dropdown-icon.png";
 
 const TOA_CONFIG = {
   A: {
-    label: "Tòa A",
-    floorDisplay: "5 – 17",
-    image: "/images/matbang/3.jpg",
+    label: "A",
+    floors: [
+      { label: "3A", image: "/images/matbang/toa-a/3A.png" },
+      { label: "5 - 17", image: "/images/matbang/toa-a/5-17.png" },
+      { label: "18", image: "/images/matbang/toa-a/18.png" },
+      { label: "19", image: "/images/matbang/toa-a/19.png" },
+      { label: "20 - 27", image: "/images/matbang/toa-a/20-27.png" },
+    ],
   },
   B1: {
-    label: "Tòa B1",
-    floorDisplay: "5 – 12",
-    image: "/images/matbang/1.jpg",
+    label: "B1",
+    floors: [
+      { label: "4", image: "/images/matbang/b1/4.png" },
+      { label: "5 - 17", image: "/images/matbang/b1/tang-5-17.png" },
+      { label: "18", image: "/images/matbang/b1/18.png" },
+      { label: "19", image: "/images/matbang/b1/19.png" },
+      { label: "20 - 23", image: "/images/matbang/b1/20-23.png" },
+    ],
   },
   B2: {
-    label: "Tòa B2",
-    floorDisplay: "12B – 17",
-    image: "/images/matbang/2.jpg",
+    label: "B2",
+    floors: [
+      { label: "4", image: "/images/matbang/b2/4.png" },
+      { label: "5 -12", image: "/images/matbang/b2/5-12.png" },
+      { label: "13", image: "/images/matbang/b2/13.png" },
+      { label: "14", image: "/images/matbang/b2/14.png" },
+    ],
   },
 };
 
 export default function MatBangTang() {
   const [selectedToa, setSelectedToa] = useState("A");
+  const [selectedFloor, setSelectedFloor] = useState(0);
   const [isZoomOpen, setIsZoomOpen] = useState(false);
 
   const config = TOA_CONFIG[selectedToa];
+  const currentFloor = config.floors[selectedFloor];
+
+  useEffect(() => {
+    setSelectedFloor(0); // reset khi đổi tòa
+  }, [selectedToa]);
 
   const openZoom = () => setIsZoomOpen(true);
   const closeZoom = () => setIsZoomOpen(false);
 
-  // Đóng zoom khi nhấn Escape
   useEffect(() => {
     if (!isZoomOpen) return;
-    const handler = (e) => {
-      if (e.key === "Escape") closeZoom();
-    };
+    const handler = (e) => e.key === "Escape" && closeZoom();
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [isZoomOpen]);
 
-  // Lock scroll khi zoom mở
   useEffect(() => {
     document.body.style.overflow = isZoomOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
   }, [isZoomOpen]);
 
   return (
@@ -54,57 +67,63 @@ export default function MatBangTang() {
         <h3 className={styles.subTitle}>CĂN HỘ ĐIỂN HÌNH</h3>
       </div>
 
-      {/* Filter row */}
+      {/* FILTER */}
       <div className={styles.filterRow}>
+        {/* TÒA */}
         <div className={styles.fieldGroup}>
           <label className={styles.fieldLabel}>Tòa</label>
-          <select
-            className={styles.fieldSelect}
-            value={selectedToa}
-            onChange={(e) => setSelectedToa(e.target.value)}
-          >
-            {Object.keys(TOA_CONFIG).map((toa) => (
-              <option key={toa} value={toa}>
-                {TOA_CONFIG[toa].label}
-              </option>
-            ))}
-          </select>
+          <div className={styles.selectWrap}>
+            <select
+              className={styles.fieldSelect}
+              value={selectedToa}
+              onChange={(e) => setSelectedToa(e.target.value)}
+            >
+              {Object.keys(TOA_CONFIG).map((toa) => (
+                <option key={toa} value={toa}>
+                  {TOA_CONFIG[toa].label}
+                </option>
+              ))}
+            </select>
+            <img src={arrowIcon} className={styles.arrowIcon} />
+          </div>
         </div>
 
+        {/* TẦNG */}
         <div className={styles.fieldGroup}>
           <label className={styles.fieldLabel}>Tầng</label>
-          <div className={styles.fieldText}>{config.floorDisplay}</div>
+          <div className={styles.selectWrap}>
+            <select
+              className={styles.fieldSelect}
+              value={selectedFloor}
+              onChange={(e) => setSelectedFloor(Number(e.target.value))}
+            >
+              {config.floors.map((floor, index) => (
+                <option key={index} value={index}>
+                  {floor.label}
+                </option>
+              ))}
+            </select>
+            <img src={arrowIcon} className={styles.arrowIcon} />
+          </div>
         </div>
       </div>
 
-      {/* Ảnh — click để zoom */}
+      {/* IMAGE */}
       <div className={styles.imageWrap}>
         <img
-          key={selectedToa}
-          src={config.image}
-          alt={`Mặt bằng ${config.label}`}
+          key={currentFloor.image}
+          src={currentFloor.image}
+          alt="Mặt bằng"
           className={styles.slideImage}
           onClick={openZoom}
         />
+
         <div className={styles.zoomHint} onClick={openZoom}>
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            <line x1="11" y1="8" x2="11" y2="14" />
-            <line x1="8" y1="11" x2="14" y2="11" />
-          </svg>
           Phóng to
         </div>
       </div>
 
-      {/* Zoom Modal */}
+      {/* ZOOM */}
       {isZoomOpen && (
         <div className={styles.zoomOverlay} onClick={closeZoom}>
           <div
@@ -114,13 +133,9 @@ export default function MatBangTang() {
             <button className={styles.zoomCloseBtn} onClick={closeZoom}>
               ✕
             </button>
-            <img
-              src={config.image}
-              alt={`Mặt bằng ${config.label} - Chi tiết`}
-              className={styles.zoomImage}
-            />
+            <img src={currentFloor.image} className={styles.zoomImage} />
             <div className={styles.zoomCaption}>
-              {config.label} — Tầng {config.floorDisplay}
+              {config.label} — Tầng {currentFloor.label}
             </div>
           </div>
         </div>

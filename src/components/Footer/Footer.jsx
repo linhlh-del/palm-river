@@ -30,8 +30,6 @@ export default function Footer() {
         {/* RIGHT */}
         <div className={styles.right}>
           <h3>THÔNG TIN LIÊN HỆ</h3>
-
-          <span>Website: https://theglobalscity.vn</span>
           <span>Hotline: 0939 535 111</span>
           <span>Địa chỉ: The Global City, Đỗ Xuân Hợp, Quận 2, TP.HCM</span>
           <span>Đơn vị phân phối: One Plus</span>

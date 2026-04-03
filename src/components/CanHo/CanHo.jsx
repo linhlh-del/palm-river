@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./CanHo.module.css";
 import arrowIcon from "../../assets/images/arrow-icon.png";
-
+import arrowAnimLeft from "../../assets/images/icon-arrow-white.png";
 const TABS = [
   {
     id: "1pn",
@@ -19,10 +19,15 @@ const TABS = [
           { label: "Bàn giao", value: "Năm 2026" },
           { label: "Nội thất", value: "Hoàn thiện cao cấp" },
         ],
-        images: ["/images/canho/1pn/1.jpg", "/images/canho/1pn/2.jpg"],
+        images: [
+          "/images/canho/1pn/1.png",
+          "/images/canho/1pn/2.png",
+          "/images/canho/1pn/3.png",
+          "/images/canho/1pn/4.png",
+        ],
       },
       {
-        id: "1pn-plus",
+        id: "1pn+",
         label: "1PN+",
         price: "8,1 tỷ",
         specs: [
@@ -34,12 +39,14 @@ const TABS = [
           { label: "Nội thất", value: "Hoàn thiện cao cấp" },
         ],
         images: [
-          "/images/canho/1pn-plus/1.jpg",
-          "/images/canho/1pn-plus/2.jpg",
+          "/images/canho/1pn+/1.png",
+          "/images/canho/1pn+/2.png",
+          "/images/canho/1pn+/3.png",
         ],
       },
     ],
   },
+
   {
     id: "2pn",
     label: "2PN",
@@ -56,10 +63,13 @@ const TABS = [
           { label: "Bàn giao", value: "Năm 2026" },
           { label: "Nội thất", value: "Hoàn thiện cao cấp" },
         ],
-        images: ["/images/canho/2pn/1.jpg", "/images/canho/2pn/2.jpg"],
+        images: Array.from(
+          { length: 13 },
+          (_, i) => `/images/canho/2pn/${i + 1}.png`,
+        ),
       },
       {
-        id: "2pn-plus",
+        id: "2pn+",
         label: "2PN+",
         price: "14,2 tỷ",
         specs: [
@@ -70,16 +80,11 @@ const TABS = [
           { label: "Bàn giao", value: "Năm 2026" },
           { label: "Nội thất", value: "Hoàn thiện cao cấp" },
         ],
-        images: [
-          "/images/canho/2pn-plus/1.jpg",
-          "/images/canho/2pn-plus/2.jpg",
-          "/images/canho/2pn-plus/3.jpg",
-          "/images/canho/2pn-plus/4.jpg",
-          "/images/canho/2pn-plus/5.jpg",
-        ],
+        images: ["/images/canho/2pn+/1.png", "/images/canho/2pn+/2.png"],
       },
     ],
   },
+
   {
     id: "3pn",
     label: "3PN",
@@ -96,16 +101,14 @@ const TABS = [
           { label: "Bàn giao", value: "Năm 2026" },
           { label: "Nội thất", value: "Hoàn thiện cao cấp" },
         ],
-        images: [
-          "/images/canho/3pn/1.jpg",
-          "/images/canho/3pn/2.jpg",
-          "/images/canho/3pn/3.jpg",
-          "/images/canho/3pn/4.jpg",
-          "/images/canho/3pn/5.jpg",
-        ],
+        images: Array.from(
+          { length: 11 },
+          (_, i) => `/images/canho/3pn/${i + 1}.png`,
+        ),
       },
     ],
   },
+
   {
     id: "4pn",
     label: "4PN",
@@ -122,39 +125,14 @@ const TABS = [
           { label: "Bàn giao", value: "Năm 2026" },
           { label: "Nội thất", value: "Hoàn thiện cao cấp" },
         ],
-        images: [
-          "/images/canho/4pn/1.jpg",
-          "/images/canho/4pn/2.jpg",
-          "/images/canho/4pn/3.jpg",
-          "/images/canho/4pn/4.jpg",
-        ],
+        images: Array.from(
+          { length: 12 },
+          (_, i) => `/images/canho/4pn/${i + 1}.png`,
+        ),
       },
     ],
   },
-  {
-    id: "penthouse",
-    label: "Penthouse",
-    layouts: [
-      {
-        id: "penthouse",
-        label: "Penthouse",
-        price: "Liên hệ",
-        specs: [
-          { label: "Diện tích thông thủy (NFA)", value: "Cập nhật sau" },
-          { label: "Diện tích sàn thực (NSA)", value: "Cập nhật sau" },
-          { label: "Pháp lý", value: "Sổ hồng riêng" },
-          { label: "Sở hữu", value: "Lâu dài" },
-          { label: "Bàn giao", value: "Năm 2026" },
-          { label: "Nội thất", value: "Hoàn thiện cao cấp" },
-        ],
-        images: [
-          "/images/canho/penthouse/1.jpg",
-          "/images/canho/penthouse/2.jpg",
-          "/images/canho/penthouse/3.jpg",
-        ],
-      },
-    ],
-  },
+
   {
     id: "duplex",
     label: "Duplex",
@@ -171,11 +149,34 @@ const TABS = [
           { label: "Bàn giao", value: "Năm 2026" },
           { label: "Nội thất", value: "Hoàn thiện cao cấp" },
         ],
-        images: [
-          "/images/canho/duplex/1.jpg",
-          "/images/canho/duplex/2.jpg",
-          "/images/canho/duplex/3.jpg",
+        images: Array.from(
+          { length: 5 },
+          (_, i) => `/images/canho/duplex/${i + 1}.jpg`,
+        ),
+      },
+    ],
+  },
+
+  {
+    id: "penthouse",
+    label: "Penthouse",
+    layouts: [
+      {
+        id: "penthouse",
+        label: "Penthouse",
+        price: "Liên hệ",
+        specs: [
+          { label: "Diện tích thông thủy (NFA)", value: "Cập nhật sau" },
+          { label: "Diện tích sàn thực (NSA)", value: "Cập nhật sau" },
+          { label: "Pháp lý", value: "Sổ hồng riêng" },
+          { label: "Sở hữu", value: "Lâu dài" },
+          { label: "Bàn giao", value: "Năm 2026" },
+          { label: "Nội thất", value: "Hoàn thiện cao cấp" },
         ],
+        images: Array.from(
+          { length: 5 },
+          (_, i) => `/images/canho/penthouse/${i + 1}.jpg`,
+        ),
       },
     ],
   },
@@ -211,9 +212,25 @@ function AptInfo({ tab, activeLayoutId, onLayoutChange }) {
 
       <div className={styles.aptDivider} />
 
-      <div className={styles.priceBox}>
+      {/* <div className={styles.priceBox}>
         <p className={styles.priceLabel}>GIÁ BÁN DỰ KIẾN</p>
         <p className={styles.priceValue}>{activeLayout.price}</p>
+      </div> */}
+      <div className={styles.priceBox}>
+        <div className={styles.priceLeft}>
+          <p className={styles.priceLabel}>GIÁ BÁN DỰ KIẾN</p>
+          <p className={styles.priceValue}>{activeLayout.price}</p>
+        </div>
+        <button
+          className={styles.priceTableBtn}
+          onClick={() => onOpenModal?.()}
+        >
+          <img src={arrowAnimLeft} alt="" className={styles.arrowAnimLeft} />
+          <img src={arrowAnimLeft} alt="" className={styles.arrowAnimLeft2} />
+          <span className={styles.priceTableText}>Xem bảng giá</span>
+          <img src={arrowAnimLeft} alt="" className={styles.arrowAnimRight} />
+          <img src={arrowAnimLeft} alt="" className={styles.arrowAnimRight2} />
+        </button>
       </div>
 
       <p className={styles.specTitle}>THÔNG SỐ KỸ THUẬT</p>

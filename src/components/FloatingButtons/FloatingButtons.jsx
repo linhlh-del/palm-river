@@ -1,8 +1,8 @@
 import styles from "./FloatingButtons.module.css";
 
-const PHONE_NUMBER = "0877191940";
-const PHONE_DISPLAY = "0877 191 940";
-const ZALO_URL = "https://zalo.me/1717736678695240623";
+const PHONE_NUMBER = "0939 535 111";
+const PHONE_DISPLAY = "0939 535 111";
+const ZALO_URL = "https://zalo.me/0877191940";
 
 import zaloLogo from "../../assets/images/logo-zalo.webp";
 

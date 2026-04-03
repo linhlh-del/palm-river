@@ -57,7 +57,7 @@
   font-size: clamp(1rem, 1.2vw, 1.2rem);
   max-width: 100%;
   font-family: "Reddit Sans", Helvetica, sans-serif;
-  color: #0063a5;
+  color: #004380;
   opacity: 0.8;
   text-align: justify;
 }
@@ -455,7 +455,7 @@
     letter-spacing: 2px;
   }
   .desc {
-    font-size: 0.75rem;
+    font-size: 1rem;
     line-height: 1.4;
   }
 

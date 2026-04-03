@@ -47,60 +47,103 @@
   padding-top: 0.5rem;
   font-size: 1.25rem;
   display: block;
+  color: #fff;
 }
 
 .cardPrice {
   font-family: SVN-Mightiest;
   font-size: 3.75rem;
+  color: #fff;
 }
 
-/* SLIDER */
+/* ── SLIDER ── */
 .slider {
   width: 100%;
   flex: 1;
   overflow: hidden;
   border-radius: 10px;
+  /* position relative để arrow absolute bên trong */
+  position: relative;
 }
 
 .image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-/* RESPONSIVE */
+/* ── ARROW BUTTONS ── */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+  z-index: 2;
+  padding: 0;
+}
+
+.arrow:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.arrow:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.arrow img {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+  display: block;
+}
+
+.arrowLeft {
+  left: 14px;
+}
+.arrowRight {
+  right: 14px;
+}
+
+/* ── RESPONSIVE ── */
 @media (max-width: 1024px) {
   .wrapper {
     padding: 50px 60px;
   }
-
   .container {
     gap: 30px;
   }
-
   .mainTitle {
     font-size: 3rem;
     margin-bottom: 1rem;
   }
-
   .subTitle {
     font-size: 1.5rem;
     margin-bottom: 1.5rem;
   }
-
   .grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
   }
-
   .card {
     height: 7rem;
   }
-
   .cardTitle {
     font-size: 1.1rem;
   }
-
   .cardPrice {
     font-size: 3rem;
   }
@@ -110,42 +153,42 @@
   .wrapper {
     padding: 40px 30px;
   }
-
   .container {
     gap: 25px;
   }
-
   .mainTitle {
     font-size: 2.25rem;
     margin-bottom: 0.75rem;
   }
-
   .subTitle {
     font-size: 1.25rem;
     margin-bottom: 1.25rem;
   }
-
   .grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
   }
-
   .card {
     height: 6rem;
     padding: 0.4rem;
   }
-
   .cardTitle {
     font-size: 1rem;
     padding-top: 0.4rem;
   }
-
   .cardPrice {
     font-size: 2.5rem;
   }
-
   .slider {
     height: 300px;
+  }
+  .arrow {
+    width: 38px;
+    height: 38px;
+  }
+  .arrow img {
+    width: 18px;
+    height: 18px;
   }
 }
 
@@ -153,43 +196,43 @@
   .wrapper {
     padding: 30px 20px;
   }
-
   .container {
     gap: 20px;
   }
-
   .mainTitle {
     font-size: 1.75rem;
     margin-bottom: 1rem;
   }
-
   .subTitle {
     font-size: 1rem;
     margin-bottom: 1rem;
   }
-
   .grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
-
   .card {
     height: 5.5rem;
     padding: 0.5rem;
     padding-left: 1rem;
     border: 0.5px solid #fff;
   }
-
   .cardTitle {
     font-size: 0.85rem;
     padding-top: 0.3rem;
   }
-
   .cardPrice {
     font-size: 2rem;
   }
-
   .slider {
     height: 250px;
+  }
+  .arrow {
+    width: 32px;
+    height: 32px;
+  }
+  .arrow img {
+    width: 15px;
+    height: 15px;
   }
 }
