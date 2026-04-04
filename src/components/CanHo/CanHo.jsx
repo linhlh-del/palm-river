@@ -16,7 +16,7 @@ const TABS = [
           { label: "Diện tích sàn thực (NSA)", value: "47 – 57m²" },
           { label: "Pháp lý", value: "Sổ hồng riêng" },
           { label: "Sở hữu", value: "Lâu dài" },
-          { label: "Bàn giao", value: "Năm 2026" },
+          { label: "Bàn giao", value: "Năm 2028" },
           { label: "Nội thất", value: "Hoàn thiện cao cấp" },
         ],
         images: [
@@ -35,7 +35,7 @@ const TABS = [
           { label: "Diện tích sàn thực (NSA)", value: "55 – 57m²" },
           { label: "Pháp lý", value: "Sổ hồng riêng" },
           { label: "Sở hữu", value: "Lâu dài" },
-          { label: "Bàn giao", value: "Năm 2026" },
+          { label: "Bàn giao", value: "Năm 2028" },
           { label: "Nội thất", value: "Hoàn thiện cao cấp" },
         ],
         images: [
@@ -60,7 +60,7 @@ const TABS = [
           { label: "Diện tích sàn thực (NSA)", value: "75 – 80m²" },
           { label: "Pháp lý", value: "Sổ hồng riêng" },
           { label: "Sở hữu", value: "Lâu dài" },
-          { label: "Bàn giao", value: "Năm 2026" },
+          { label: "Bàn giao", value: "Năm 2028" },
           { label: "Nội thất", value: "Hoàn thiện cao cấp" },
         ],
         images: Array.from(
@@ -77,7 +77,7 @@ const TABS = [
           { label: "Diện tích sàn thực (NSA)", value: "82 – 85m²" },
           { label: "Pháp lý", value: "Sổ hồng riêng" },
           { label: "Sở hữu", value: "Lâu dài" },
-          { label: "Bàn giao", value: "Năm 2026" },
+          { label: "Bàn giao", value: "Năm 2028" },
           { label: "Nội thất", value: "Hoàn thiện cao cấp" },
         ],
         images: ["/images/canho/2pn+/1.png", "/images/canho/2pn+/2.png"],
@@ -98,7 +98,7 @@ const TABS = [
           { label: "Diện tích sàn thực (NSA)", value: "100 – 130m²" },
           { label: "Pháp lý", value: "Sổ hồng riêng" },
           { label: "Sở hữu", value: "Lâu dài" },
-          { label: "Bàn giao", value: "Năm 2026" },
+          { label: "Bàn giao", value: "Năm 2028" },
           { label: "Nội thất", value: "Hoàn thiện cao cấp" },
         ],
         images: Array.from(
@@ -122,7 +122,7 @@ const TABS = [
           { label: "Diện tích sàn thực (NSA)", value: "120 – 140m²" },
           { label: "Pháp lý", value: "Sổ hồng riêng" },
           { label: "Sở hữu", value: "Lâu dài" },
-          { label: "Bàn giao", value: "Năm 2026" },
+          { label: "Bàn giao", value: "Năm 2028" },
           { label: "Nội thất", value: "Hoàn thiện cao cấp" },
         ],
         images: Array.from(
@@ -146,7 +146,7 @@ const TABS = [
           { label: "Diện tích sàn thực (NSA)", value: "Cập nhật sau" },
           { label: "Pháp lý", value: "Sổ hồng riêng" },
           { label: "Sở hữu", value: "Lâu dài" },
-          { label: "Bàn giao", value: "Năm 2026" },
+          { label: "Bàn giao", value: "Năm 2028" },
           { label: "Nội thất", value: "Hoàn thiện cao cấp" },
         ],
         images: Array.from(
@@ -170,7 +170,7 @@ const TABS = [
           { label: "Diện tích sàn thực (NSA)", value: "Cập nhật sau" },
           { label: "Pháp lý", value: "Sổ hồng riêng" },
           { label: "Sở hữu", value: "Lâu dài" },
-          { label: "Bàn giao", value: "Năm 2026" },
+          { label: "Bàn giao", value: "Năm 2028" },
           { label: "Nội thất", value: "Hoàn thiện cao cấp" },
         ],
         images: Array.from(
