@@ -73,7 +73,7 @@ export default function Chinhsachuudai() {
     { title: "CĂN 2PN GIÁ TỪ", price: "8,8 tỷ" },
     { title: "CĂN 2PN+ GIÁ TỪ", price: "10 tỷ" },
     { title: "CĂN 3PN GIÁ TỪ", price: "13 tỷ" },
-    { title: "CĂN 3PN GIÁ TỪ", price: "16 tỷ" },
+    { title: "CĂN 4PN GIÁ TỪ", price: "16 tỷ" },
   ];
 
   return (
