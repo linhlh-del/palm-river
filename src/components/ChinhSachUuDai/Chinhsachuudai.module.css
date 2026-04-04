@@ -31,8 +31,8 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 5rem;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 3rem;
 }
 
 .card {
@@ -40,7 +40,7 @@
   flex-direction: column;
   border: 1px solid #fff;
   padding: 0.5rem;
-  height: 8rem;
+  height: 9rem;
 }
 
 .cardTitle {
@@ -62,10 +62,10 @@
 .slider {
   width: 100%;
   flex: 1;
-  overflow: hidden;
   border-radius: 10px;
-  /* position relative để arrow absolute bên trong */
   position: relative;
+  aspect-ratio: 2560 / 1437;
+  overflow: hidden;
 }
 
 .image {
@@ -73,6 +73,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  cursor: zoom-in;
 }
 
 /* ── ARROW BUTTONS ── */
@@ -120,26 +121,158 @@
   right: 14px;
 }
 
+/* ── DOTS ── */
+.dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+}
+
+.dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.activeDot {
+  background: #fff !important;
+}
+
+/* ── ZOOM MODAL ── */
+.zoomOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.zoomModal {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zoomImage {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 6px;
+  aspect-ratio: 2560 / 1437;
+}
+
+.zoomCloseBtn {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.zoomArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  z-index: 2;
+  padding: 0;
+}
+
+.zoomArrow:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.zoomArrow img {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+}
+
+.zoomArrowLeft {
+  left: -60px;
+}
+.zoomArrowRight {
+  right: -60px;
+}
+
+.zoomDots {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+
+.zoomDots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.zoomActiveDot {
+  background: #fff !important;
+}
+
 /* ── RESPONSIVE ── */
+
+@media (max-width: 1600px) {
+  .grid {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1.5rem;
+  }
+  .card {
+    height: 8rem;
+  }
+  .cardTitle {
+    padding-top: 0.85rem;
+    font-size: 1rem;
+  }
+}
 
 @media (max-width: 1200px) {
   .grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 1.75rem;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1.5rem;
+  }
+  .card {
+    height: 8rem;
+    gap: 0.5rem;
   }
   .cardTitle {
     padding-top: 0.75rem;
-    font-size: 1rem;
-    display: block;
-    color: #fff;
+    font-size: 0.8rem;
   }
-
   .cardPrice {
-    font-family: SVN-Mightiest;
-    font-size: 3rem;
-    color: #fff;
-    text-align: center;
+    font-size: 3.25rem;
   }
 }
 
@@ -160,16 +293,17 @@
   }
   .grid {
     grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    gap: 2.5rem;
   }
   .card {
-    height: 7rem;
+    height: 8rem;
   }
   .cardTitle {
-    font-size: 1.1rem;
+    font-size: 1.25rem;
+    padding-top: 0.2rem;
   }
   .cardPrice {
-    font-size: 3rem;
+    font-size: 4rem;
   }
 }
 
@@ -178,7 +312,7 @@
     padding: 40px 30px;
   }
   .container {
-    gap: 25px;
+    gap: 1.5rem;
   }
   .mainTitle {
     font-size: 2.25rem;
@@ -190,7 +324,7 @@
   }
   .grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    gap: 1rem;
   }
   .card {
     height: 6rem;
@@ -203,9 +337,6 @@
   .cardPrice {
     font-size: 2.5rem;
   }
-  .slider {
-    height: 300px;
-  }
   .arrow {
     width: 38px;
     height: 38px;
@@ -213,6 +344,12 @@
   .arrow img {
     width: 18px;
     height: 18px;
+  }
+  .zoomArrowLeft {
+    left: -44px;
+  }
+  .zoomArrowRight {
+    right: -44px;
   }
 }
 
@@ -248,9 +385,6 @@
   .cardPrice {
     font-size: 2rem;
   }
-  .slider {
-    height: 250px;
-  }
   .arrow {
     width: 32px;
     height: 32px;
@@ -258,5 +392,19 @@
   .arrow img {
     width: 15px;
     height: 15px;
+  }
+  .zoomArrow {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+  .zoomArrow img {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+  .zoomArrowLeft {
+    left: -36px;
+  }
+  .zoomArrowRight {
+    right: -36px;
   }
 }

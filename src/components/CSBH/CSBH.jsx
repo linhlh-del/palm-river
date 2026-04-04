@@ -121,7 +121,7 @@ export default function CSBH() {
                 </span>
               </div>
               <div className={styles.Main_152_149}>
-                <span className={styles.generated_18_152_150}>18%</span>
+                <span className={styles.generated_18_152_150}>16,85%</span>
               </div>
               <div className={styles.Text_152_151}>
                 <span className={styles.BookingSớmThanhToánSớm_152_152}>

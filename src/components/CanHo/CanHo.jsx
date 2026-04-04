@@ -10,10 +10,10 @@ const TABS = [
       {
         id: "1pn",
         label: "1PN",
-        price: "7,3 tỷ",
+        price: "6,5 tỷ",
         specs: [
-          { label: "Diện tích thông thủy (NFA)", value: "46.59–55.51m²" },
-          { label: "Diện tích sàn thực (NSA)", value: "41.52–49.86m²" },
+          { label: "Diện tích thông thủy (NFA)", value: "47 – 57m²" },
+          { label: "Diện tích sàn thực (NSA)", value: "47 – 57m²" },
           { label: "Pháp lý", value: "Sổ hồng riêng" },
           { label: "Sở hữu", value: "Lâu dài" },
           { label: "Bàn giao", value: "Năm 2026" },
@@ -29,10 +29,10 @@ const TABS = [
       {
         id: "1pn+",
         label: "1PN+",
-        price: "8,1 tỷ",
+        price: "7 tỷ",
         specs: [
-          { label: "Diện tích thông thủy (NFA)", value: "52.00–60.00m²" },
-          { label: "Diện tích sàn thực (NSA)", value: "46.00–54.00m²" },
+          { label: "Diện tích thông thủy (NFA)", value: "55 – 57m²" },
+          { label: "Diện tích sàn thực (NSA)", value: "55 – 57m²" },
           { label: "Pháp lý", value: "Sổ hồng riêng" },
           { label: "Sở hữu", value: "Lâu dài" },
           { label: "Bàn giao", value: "Năm 2026" },
@@ -54,10 +54,10 @@ const TABS = [
       {
         id: "2pn",
         label: "2PN",
-        price: "12,5 tỷ",
+        price: "8,8 tỷ",
         specs: [
-          { label: "Diện tích thông thủy (NFA)", value: "72.10–85.40m²" },
-          { label: "Diện tích sàn thực (NSA)", value: "65.20–77.50m²" },
+          { label: "Diện tích thông thủy (NFA)", value: "75 – 80m²" },
+          { label: "Diện tích sàn thực (NSA)", value: "75 – 80m²" },
           { label: "Pháp lý", value: "Sổ hồng riêng" },
           { label: "Sở hữu", value: "Lâu dài" },
           { label: "Bàn giao", value: "Năm 2026" },
@@ -71,10 +71,10 @@ const TABS = [
       {
         id: "2pn+",
         label: "2PN+",
-        price: "14,2 tỷ",
+        price: "10 tỷ",
         specs: [
-          { label: "Diện tích thông thủy (NFA)", value: "88.00–98.00m²" },
-          { label: "Diện tích sàn thực (NSA)", value: "79.00–88.00m²" },
+          { label: "Diện tích thông thủy (NFA)", value: "82 – 85m²" },
+          { label: "Diện tích sàn thực (NSA)", value: "82 – 85m²" },
           { label: "Pháp lý", value: "Sổ hồng riêng" },
           { label: "Sở hữu", value: "Lâu dài" },
           { label: "Bàn giao", value: "Năm 2026" },
@@ -92,10 +92,10 @@ const TABS = [
       {
         id: "3pn",
         label: "3PN",
-        price: "18,9 tỷ",
+        price: "13 tỷ",
         specs: [
-          { label: "Diện tích thông thủy (NFA)", value: "105.0–128.5m²" },
-          { label: "Diện tích sàn thực (NSA)", value: "95.2–116.8m²" },
+          { label: "Diện tích thông thủy (NFA)", value: "100 – 130m²" },
+          { label: "Diện tích sàn thực (NSA)", value: "100 – 130m²" },
           { label: "Pháp lý", value: "Sổ hồng riêng" },
           { label: "Sở hữu", value: "Lâu dài" },
           { label: "Bàn giao", value: "Năm 2026" },
@@ -116,10 +116,10 @@ const TABS = [
       {
         id: "4pn",
         label: "4PN",
-        price: "Liên hệ",
+        price: "16 tỷ",
         specs: [
-          { label: "Diện tích thông thủy (NFA)", value: "Cập nhật sau" },
-          { label: "Diện tích sàn thực (NSA)", value: "Cập nhật sau" },
+          { label: "Diện tích thông thủy (NFA)", value: "120 – 140m²" },
+          { label: "Diện tích sàn thực (NSA)", value: "120 – 140m²" },
           { label: "Pháp lý", value: "Sổ hồng riêng" },
           { label: "Sở hữu", value: "Lâu dài" },
           { label: "Bàn giao", value: "Năm 2026" },
