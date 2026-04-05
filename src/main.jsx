@@ -1,13 +1,13 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import "./styles/variables.css"; // ← đầu tiên, trước tất cả
+import "./styles/variables.css";
 import "./index.css";
 import App from "./App.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/can-ho-cao-cap-masteri-cosmo-central-the-global-city">
       <App />
     </BrowserRouter>
   </StrictMode>,
