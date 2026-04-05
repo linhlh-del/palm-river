@@ -5,8 +5,7 @@ import logoLusso from "../../assets/images/logo-oneplus.png";
 import Toast from "./Toast";
 
 const SHEET_URL =
-  "https://script.google.com/macros/s/AKfycbzgYpSnaUB7vn7hmXMRuuEUF9J9bPu2UR5VxN2Rbi-AJTlRJAk5yW0aPNf-XDW-Rk95MA/exec";
-
+  "https://script.google.com/macros/s/AKfycbzKAY7Tvd8tZpsXyzG1TdF6Hi9OT0oC-VOr-2zdNvgvQ1qSLXNFJe9qWSvVQ_tnaf3m/exec";
 export default function PopUp({ isOpen, onClose }) {
   const navigate = useNavigate();
   const [form, setForm] = useState({

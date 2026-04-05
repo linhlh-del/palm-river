@@ -4,7 +4,7 @@ import styles from "./CSBH.module.css";
 import toast from "react-hot-toast";
 
 const SHEET_URL =
-  "https://script.google.com/macros/s/AKfycbzgYpSnaUB7vn7hmXMRuuEUF9J9bPu2UR5VxN2Rbi-AJTlRJAk5yW0aPNf-XDW-Rk95MA/exec";
+  "https://script.google.com/macros/s/AKfycbzKAY7Tvd8tZpsXyzG1TdF6Hi9OT0oC-VOr-2zdNvgvQ1qSLXNFJe9qWSvVQ_tnaf3m/exec";
 
 export default function CSBH() {
   const navigate = useNavigate();
