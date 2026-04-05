@@ -2,7 +2,7 @@ import styles from "./FloatingButtons.module.css";
 
 const PHONE_NUMBER = "0939 535 111";
 const PHONE_DISPLAY = "0939 535 111";
-const ZALO_URL = "https://zalo.me/0877191940";
+const ZALO_URL = "https://zalo.me/0868546821";
 
 import zaloLogo from "../../assets/images/logo-zalo.webp";
 
