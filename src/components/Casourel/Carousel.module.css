@@ -25,24 +25,6 @@
   box-sizing: border-box;
 }
 
-@media (max-width: 1024px) {
-  .carousel {
-    padding: 0 4rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .carousel {
-    padding: 0 2rem;
-  }
-}
-
-@media (max-width: 600px) {
-  .carousel {
-    padding: 0 1rem;
-  }
-}
-
 .list {
   display: flex;
   gap: 3rem;
@@ -52,10 +34,6 @@
   box-sizing: border-box;
 }
 
-/* Card – nhỏ hơn, thoáng hơn ở màn lớn
-   ở 1920px: 42vw = 806px → giới hạn 780px (~40% màn hình)
-   ở 1280px: 42vw = 538px → vừa vặn
-*/
 .card {
   min-width: clamp(400px, 42vw, 780px);
   aspect-ratio: 16 / 9;
@@ -66,6 +44,7 @@
   align-items: flex-end;
   transition: transform 0.8s ease;
   flex-shrink: 0;
+  cursor: zoom-in;
 }
 
 /* Overlay text */
@@ -157,140 +136,153 @@
 }
 
 /* ════════════════════════════════════════
+   ZOOM MODAL
+════════════════════════════════════════ */
+@keyframes zoomFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.zoomOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: zoomFadeIn 0.25s ease-in;
+}
+
+.zoomModal {
+  position: relative;
+  width: 90%;
+  max-width: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zoomImage {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 6px;
+  aspect-ratio: 16 / 9;
+  display: block;
+}
+
+/* Caption overlay lên hình giống overlay desktop */
+.zoomCaption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 16px 20px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #004380;
+  text-align: left;
+  letter-spacing: 0.05em;
+  border-radius: 0 0 6px 6px;
+}
+
+/* Close button góc trên phải */
+.zoomCloseBtn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  color: #930027;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  z-index: 10;
+  transform: translate(50%, -50%);
+}
+
+.zoomCloseBtn:hover {
+  background: #fff;
+}
+
+/* Arrows */
+.zoomArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: background 0.2s;
+  z-index: 2;
+  padding: 0;
+}
+
+.zoomArrow:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.zoomArrow img {
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain;
+}
+
+.zoomArrowLeft {
+  left: -20px;
+}
+.zoomArrowRight {
+  right: -20px;
+}
+
+/* Dots nằm trên caption */
+.zoomDots {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 3;
+}
+
+.zoomDots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.zoomActiveDot {
+  background: #fff !important;
+}
+
+/* ════════════════════════════════════════
    RESPONSIVE
 ════════════════════════════════════════ */
-/* @media (max-width: 1200px) {
-  .carousel {
-    padding: 0 2rem;
-    overflow: visible;
-  }
-  .list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    transition: none;
-  }
-  .card {
-    min-width: 100%;
-    aspect-ratio: 16 / 9;
-    background-size: contain;
-  }
-  .card:last-child {
-    display: none;
-  }
-  .controls {
-    display: none;
-  }
-} */
-/* @media (max-width: 1200px) {
-  .carousel {
-    padding: 0 2rem;
-    overflow: hidden; 
-  }
-  .card {
-    min-width: clamp(340px, 70vw, 700px);
-    aspect-ratio: 16 / 9;
-  }
-} */
-
-/* @media (max-width: 1024px) {
-  .wrapper {
-    padding: 60px 0;
-  }
-  .title {
-    font-size: 48px;
-    margin-bottom: 30px;
-  }
-  .list {
-    gap: 1.5rem;
-  }
-  .overlay {
-    padding: 15px;
-  }
-  .overlay p {
-    font-size: 20px;
-  }
-  .dotCurrent {
-    font-size: 30px;
-  }
-  .dotSep,
-  .dotTotal {
-    font-size: 18px;
-  }
-  .arrowImg {
-    width: 28px;
-    height: 28px;
-  }
-} */
-
-/* @media (max-width: 768px) {
-  .wrapper {
-    padding: 40px 0;
-  }
-  .title {
-    font-size: 36px;
-    margin-bottom: 20px;
-  }
-  .list {
-    gap: 1rem;
-  }
-  .overlay {
-    padding: 12px;
-  }
-  .overlay p {
-    font-size: 16px;
-  }
-  .controls {
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-  }
-  .dotCurrent {
-    font-size: 26px;
-  }
-  .dotSep,
-  .dotTotal {
-    font-size: 16px;
-  }
-  .arrowImg {
-    width: 24px;
-    height: 24px;
-  }
-} */
-
-/* @media (max-width: 600px) {
-  .wrapper {
-    padding: 30px 0;
-  }
-  .title {
-    font-size: 1.75rem;
-    margin-bottom: 1.5rem;
-  }
-  .list {
-    gap: 0.5rem;
-  }
-  .overlay {
-    padding: 10px;
-  }
-  .overlay p {
-    font-size: 14px;
-  }
-  .controls {
-    gap: 1.25rem;
-    margin-top: 1.25rem;
-  }
-  .dotCurrent {
-    font-size: 22px;
-  }
-  .dotSep,
-  .dotTotal {
-    font-size: 14px;
-  }
-  .arrowImg {
-    width: 20px;
-    height: 20px;
-  }
-} */
-
 @media (max-width: 1200px) {
   .carousel {
     padding: 0 2rem;
@@ -311,7 +303,7 @@
   }
   .card {
     min-width: clamp(300px, 75vw, 640px);
-    aspect-ratio: 16/9;
+    aspect-ratio: 16 / 9;
   }
   .overlay p {
     font-size: 20px;
@@ -331,7 +323,7 @@
   }
   .card {
     min-width: clamp(260px, 80vw, 560px);
-    aspect-ratio: 4/3;
+    aspect-ratio: 4 / 3;
   }
   .overlay p {
     font-size: 16px;
@@ -351,6 +343,28 @@
     width: 24px;
     height: 24px;
   }
+  .zoomArrowLeft {
+    left: 8px;
+  }
+  .zoomArrowRight {
+    right: 8px;
+  }
+  .zoomArrow {
+    width: 2.2rem;
+    height: 2.2rem;
+    background: rgba(255, 255, 255, 0.25);
+  }
+  .zoomArrow img {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+  .zoomDots {
+    bottom: 50px;
+  }
+  .zoomCaption {
+    font-size: 0.85rem;
+    padding: 10px 14px;
+  }
 }
 
 @media (max-width: 600px) {
@@ -366,7 +380,7 @@
   }
   .card {
     min-width: 82vw;
-    aspect-ratio: 4/3;
+    aspect-ratio: 4 / 3;
   }
   .overlay p {
     font-size: 14px;
@@ -388,5 +402,21 @@
   .arrowImg {
     width: 20px;
     height: 20px;
+  }
+  .zoomModal {
+    width: 95%;
+  }
+  .zoomArrowLeft {
+    left: 8px;
+  }
+  .zoomArrowRight {
+    right: 8px;
+  }
+  .zoomDots {
+    bottom: 44px;
+  }
+  .zoomCaption {
+    font-size: 0.75rem;
+    padding: 8px 12px;
   }
 }

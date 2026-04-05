@@ -24,6 +24,8 @@ export default function Carousel() {
   const [index, setIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [slideWidth, setSlideWidth] = useState(0);
+  const [isZoomOpen, setIsZoomOpen] = useState(false);
+  const [zoomIndex, setZoomIndex] = useState(0);
   const carouselRef = useRef(null);
   const listRef = useRef(null);
 
@@ -39,7 +41,6 @@ export default function Carousel() {
   };
 
   useEffect(() => {
-    // Đợi DOM render xong mới tính
     const timer = setTimeout(calcSlideWidth, 100);
     window.addEventListener("resize", calcSlideWidth);
     return () => {
@@ -48,13 +49,14 @@ export default function Carousel() {
     };
   }, []);
 
-  /* ── Auto slide ── */
+  /* ── Auto slide — dừng khi zoom ── */
   useEffect(() => {
+    if (isZoomOpen) return;
     const id = setInterval(() => setIndex((p) => p + 1), 3000);
     return () => clearInterval(id);
-  }, []);
+  }, [isZoomOpen]);
 
-  /* ── Wrap-around khi đến clone ── */
+  /* ── Wrap-around ── */
   useEffect(() => {
     if (index === data.length) {
       const t = setTimeout(() => {
@@ -64,30 +66,61 @@ export default function Carousel() {
       return () => clearTimeout(t);
     }
     if (index === 0 && !isTransitioning) {
-      // Bật lại transition sau khi reset
       const t = setTimeout(() => setIsTransitioning(true), 50);
       return () => clearTimeout(t);
     }
   }, [index, isTransitioning]);
 
-  /* ── Prev ── */
+  /* ── Prev / Next slide ── */
   const handlePrev = () => {
     setIndex((p) => {
       if (p === 0) {
-        // Nhảy tức thì (không transition) sang clone cuối, rồi lùi về data.length-1
         setIsTransitioning(false);
         setTimeout(() => {
           setIsTransitioning(true);
           setIndex(data.length - 1);
         }, 50);
-        return data.length; // clone
+        return data.length;
       }
       return p - 1;
     });
   };
 
-  /* ── Next ── */
   const handleNext = () => setIndex((p) => p + 1);
+
+  /* ── Zoom handlers ── */
+  const openZoom = () => {
+    const realIndex = index >= data.length ? 0 : index;
+    setZoomIndex(realIndex);
+    setIsZoomOpen(true);
+  };
+
+  const closeZoom = () => setIsZoomOpen(false);
+
+  const handleZoomPrev = () =>
+    setZoomIndex((p) => (p - 1 + data.length) % data.length);
+
+  const handleZoomNext = () => setZoomIndex((p) => (p + 1) % data.length);
+
+  /* ── Keyboard khi zoom ── */
+  useEffect(() => {
+    if (!isZoomOpen) return;
+    const handler = (e) => {
+      if (e.key === "Escape") closeZoom();
+      if (e.key === "ArrowLeft") handleZoomPrev();
+      if (e.key === "ArrowRight") handleZoomNext();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [isZoomOpen, zoomIndex]);
+
+  /* ── Lock scroll ── */
+  useEffect(() => {
+    document.body.style.overflow = isZoomOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isZoomOpen]);
 
   const displayIndex = index >= data.length ? 1 : index + 1;
 
@@ -109,6 +142,7 @@ export default function Carousel() {
               key={i}
               className={styles.card}
               style={{ backgroundImage: `url(${item.image})` }}
+              onClick={openZoom}
             >
               <div className={styles.overlay}>
                 <p>{item.title}</p>
@@ -119,6 +153,7 @@ export default function Carousel() {
           <div
             className={styles.card}
             style={{ backgroundImage: `url(${data[0].image})` }}
+            onClick={openZoom}
           >
             <div className={styles.overlay}>
               <p>{data[0].title}</p>
@@ -164,6 +199,59 @@ export default function Carousel() {
           />
         </button>
       </div>
+
+      {/* ZOOM MODAL */}
+      {isZoomOpen && (
+        <div className={styles.zoomOverlay} onClick={closeZoom}>
+          <div
+            className={styles.zoomModal}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button className={styles.zoomCloseBtn} onClick={closeZoom}>
+              ✕
+            </button>
+
+            <img
+              src={data[zoomIndex].image}
+              alt={data[zoomIndex].title}
+              className={styles.zoomImage}
+            />
+
+            <div className={styles.zoomCaption}>{data[zoomIndex].title}</div>
+
+            <button
+              className={`${styles.zoomArrow} ${styles.zoomArrowLeft}`}
+              onClick={handleZoomPrev}
+            >
+              <img
+                src={arrowIcon}
+                alt="prev"
+                style={{ transform: "rotate(90deg)" }}
+              />
+            </button>
+            <button
+              className={`${styles.zoomArrow} ${styles.zoomArrowRight}`}
+              onClick={handleZoomNext}
+            >
+              <img
+                src={arrowIcon}
+                alt="next"
+                style={{ transform: "rotate(-90deg)" }}
+              />
+            </button>
+
+            <div className={styles.zoomDots}>
+              {data.map((_, i) => (
+                <span
+                  key={i}
+                  className={i === zoomIndex ? styles.zoomActiveDot : ""}
+                  onClick={() => setZoomIndex(i)}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
