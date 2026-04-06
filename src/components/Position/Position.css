@@ -88,6 +88,7 @@
 .minutes {
   font-size: 14px;
 }
+
 .right {
   text-align: left;
   flex: 1;
@@ -111,7 +112,7 @@
   max-width: 1617px;
   margin: 40px auto;
   padding: 0 20px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .vitri-image img {
@@ -141,21 +142,179 @@
   font-size: 14px;
 }
 
+/* MAP WRAP */
+.map-wrap {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+.map-wrap img {
+  width: 100%;
+  display: block;
+  aspect-ratio: 1617 / 721;
+  object-fit: cover;
+}
+
+/* SVG ROUTES */
+.route-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.dr {
+  fill: none;
+  stroke: #004380;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 12 0;
+  opacity: 0.9;
+}
+
+.dw {
+  fill: none;
+  stroke: #fff;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 8 6;
+  opacity: 1;
+}
+
+.dr1,
+.dr2,
+.dr4 {
+  stroke-width: 7;
+  animation: dash-move 1.8s linear infinite;
+}
+
+.dw1,
+.dw2,
+.dw4 {
+  stroke-width: 2;
+  animation: dash-move 1.8s linear infinite;
+}
+
+@keyframes dash-move {
+  to {
+    stroke-dashoffset: -30;
+  }
+}
+
+/* MARKERS */
+.marker {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* MARKER IMAGE */
+.marker-img {
+  width: 8rem !important;
+  height: 8rem !important;
+  display: block;
+  object-fit: contain !important;
+  animation: marker-bounce 2s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+@keyframes marker-bounce {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  30% {
+    transform: translateY(-6px) scale(1.08);
+  }
+  60% {
+    transform: translateY(-2px) scale(1.03);
+  }
+}
+
+/* PULSE */
+.pulse-wrap {
+  position: relative;
+}
+
+/* POPUP — hiện bên phải marker */
+.popup {
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  bottom: auto;
+  background: #004380;
+  color: #fff;
+  border-radius: 10px;
+  padding: 14px 16px;
+  width: 220px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  font-family: "Montserrat", Helvetica, sans-serif;
+  z-index: 20;
+}
+
+/* mũi tên trỏ sang trái vào marker */
+.popup::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -14px;
+  transform: translateY(-50%);
+  border: 7px solid transparent;
+  border-right-color: #004380;
+}
+
+.marker-main:hover .popup {
+  opacity: 1;
+}
+
+.popup-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ff994c;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.popup-row {
+  font-size: 11px;
+  line-height: 1.6;
+  opacity: 0.9;
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.popup-dot {
+  margin-top: 4px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ff994c;
+  flex-shrink: 0;
+}
+
 /* RESPONSIVE */
 @media (max-width: 1800px) {
   .vitri-header .container {
-    display: grid;
     grid-template-columns: 0.6fr 1fr;
-    align-items: center;
-    text-align: center;
   }
 }
+
 @media (max-width: 1200px) {
   .vitri-header .container {
-    display: grid;
     grid-template-columns: 0.75fr 1fr;
-    align-items: center;
-    text-align: center;
+  }
+
+  .marker-img {
+    width: 5rem !important;
+    height: 5rem !important;
   }
 }
 
@@ -167,8 +326,6 @@
 
   .title {
     font-size: 2.5rem;
-    padding-left: 0;
-    text-align: center;
   }
 
   .desc {
@@ -183,6 +340,11 @@
   .container {
     max-width: 90%;
   }
+
+  .marker-img {
+    width: 4rem !important;
+    height: 4rem !important;
+  }
 }
 
 @media (max-width: 768px) {
@@ -193,8 +355,6 @@
 
   .title {
     font-size: 1.75rem;
-    padding-left: 0;
-    text-align: center;
   }
 
   .desc {
@@ -219,6 +379,15 @@
   .container {
     max-width: 95%;
   }
+
+  .marker-img {
+    width: 3rem !important;
+    height: 3rem !important;
+  }
+
+  .popup {
+    width: 180px;
+  }
 }
 
 @media (max-width: 600px) {
@@ -234,14 +403,11 @@
   .title {
     display: block;
     font-size: 1.75rem;
-    padding-left: 0;
-    text-align: center;
   }
 
   .title span {
     display: inline;
     width: auto;
-    text-align: center;
   }
 
   .desc {
@@ -273,10 +439,6 @@
     font-size: 12px;
   }
 
-  .right {
-    text-align: left;
-  }
-
   .right p {
     font-size: 0.7rem;
     margin: 0;
@@ -286,13 +448,25 @@
     max-width: 100%;
     padding: 0 10px;
   }
+
   .vitri-image {
     width: 100%;
     padding: 0;
-    overflow: hidden;
   }
+
   .vitri-image img {
-    /* height: 300px; */
     aspect-ratio: 1617 / 721;
+  }
+
+  .marker-img {
+    width: 2rem !important;
+    height: 2rem !important;
+  }
+
+  .popup {
+    width: 150px;
+    padding: 10px 12px;
+    font-size: 10px;
+    left: calc(100% + 8px);
   }
 }
