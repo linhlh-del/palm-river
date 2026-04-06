@@ -22,7 +22,7 @@
 }
 
 .container {
-  max-width: 80%;
+  max-width: 84%;
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -62,7 +62,7 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   margin: 3.75rem auto;
-  max-width: 76%;
+  max-width: 84%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -76,29 +76,28 @@
   gap: 1rem;
 }
 
-.left {
+.card-left {
   text-align: center;
-  margin-right: 15px;
 }
 
 .number {
-  font-size: 48px;
+  font-size: 4.5rem;
   color: #1760ad;
 }
 
 .minutes {
-  font-size: 14px;
+  font-size: 1.5rem;
 }
 
-.right {
+.card-right {
   text-align: left;
   flex: 1;
 }
 
-.right p {
+.card-right p {
   font-family: "Montserrat", Helvetica, sans-serif;
-  font-size: 1rem !important;
-  margin-bottom: 4px;
+  font-size: 1.15rem;
+  margin-bottom: 0.4rem;
   line-height: 1.4;
   word-wrap: break-word;
   letter-spacing: 0;
@@ -312,7 +311,10 @@
   .vitri-header .container {
     grid-template-columns: 0.75fr 1fr;
   }
-
+  .card-right p {
+    margin-bottom: 0.2rem;
+    font-size: 1rem;
+  }
   .marker-img {
     width: 5rem !important;
     height: 5rem !important;
@@ -341,7 +343,13 @@
   .container {
     max-width: 90%;
   }
-
+  .card-left .minutes {
+    font-size: 1.25rem;
+  }
+  .card-right p {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
   .marker-img {
     width: 4rem !important;
     height: 4rem !important;
@@ -371,15 +379,18 @@
 
   .card {
     padding: 0.5rem;
-    gap: 0.5rem;
+    gap: 0.75rem;
   }
 
   .number {
-    font-size: 36px;
+    font-size: 3rem;
   }
-
+  .card-right p {
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+  }
   .container {
-    max-width: 95%;
+    max-width: 100%;
   }
 
   .marker-img {
@@ -426,22 +437,23 @@
   }
 
   .card {
-    padding: 0.2rem 0.5rem;
+    padding: 0.2rem 0.75rem;
+    gap: 0.75rem;
   }
 
-  .left {
+  .card-left {
     margin-bottom: 8px;
   }
 
-  .number {
-    font-size: 2.25rem;
+  .card-left.number {
+    font-size: 3rem;
   }
 
-  .minutes {
-    font-size: 12px;
+  .card-left .minutes {
+    font-size: 1rem;
   }
 
-  .card .right p {
+  .card .card-right p {
     font-size: 0.7rem !important;
     margin: 0;
   }
@@ -499,4 +511,8 @@
     height: 4px;
     margin-top: 3px;
   }
+}
+
+@media (max-width: 480px) {
+
 }
