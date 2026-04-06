@@ -464,9 +464,37 @@
   }
 
   .popup {
-    width: 150px;
-    padding: 10px 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: auto;
+    bottom: calc(100% + 10px);
+    width: 130px;
+    padding: 8px 10px;
+  }
+
+  /* Mũi tên trỏ xuống phía marker */
+  .popup::after {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #004380;
+    border-right-color: transparent;
+  }
+
+  .popup-title {
     font-size: 10px;
-    left: calc(100% + 8px);
+    margin-bottom: 4px;
+  }
+
+  .popup-row {
+    font-size: 9px;
+    line-height: 1.5;
+  }
+
+  .popup-dot {
+    width: 4px;
+    height: 4px;
+    margin-top: 3px;
   }
 }
