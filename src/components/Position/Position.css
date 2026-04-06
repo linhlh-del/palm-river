@@ -73,6 +73,7 @@
   padding: 1rem;
   align-items: center;
   font-family: SVN-Mightiest;
+  gap: 1rem;
 }
 
 .left {
@@ -96,7 +97,7 @@
 
 .right p {
   font-family: "Montserrat", Helvetica, sans-serif;
-  font-size: 1rem;
+  font-size: 1rem !important;
   margin-bottom: 4px;
   line-height: 1.4;
   word-wrap: break-word;
@@ -369,7 +370,8 @@
   }
 
   .card {
-    padding: 12px;
+    padding: 0.5rem;
+    gap: 0.5rem;
   }
 
   .number {
@@ -432,15 +434,15 @@
   }
 
   .number {
-    font-size: 2rem;
+    font-size: 2.25rem;
   }
 
   .minutes {
     font-size: 12px;
   }
 
-  .right p {
-    font-size: 0.7rem;
+  .card .right p {
+    font-size: 0.7rem !important;
     margin: 0;
   }
 
