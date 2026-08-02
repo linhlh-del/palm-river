@@ -69,6 +69,11 @@
   object-fit: contain;
   opacity: 0.9;
 }
+.imgBack,
+.imgFront {
+  filter: brightness(0) saturate(100%) invert(80%) sepia(45%) saturate(500%)
+    hue-rotate(360deg) brightness(95%) contrast(90%);
+}
 
 /* ════════════════════════
    KEYFRAMES

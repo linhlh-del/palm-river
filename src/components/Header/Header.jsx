@@ -10,9 +10,8 @@ const NAV_ITEMS = [
   { label: "VỊ TRÍ", href: "#map" },
   { label: "MẶT BẰNG", href: "#mat-bang-tong-the" },
   { label: "TIỆN ÍCH", href: "#tien-ich" },
-  { label: "CHÍNH SÁCH", href: "#ban-hang" },
-  { label: "LIÊN HỆ", href: "#lien-he" },
   { label: "TIN TỨC", href: "#tin-tuc" },
+  { label: "LIÊN HỆ", href: "#lien-he" },
 ];
 
 export default function Header({ onOpenModal }) {

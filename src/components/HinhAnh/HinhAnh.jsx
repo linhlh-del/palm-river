@@ -55,7 +55,8 @@ export default function HinhAnh({ onOpenModal }) {
           ))}
         </div>
 
-        <div className="tinb-gallery-carousel">
+        {/* MOBILE: carousel */}
+        <div className="tinb-gallery-carousel tinb-carousel-view">
           {/* Ảnh + nút mũi tên giờ nằm chung 1 khối, mũi tên đè lên trên ảnh */}
           <div className="tinb-carousel-main">
             <div className="tinb-gallery-item show">
@@ -94,6 +95,18 @@ export default function HinhAnh({ onOpenModal }) {
               <img src={arrowRight} alt="Ảnh tiếp theo" />
             </button>
           </div>
+        </div>
+
+        {/* TABLET / DESKTOP: grid */}
+        <div className="tinb-gallery-grid tinb-grid-view">
+          {gallery.map((item, index) => (
+            <div className="tinb-grid-item" key={`${item.category}-${index}`}>
+              <img src={item.src} alt={item.alt} loading="lazy" />
+              <div className="tinb-grid-overlay">
+                <span>{item.label}</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

@@ -2,6 +2,15 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./GetInfor.module.css";
 import toast from "react-hot-toast";
+
+const APARTMENT_TYPES = [
+  "Căn Studio",
+  "Căn 1 Phòng Ngủ",
+  "Căn 2 Phòng Ngủ",
+  "Căn 3 Phòng Ngủ",
+  "Garden House",
+  "Shophouse Khối Đế",
+];
 const SHEET_URL =
   "https://script.google.com/macros/s/AKfycbzKAY7Tvd8tZpsXyzG1TdF6Hi9OT0oC-VOr-2zdNvgvQ1qSLXNFJe9qWSvVQ_tnaf3m/exec";
 
@@ -148,13 +157,21 @@ export default function GetInfor() {
             </div>
             <div className={styles.inputGroup} style={{ position: "relative" }}>
               <label>Nhu cầu</label>
-              <input
-                type="email"
+              <select
                 name="email"
-                placeholder="Loại hình căn hộ (không bắt buộc)"
                 value={form.email}
                 onChange={handleChange}
-              />
+                className={styles.select}
+              >
+                <option value="" disabled hidden>
+                  Chọn loại hình căn hộ (không bắt buộc)
+                </option>
+                {APARTMENT_TYPES.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <button type="submit" className={styles.btn} disabled={loading}>
@@ -163,7 +180,7 @@ export default function GetInfor() {
           </form>
 
           <div className={styles.hotline}>
-            Hotline phòng kinh doanh: 0869 702 321
+            {/* Hotline phòng kinh doanh: 0869 702 321 */}
           </div>
         </div>
       </div>

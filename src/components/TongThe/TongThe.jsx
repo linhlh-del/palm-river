@@ -1,7 +1,7 @@
 import "./TongThe.css";
 import { useState } from "react";
 import matBangImg from "../../assets/images/masterplan.jpg";
-
+import arrowImg from "../../assets/images/arrow-icon.png";
 // ── Data building/tiện ích trên mặt bằng ─────────────────────────────────────
 const BUILDINGS = [
   {
@@ -9,6 +9,8 @@ const BUILDINGS = [
     name: "palm river",
     top: "74%",
     left: "32%",
+    hintTop: "66%", // ← toạ độ riêng của popup hint, chỉnh tuỳ ý
+    hintLeft: "32%", // ← toạ độ riêng của popup hint, chỉnh tuỳ ý
     viewBox: "392 667 276 222",
     path: "M622.5 687L638.5 691.5L640 692L641.5 824L645.5 829V839L648 849.5L541.5 868.5L521 863.5L484 858L472 859.5L427 854.5L420.5 719.5L412 714V701L414 695H469.5L474.5 826H482.5L478.5 698L487.5 696.5H533L537 837L554.5 835.5L550.5 696.5L601 693V689L622.5 687Z",
   },
@@ -147,6 +149,32 @@ export default function TongThe() {
                   </svg>
                 </div>
               </a>
+            </div>
+          ))}
+          {/* Popup luôn hiển thị — chỉ khu vực cần chú ý, toạ độ riêng */}
+          {/* Popup luôn hiển thị — chỉ khu vực cần chú ý, toạ độ riêng */}
+          {BUILDINGS.map((b) => (
+            <div
+              key={`hint-${b.id}`}
+              data-id={b.id}
+              className={`mb__hint hint-${b.id}`}
+              style={{ top: b.hintTop, left: b.hintLeft }}
+            >
+              <div className="mb__hint-label">{b.name}</div>
+              <div className="mb__hint-imgStack">
+                <img
+                  src={arrowImg}
+                  alt=""
+                  className="mb__hint-imgBack"
+                  draggable={false}
+                />
+                <img
+                  src={arrowImg}
+                  alt=""
+                  className="mb__hint-imgFront"
+                  draggable={false}
+                />
+              </div>
             </div>
           ))}
         </div>

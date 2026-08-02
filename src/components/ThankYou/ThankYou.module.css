@@ -2,7 +2,7 @@
 .pageWrapper {
   min-height: 100vh;
   width: 100%;
-  background: #004380;
+  background-image: url(../../assets/images/bg-web.jpg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -106,7 +106,7 @@
 /* CTA BUTTON */
 .ctaBtn {
   background: #fff;
-  color: #004380;
+  color: #d2b57c;
   padding: 1.125rem 2rem;
   border: none;
   border-radius: 6px;

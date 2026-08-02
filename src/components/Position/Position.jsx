@@ -13,6 +13,26 @@ const renderDecoratedTitle = (label) => (
   </span>
 );
 
+// Dùng riêng cho title trong các card (data) - có diamond thay vì sparkle
+const renderCardTitle = (label) => (
+  <span className="title-line card-diamond-line">
+    <span className="card-diamond" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="10" height="10">
+        <rect
+          x="4"
+          y="4"
+          width="16"
+          height="16"
+          rx="4"
+          transform="rotate(45 12 12)"
+          fill="currentColor"
+        />
+      </svg>
+    </span>
+    <span className="card-title-label">{label}</span>
+  </span>
+);
+
 export default function Position() {
   const mapWrapRef = useRef(null);
 
@@ -43,8 +63,8 @@ export default function Position() {
       <div className="vitri-header">
         <div className="container">
           <h2 className="title">
-            {renderDecoratedTitle("TÂM ĐIỂM")}
-            {renderDecoratedTitle("KẾT NỐI")}
+            <span>TÂM ĐIỂM</span>
+            <span>KẾT NỐI</span>
           </h2>
           <p className="desc">
             Lợi thế tọa lạc trong khu vực phát triển trọng điểm của khu Đông
@@ -70,13 +90,12 @@ export default function Position() {
                   {Array.isArray(item.title) ? (
                     item.title.map((line, i) => (
                       <p key={i} className="card-title-line">
-                        {renderDecoratedTitle(line)}
+                        {renderCardTitle(line)}
                       </p>
                     ))
                   ) : (
-                      
                     <p className="card-title-line">
-                      {renderDecoratedTitle(item.title)}
+                      {renderCardTitle(item.title)}
                     </p>
                   )}
                 </div>
@@ -99,17 +118,6 @@ export default function Position() {
   );
 }
 
-// const data = [
-//   {
-//     time: "01",
-//     title: [
-//       "Khu phố thương mại SOHO sôi động",
-//       "Kênh đào nhạc nước lớn nhất Đông Nam Á",
-//     ],
-//   },
-//   { time: "05", title: ["Thảo Điền"] },
-//   { time: "10", title: ["Trung tâm tài chính Thủ Thiêm"] },
-// ];
 const data = [
   {
     time: "~5 phút",
