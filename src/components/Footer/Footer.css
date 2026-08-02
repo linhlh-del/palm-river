@@ -1,0 +1,135 @@
+.pn-footer {
+  background-image: url(../../assets/images/bg-web.jpg);
+  color: var(--pn-text, #e9e7dd);
+  font-family: "DVNBeaufort-Regular", serif;
+  border-top: 1px solid var(--pn-line, rgba(233, 231, 221, 0.18));
+  padding: 70px 0 30px;
+}
+
+.pn-footer-grid {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: 40px;
+}
+
+@media (max-width: 900px) {
+  .pn-footer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pn-footer-heading {
+  font-size: 2.2rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--pn-gold, #c9ab6f);
+  line-height: 1.2;
+  margin: 0 0 24px;
+}
+
+.pn-subscribe-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--pn-gold, #c9ab6f);
+  color: var(--pn-bg, #333f26);
+  text-decoration: none;
+  padding: 12px 26px;
+  border-radius: 30px;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.pn-subscribe-btn:hover {
+  filter: brightness(1.08);
+}
+
+.pn-address-block {
+  margin-top: 50px;
+}
+
+.pn-address-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--pn-line, rgba(233, 231, 221, 0.18));
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.pn-address-row a {
+  color: var(--pn-text, #e9e7dd);
+  text-decoration: none;
+}
+
+.pn-address-row a:hover {
+  color: var(--pn-gold, #c9ab6f);
+}
+
+.pn-disclaimer {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  font-size: 0.7rem;
+  color: var(--pn-text-dim, rgba(233, 231, 221, 0.65));
+  text-transform: uppercase;
+  line-height: 1.6;
+}
+
+@media (max-width: 700px) {
+  .pn-disclaimer {
+    flex-direction: column;
+  }
+}
+
+.pn-footer-right p {
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.pn-footer-right .pn-gold-text {
+  color: var(--pn-gold, #c9ab6f);
+}
+
+.pn-footer-bottom {
+  margin-top: 60px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.pn-back-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  color: var(--pn-gold, #c9ab6f);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.pn-back-top-icon {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--pn-gold, #c9ab6f);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pn-footer-logo {
+  width: 60px;
+  height: 60px;
+  opacity: 0.9;
+}

@@ -1,9 +1,13 @@
+.wrapperContainer {
+  border-top: 1px solid var(--pn-line, rgba(233, 231, 221, 0.18));
+  background-image: url("../../assets/images/bg-web.jpg");
+}
+
 .wrapper {
   width: 100%;
   padding: 40px 100px;
   display: flex;
   justify-content: center;
-  background: transparent;
 }
 
 .container {
@@ -18,7 +22,7 @@
   font-family: Montserrat;
   font-size: 24px;
   font-style: italic;
-  color: #0e2046;
+  color: #d2b57c;
   text-align: center;
 }
 
@@ -41,13 +45,13 @@
   font-family: Montserrat;
   font-size: 16px;
   margin-bottom: 6px;
-  color: #0e2046;
+  color: #d2b57c;
   text-align: left;
 }
 
 .inputGroup input {
   border: none;
-  border-bottom: 1px solid #0063a5;
+  border-bottom: 1px solid #d2b57c;
   height: 2.5rem;
   font-size: 1rem;
   padding: 0.3125rem 0.625rem;
@@ -55,7 +59,7 @@
 }
 
 .btn {
-  background: #ff6700;
+  background: #c48506;
   border: none;
   border-radius: 5px;
   padding: 0.625rem 2rem;
@@ -76,7 +80,7 @@
   font-family: Montserrat;
   font-style: italic;
   font-size: 1.25rem;
-  color: #0e2046;
+  color: #d2b57c;
 }
 
 /* RESPONSIVE */
@@ -158,7 +162,7 @@
   .inputGroup label {
     font-size: 14px;
     margin-bottom: 4px;
-    color: #0e2046;
+    color: #d2b57c;
   }
 
   .inputGroup input {

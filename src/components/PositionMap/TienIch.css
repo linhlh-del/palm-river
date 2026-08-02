@@ -1,0 +1,575 @@
+.amen_site {
+  position: relative;
+  overflow: hidden;
+}
+.amen_site .align-items-center {
+  align-items: center;
+}
+
+.amen_site .gap-2 {
+  gap: 8px;
+}
+.amen_site *,
+.amen_site ::after,
+.amen_site ::before {
+  box-sizing: border-box;
+}
+
+.amen_site p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+}
+
+.amen_site .img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+.amen_site .f-title {
+  font-family: "DVNBeaufort-Regular", sans-serif;
+  color: #e0edc9;
+  line-height: 1.3;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.amen_site .text-uppercase {
+  text-transform: uppercase !important;
+}
+
+.amen_site .mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.amen_site .fs-48 {
+  font-size: 48px;
+}
+
+.amen_site .fs-24 {
+  font-size: 24px;
+}
+
+.amen_site .fs-16 {
+  font-size: 16px;
+}
+
+.amen_site .fs-14 {
+  font-size: 14px;
+}
+
+.amen_site .fw-400 {
+  font-weight: 400;
+}
+
+.amen_site .cl-gold {
+  color: #d2b57c;
+}
+
+.amen_site .d-flex {
+  display: flex;
+}
+
+/* ================= MAP ================= */
+.amen_site .map-amen {
+  position: relative;
+  background-image: url(../../assets/images/bg-web.jpg);
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.amen_site .map-amen svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.amen_site .map-amen svg g {
+  opacity: 0.25;
+  cursor: pointer;
+  transition:
+    opacity 0.3s ease,
+    filter 0.3s ease;
+  position: relative;
+  pointer-events: all;
+  transform-origin: center;
+  /* animation-delay riêng cho từng vùng được set inline trong JSX (idx * 0.45s)
+     -> tạo cảm giác sáng lan lần lượt qua từng vùng thay vì nhấp nháy đồng loạt */
+  animation: areaWave 2.4s ease-in-out infinite;
+  filter: drop-shadow(0 0 0 rgba(210, 255, 85, 0));
+}
+
+.amen_site .map-amen svg g path:nth-child(2) {
+  /* path thứ 2 là path viền (stroke) - tăng độ dày để rõ hơn khi sáng lên */
+  stroke-width: 2.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.amen_site .map-amen svg g.is-active,
+.amen_site .map-amen svg g:hover {
+  opacity: 1;
+  animation-play-state: paused;
+  filter: drop-shadow(0 0 14px rgba(210, 255, 85, 0.85))
+    drop-shadow(0 0 28px rgba(210, 255, 85, 0.5));
+}
+
+/* sáng hơn hẳn ở đỉnh sóng + glow, không chỉ mờ/tỏ opacity như trước */
+@keyframes areaWave {
+  0%,
+  100% {
+    opacity: 0.25;
+    filter: drop-shadow(0 0 0 rgba(210, 255, 85, 0));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 16px rgba(210, 255, 85, 0.9))
+      drop-shadow(0 0 32px rgba(210, 255, 85, 0.55));
+  }
+}
+
+/* ================= ĐIỂM GHIM (point-element) ================= */
+.amen_site .point-element {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}
+
+.amen_site .point-element .number {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background-image: url(../../assets/images/bg-web.jpg);
+  border: 1px solid #d2b57c;
+  color: #d2b57c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+}
+
+.amen_site .point-element.is-active .number,
+.amen_site .point-element:hover .number {
+  background: #d2b57c;
+  color: #07443b;
+  transform: scale(1.15);
+}
+
+.amen_site .point-element .point-infor {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background-image: url(../../assets/images/bg-web.jpg);
+  border: 1px solid #d2b57c;
+  padding: 10px 14px;
+  min-width: 140px;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 10;
+}
+
+.amen_site .point-element.is-active .point-infor,
+.amen_site .point-element:hover .point-infor {
+  opacity: 1;
+}
+
+.amen_site .point-element .point-infor .fs-48 {
+  font-size: 20px;
+  color: #d2b57c;
+}
+
+.amen_site .point-element .point-infor .fs-14 {
+  font-size: 11px;
+  color: #e0edc9;
+  line-height: 1.3;
+}
+
+/* ================= AREA POPUP (tên vùng + số lượng tiện ích) =================
+   Layout theo đúng cấu trúc tham khảo: 2 cột (name-area | amount-area),
+   nền lặp bg-hat.jpg giống bảng danh sách, hiện/ẩn bằng opacity+visibility+transform */
+.amen_site .map-amen .area-popup {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -50%) translateY(15px);
+  background: #313c1d url(../../assets/images/bg-hat.jpg) center center /
+    contain repeat;
+  border: 1px solid rgba(210, 181, 124, 0.35);
+  z-index: 6;
+  width: 190px;
+  min-height: 80px;
+  transition: all 1s ease;
+  pointer-events: none;
+}
+
+.amen_site .map-amen .area-popup.active {
+  transform: translate(-50%, -50%) translateY(0);
+  transition: all 1s ease;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Toạ độ tâm từng popup trên bản đồ (theo % của .map-amen)
+   ⚠️ chỉ có area-popup-1 là số liệu thật (top:30%, left:60%) — 2/3/4 đang tạm,
+   cần bạn đo lại đúng vị trí trên ảnh map thật rồi thay vào */
+.amen_site .map-amen .area-popup.area-popup-1 {
+  top: 30%;
+  left: 60%;
+}
+.amen_site .map-amen .area-popup.area-popup-2 {
+  top: 45%;
+  left: 75%;
+}
+.amen_site .map-amen .area-popup.area-popup-3 {
+  top: 60%;
+  left: 65%;
+}
+.amen_site .map-amen .area-popup.area-popup-4 {
+  top: 32%;
+  left: 20%;
+}
+
+/* Bootstrap-lite grid, scope trong .amen_site để không phụ thuộc Bootstrap ngoài */
+.amen_site .row {
+  display: flex;
+  flex-wrap: wrap;
+}
+.amen_site .row.gx-0 {
+  --bs-gutter-x: 0;
+}
+.amen_site .col-6 {
+  flex: 0 0 auto;
+  width: 50%;
+}
+@media (min-width: 768px) {
+  .amen_site .col-md-7 {
+    flex: 0 0 auto;
+    width: 58.33333333%;
+  }
+  .amen_site .col-md-5 {
+    flex: 0 0 auto;
+    width: 41.66666667%;
+  }
+}
+
+.amen_site .map-amen .area-popup .name-area {
+  border-right: 1px solid rgba(210, 181, 124, 0.25);
+  height: 100%;
+}
+
+.amen_site .map-amen .area-popup .name-area h5 {
+  color: var(--Light, #e0edc9);
+  font-family: "DVNBeaufort-Regular", sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 125%;
+  text-transform: uppercase;
+  padding: 10px;
+  margin: 0;
+}
+
+.amen_site .map-amen .area-popup .amount-area {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.amen_site .map-amen .area-popup .amount-area .num {
+  padding: 10px;
+  color: var(--Gold, #d2b57c);
+  text-align: center;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%;
+  text-transform: uppercase;
+  justify-content: center;
+}
+
+.amen_site .map-amen .area-popup .amount-area .type {
+  text-align: center;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #e0edc9;
+  margin: 0 0 10px;
+}
+
+/* ================= BẢNG DANH SÁCH TIỆN ÍCH BÊN PHẢI ================= */
+.amen_site .table_amenities {
+  position: absolute;
+  top: 65px;
+  bottom: 65px;
+  right: 64px;
+  border: 1px solid var(--BRAND-2, #283413);
+  background: #313c1d url(../../assets/images/bg-hat.jpg) center center /
+    contain repeat;
+  padding: 24px 24px 32px 24px;
+  width: 25vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.amen_site .table_amenities .head-amen h3 {
+  color: #d2b57c;
+}
+
+.amen_site .table_amenities .amen-scroll-wrapper {
+  margin-top: 64px;
+  padding-left: 32px;
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  direction: rtl;
+
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+
+  /* Legacy IE/Edge (EdgeHTML) - không hỗ trợ custom màu/độ dày, chỉ ẩn autohide */
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+/* Chrome, Safari, Edge Chromium */
+.amen_site .table_amenities .amen-scroll-wrapper::-webkit-scrollbar {
+  width: 2px; /* KHÔNG để 1px - một số engine sẽ bỏ qua custom style và fallback về scrollbar mặc định của OS */
+}
+
+.amen_site .table_amenities .amen-scroll-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.amen_site .table_amenities .amen-scroll-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  min-height: 24px;
+}
+
+.amen_site
+  .table_amenities
+  .amen-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Ẩn 2 nút mũi tên lên/xuống ở đầu-cuối thanh scroll */
+.amen_site .table_amenities .amen-scroll-wrapper::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.amen_site .table_amenities .amen-scroll-wrapper::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.amen_site .table_amenities .amen-scroll-wrapper .list-amen {
+  height: 10%;
+  direction: ltr;
+}
+
+.amen_site .table_amenities .amen-scroll-wrapper .list-amen .section-amenities {
+  border-bottom: 1px solid rgba(210, 181, 124, 0.25);
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.amen_site
+  .table_amenities
+  .amen-scroll-wrapper
+  .list-amen
+  .section-amenities
+  .topic-amen {
+  cursor: pointer;
+  padding-bottom: 16px;
+  position: relative;
+  padding-right: 20px;
+  color: #d2b57c;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  text-align: left;
+  font: inherit;
+}
+
+.amen_site
+  .table_amenities
+  .amen-scroll-wrapper
+  .list-amen
+  .section-amenities
+  .topic-amen
+  .chevron-icon {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  filter: brightness(0) saturate(100%) invert(74%) sepia(23%) saturate(402%)
+    hue-rotate(355deg) brightness(95%) contrast(90%);
+}
+
+.amen_site
+  .table_amenities
+  .amen-scroll-wrapper
+  .list-amen
+  .section-amenities
+  .topic-amen.is-open
+  .chevron-icon {
+  transform: rotate(180deg);
+}
+
+.amen_site
+  .table_amenities
+  .amen-scroll-wrapper
+  .list-amen
+  .section-amenities
+  ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 16px 0;
+}
+
+.amen_site
+  .table_amenities
+  .amen-scroll-wrapper
+  .list-amen
+  .section-amenities
+  ul
+  li:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.amen_site
+  .table_amenities
+  .amen-scroll-wrapper
+  .list-amen
+  .section-amenities
+  ul
+  li
+  a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.amen_site
+  .table_amenities
+  .amen-scroll-wrapper
+  .list-amen
+  .section-amenities
+  ul
+  li
+  a
+  .num-amen {
+  transition: all 0.5s ease;
+  color: #e0edc9;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.amen_site
+  .table_amenities
+  .amen-scroll-wrapper
+  .list-amen
+  .section-amenities
+  ul
+  li
+  a
+  .name-amen {
+  color: var(--Light, #e0edc9);
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 125%;
+  transition: color 0.3s ease;
+  font-family: "BeBeVietnamPro-Light", sans-serif;
+  letter-spacing: 0.05em;
+}
+
+/* Trạng thái active/hover - đồng bộ với marker trên bản đồ */
+.amen_site
+  .table_amenities
+  .amen-scroll-wrapper
+  .list-amen
+  .section-amenities
+  ul
+  li.is-active
+  .num-amen,
+.amen_site
+  .table_amenities
+  .amen-scroll-wrapper
+  .list-amen
+  .section-amenities
+  ul
+  li:hover
+  .num-amen {
+  background: #d2b57c;
+  border-color: #d2b57c;
+  color: #07443b;
+}
+
+.amen_site
+  .table_amenities
+  .amen-scroll-wrapper
+  .list-amen
+  .section-amenities
+  ul
+  li.is-active
+  .name-amen,
+.amen_site
+  .table_amenities
+  .amen-scroll-wrapper
+  .list-amen
+  .section-amenities
+  ul
+  li:hover
+  .name-amen {
+  color: #d2b57c;
+}
+
+/* ================= RESPONSIVE (mobile: bảng xuống dưới bản đồ) ================= */
+@media (max-width: 1024px) {
+  .amen_site {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .amen_site .table_amenities {
+    position: relative;
+    top: auto;
+    bottom: auto;
+    right: auto;
+    width: 100%;
+    max-height: 420px;
+  }
+}

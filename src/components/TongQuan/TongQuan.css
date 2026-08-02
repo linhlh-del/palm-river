@@ -6,7 +6,8 @@
 .mc {
   position: relative;
   width: 100%;
-  background: #004380;
+  /* background: #343F21; */
+  background-image: url(../../assets/images/bg-web.jpg);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -53,8 +54,8 @@
   color: #fff;
   text-align: center;
   letter-spacing: 3px;
-  font-family: "SVN-Mightiest", "Playfair Display", Georgia, serif;
-  font-size: clamp(28px, 4vw, 52px);
+  font-family: "DVNBeaufort-Regular", sans-serif;
+  font-size: clamp(28px, 4vw, 3rem);
   font-weight: 400;
   line-height: 1.2;
   margin: 0;
@@ -64,7 +65,7 @@
 .mc__desc {
   color: rgba(255, 255, 255, 0.85);
   text-align: justify;
-  font-family: "Reddit Sans", Helvetica, sans-serif;
+  font-family: "BeVietnamPro-Light", sans-serif;
   font-size: clamp(1rem, 1.2vw, 1.2rem);
   font-weight: 400;
   line-height: 1.7;
@@ -117,7 +118,7 @@
 
 .mc__label {
   color: #fff;
-  font-family: "Reddit Sans", Helvetica, sans-serif;
+  font-family: "DVNBeaufort-Regular", sans-serif;
   font-size: clamp(11px, 1vw, 14px);
   font-weight: 700;
   line-height: 1.4;
@@ -146,7 +147,7 @@
 .mc__value,
 .mc__oneplus-sub {
   color: rgba(255, 255, 255, 0.9);
-  font-family: "Reddit Sans", Helvetica, sans-serif;
+  font-family: "DVNBeaufort-Regular", sans-serif;
   font-size: clamp(11px, 1vw, 14px);
   font-weight: 400;
   line-height: 1.6;
@@ -205,7 +206,7 @@
     content: attr(data-label);
     display: block;
     color: #fff;
-    font-family: "Reddit Sans", Helvetica, sans-serif;
+    font-family: "DVNBeaufort-Regular", sans-serif;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.5px;

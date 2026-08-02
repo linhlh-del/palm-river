@@ -1,11 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./PopUp.module.css";
-import logoLusso from "../../assets/images/logo-oneplus.png";
+import logoLusso from "../../assets/images/logo-rever.png";
 import Toast from "./Toast";
 
 const SHEET_URL =
   "https://script.google.com/macros/s/AKfycbzKAY7Tvd8tZpsXyzG1TdF6Hi9OT0oC-VOr-2zdNvgvQ1qSLXNFJe9qWSvVQ_tnaf3m/exec";
+
+const APARTMENT_TYPES = [
+  "Căn Studio",
+  "Căn 1 Phòng Ngủ",
+  "Căn 2 Phòng Ngủ",
+  "Căn 3 Phòng Ngủ",
+  "Garden House",
+  "Shophouse Khối Đế",
+];
+
 export default function PopUp({ isOpen, onClose }) {
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -14,11 +24,18 @@ export default function PopUp({ isOpen, onClose }) {
     email: "",
     message: "",
   });
+  const [selectedTypes, setSelectedTypes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState({ message: "", type: "success" });
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleTypeToggle = (type) => {
+    setSelectedTypes((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
+    );
   };
 
   const handleSubmit = async (e) => {
@@ -29,6 +46,7 @@ export default function PopUp({ isOpen, onClose }) {
     const dataToSend = {
       ...form,
       phone: `'${form.phone}`,
+      apartmentTypes: selectedTypes.join(", "),
     };
 
     // Gửi request mà không cần đợi response (fire and forget)
@@ -43,6 +61,7 @@ export default function PopUp({ isOpen, onClose }) {
 
     // Reset form
     setForm({ name: "", phone: "", email: "", message: "" });
+    setSelectedTypes([]);
     setLoading(false);
 
     // Navigate to thank you page
@@ -73,7 +92,7 @@ export default function PopUp({ isOpen, onClose }) {
           <img src={logoLusso} alt="Lusso Saigon" className={styles.logo} />
 
           {/* Title */}
-          <h2>NHẬN BẢNG GIÁ VÀ CHÍNH SÁCH MỚI NHẤT MASTERISE COSMO CENTRAL</h2>
+          <h2>NHẬN BẢNG GIÁ VÀ CHÍNH SÁCH MỚI NHẤT PALM RIVER</h2>
 
           <p>
             Để tiết kiệm thời gian tìm hiểu dự án, vui lòng để lại thông tin.
@@ -100,20 +119,20 @@ export default function PopUp({ isOpen, onClose }) {
               required
             />
 
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={form.email}
-              onChange={handleChange}
-            />
-
-            <textarea
-              name="message"
-              placeholder="Nội dung / Lời nhắn"
-              value={form.message}
-              onChange={handleChange}
-            />
+            {/* CHECKBOX LOẠI HÌNH CĂN HỘ */}
+            <div className={styles.checkboxGroup}>
+              {APARTMENT_TYPES.map((type) => (
+                <label key={type} className={styles.checkboxItem}>
+                  <input
+                    type="checkbox"
+                    checked={selectedTypes.includes(type)}
+                    onChange={() => handleTypeToggle(type)}
+                  />
+                  <span className={styles.checkmark}></span>
+                  <span>{type}</span>
+                </label>
+              ))}
+            </div>
 
             <button type="submit" disabled={loading}>
               {loading ? "ĐANG GỬI..." : "ĐĂNG KÝ"}

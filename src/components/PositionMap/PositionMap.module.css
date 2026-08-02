@@ -299,20 +299,22 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  /* Scrollbar mảnh, màu trắng mờ */
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
 }
 
 .listDesktop::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 .listDesktop::-webkit-scrollbar-track {
   background: transparent;
 }
 .listDesktop::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+}
+.listDesktop::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.35);
-  border-radius: 2px;
 }
 
 /* ── MOBILE LIST (< 600px): slide + swipe ── */

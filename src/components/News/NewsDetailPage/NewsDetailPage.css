@@ -1,0 +1,673 @@
+/* =============================================================================
+   NewsDetailPage.css
+   Palm City — Editorial / news-detail theme (khớp bố cục single-page gốc)
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap");
+
+.ndp {
+  --pc-bg: #1e2b1c;
+  --pc-bg-soft: #253420;
+  --pc-bg-deep: #16200f;
+  --pc-gold: #d2b57c;
+  --pc-gold-light: #e8d9b0;
+  --pc-cream: #e0edc9;
+  --pc-ink: #f3f1e7;
+  --pc-ink-muted: #c7cdbc;
+  --pc-line: rgba(210, 181, 124, 0.25);
+
+  --font-display: "DVNBeaufort-Regular", sans-serif;
+  --font-body: "Be Vietnam Pro", -apple-system, "Segoe UI", sans-serif;
+
+  background: var(--pc-bg);
+  color: var(--pc-ink);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.ndp * {
+  box-sizing: border-box;
+}
+.ndp a {
+  color: inherit;
+  text-decoration: none;
+}
+.ndp img {
+  max-width: 100%;
+  display: block;
+}
+
+.ndp__container {
+  width: 100%;
+  max-width: calc(100% - 128px);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* -------------------------------------------------------------------------
+   Banner — tỉ lệ cố định theo padding-bottom (giống mẫu gốc: 30%)
+   ---------------------------------------------------------------------- */
+.ndp__hero {
+  position: relative;
+  width: 100%;
+  padding-bottom: 32%;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--pc-bg-deep), var(--pc-bg-soft));
+}
+
+.ndp__hero img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* -------------------------------------------------------------------------
+   Page wrapper + card đè lên banner
+   ---------------------------------------------------------------------- */
+.ndp__page {
+  padding: 0 0 20px;
+  background-image: url(../../../assets/images/bg-web.jpg);
+}
+
+.ndp__block {
+  background-image: url(../../../assets/images/bg-web.jpg);
+  border: 1px solid var(--pc-line);
+  padding: 32px 20px 64px;
+  transform: translateY(-48px);
+  margin-bottom: 56px;
+}
+
+@media (min-width: 768px) {
+  .ndp__block {
+    padding: 48px 40px 96px;
+    transform: translateY(-64px);
+  }
+}
+
+@media (min-width: 1200px) {
+  .ndp__block {
+    padding: 55px 55px 100px;
+    transform: translateY(-75px);
+    margin-bottom: 80px;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Grid 3 cột: share / nội dung / sidebar
+   Mobile: 1 cột. Tablet (>=768): share+content 1 hàng, sidebar full hàng riêng.
+   Desktop (>=1200): 3 cột cùng hàng, đúng tỉ lệ 1 / 7 / 4 (12 cột bootstrap).
+   ---------------------------------------------------------------------- */
+.ndp__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "share"
+    "content"
+    "sidebar";
+  row-gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .ndp__grid {
+    grid-template-columns: 8.3333% 1fr;
+    grid-template-areas:
+      "share content"
+      "sidebar sidebar";
+    column-gap: 24px;
+    row-gap: 40px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .ndp__grid {
+    grid-template-columns: 8.3333% 58.3333% 28.3333%;
+    grid-template-areas: "share content sidebar";
+    column-gap: 2rem;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Share — 2 icon đơn giản, KHÔNG sticky, KHÔNG thanh tiến trình đọc
+   ---------------------------------------------------------------------- */
+.ndp__share {
+  grid-area: share;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .ndp__share {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+
+.ndp__share-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--pc-gold);
+  border-radius: 50%;
+  padding: 0.5rem;
+  color: var(--pc-cream);
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.ndp__share-btn:hover {
+  color: var(--pc-gold);
+  transform: translateY(-2px);
+}
+
+.ndp__share-copied {
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--pc-gold);
+}
+
+/* -------------------------------------------------------------------------
+   Article head
+   ---------------------------------------------------------------------- */
+.ndp__article {
+  grid-area: content;
+}
+
+.ndp__head {
+  border-bottom: 1px solid var(--pc-line);
+  padding-bottom: 32px;
+}
+
+.ndp__cate {
+  display: inline-block;
+  background: var(--pc-gold);
+  padding: 4px 8px;
+  border-radius: 2px;
+}
+
+.ndp__cate a {
+  text-transform: uppercase;
+  color: var(--pc-bg-deep);
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.ndp__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(28px, 4vw, 56px);
+  line-height: 1.2;
+  color: var(--pc-gold-light);
+  margin: 16px 0;
+}
+
+.ndp__date {
+  margin: 0;
+  font-size: 13px;
+  color: var(--pc-ink-muted);
+}
+
+/* -------------------------------------------------------------------------
+   Article body typography
+   ---------------------------------------------------------------------- */
+.ndp__content {
+  margin-top: 32px;
+  font-size: 17px;
+}
+.ndp__content p {
+  margin: 0 0 22px;
+  color: #d7dcc9;
+}
+
+.ndp__content h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(22px, 2.6vw, 28px);
+  color: var(--pc-gold-light);
+  margin: 44px 0 18px;
+}
+
+.ndp__source {
+  text-align: right;
+  font-style: italic;
+  color: var(--pc-ink-muted);
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.ndp__figure {
+  margin: 32px 0;
+}
+
+.ndp__figure-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: linear-gradient(135deg, #2a3a24, #17210f);
+  border: 1px solid var(--pc-line);
+}
+
+.ndp__figure-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ndp__figure-frame[data-broken="true"] img {
+  display: none;
+}
+
+.ndp__figure-fallback {
+  display: none;
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--pc-gold);
+  text-align: center;
+  padding: 24px;
+}
+
+.ndp__figure-frame[data-broken="true"] .ndp__figure-fallback {
+  display: flex;
+}
+
+.ndp__figure figcaption {
+  margin-top: 10px;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--pc-ink-muted);
+  line-height: 1.5;
+}
+
+/* -------------------------------------------------------------------------
+   Tags
+   ---------------------------------------------------------------------- */
+.ndp__tags {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ndp__tags-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--pc-gold);
+}
+
+.ndp__tags ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ndp__tags li span {
+  display: inline-block;
+  font-size: 12px;
+  color: var(--pc-ink-muted);
+  border: 1px solid var(--pc-line);
+  padding: 4px 10px;
+  border-radius: 2px;
+}
+
+/* -------------------------------------------------------------------------
+   Sidebar — Điểm nổi bật
+   ---------------------------------------------------------------------- */
+.ndp__aside {
+  grid-area: sidebar;
+}
+
+.ndp__sidebar-title {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pc-gold);
+  margin: 0 0 20px;
+}
+
+.ndp__highlight-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .ndp__highlight-list {
+    flex-direction: row;
+  }
+  .ndp__highlight {
+    flex: 1;
+  }
+}
+
+.ndp__highlight {
+  display: block;
+  border: 1px solid var(--pc-line);
+  padding: 16px;
+  transition: border-color 0.2s ease;
+}
+
+.ndp__highlight:hover {
+  border-color: var(--pc-gold);
+}
+
+.ndp__highlight-title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  line-height: 1.4;
+  color: var(--pc-ink);
+  margin-bottom: 12px;
+}
+
+.ndp__highlight:hover .ndp__highlight-title {
+  color: var(--pc-gold-light);
+}
+
+.ndp__highlight-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--pc-ink-muted);
+}
+
+.ndp__highlight-meta span.tag::before {
+  content: "# ";
+  color: var(--pc-gold);
+}
+
+/* -------------------------------------------------------------------------
+   Related articles carousel
+   ---------------------------------------------------------------------- */
+.ndp__related {
+  background-image: url(../../../assets/images/bg-web.jpg);
+  padding: 72px 0 88px;
+  border-top: 1px solid var(--pc-line);
+}
+
+.ndp__related-head {
+  text-align: center;
+  max-width: 560px;
+  margin: 0 auto 40px;
+}
+
+.ndp__related-head h3 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: clamp(26px, 3.4vw, 36px);
+  color: var(--pc-gold-light);
+  font-weight: 500;
+  margin: 0 0 12px;
+}
+
+.ndp__related-head p {
+  color: var(--pc-ink-muted);
+  font-size: 14px;
+  margin: 0;
+}
+
+.ndp__related-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.ndp__related-arrows {
+  display: flex;
+  gap: 10px;
+}
+
+.ndp__arrow-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--pc-gold);
+  background: transparent;
+  color: var(--pc-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.ndp__arrow-btn:hover:not(:disabled) {
+  background: var(--pc-gold);
+  color: var(--pc-bg);
+}
+.ndp__arrow-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.ndp__related-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pc-gold-light);
+  border: 1px solid var(--pc-gold);
+  padding: 10px 20px;
+  border-radius: 999px;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.ndp__related-more:hover {
+  background: var(--pc-gold);
+  color: var(--pc-bg);
+}
+
+.ndp__related-track {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.ndp__related-track::-webkit-scrollbar {
+  display: none;
+}
+
+.ndp__news-card {
+  scroll-snap-align: start;
+  flex: 0 0 min(420px, 86vw);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--pc-line);
+  border-radius: 6px;
+  overflow: hidden;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.ndp__news-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--pc-gold);
+}
+
+.ndp__news-card figure {
+  margin: 0;
+  aspect-ratio: 16 / 10;
+  background: linear-gradient(135deg, #2a3a24, #17210f);
+  overflow: hidden;
+}
+
+.ndp__news-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ndp__news-card-body {
+  padding: 20px 22px 22px;
+}
+
+.ndp__news-card-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 1.4;
+  color: var(--pc-ink);
+  margin: 0 0 10px;
+}
+
+.ndp__news-card:hover .ndp__news-card-title {
+  color: var(--pc-gold-light);
+}
+
+.ndp__news-card-excerpt {
+  font-size: 13.5px;
+  color: var(--pc-ink-muted);
+  margin: 0 0 16px;
+  line-height: 1.55;
+}
+
+.ndp__news-card-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--pc-ink-muted);
+  border-top: 1px solid var(--pc-line);
+  padding-top: 14px;
+}
+
+.ndp__news-card-meta .tag::before {
+  content: "# ";
+  color: var(--pc-gold);
+}
+
+/* -------------------------------------------------------------------------
+   Newsletter / footer
+   ---------------------------------------------------------------------- */
+.ndp__footer {
+  background-image: url(../../../assets/images/bg-web.jpg);
+  padding: 56px 0 32px;
+  border-top: 1px solid var(--pc-line);
+}
+
+.ndp__footer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+@media (max-width: 768px) {
+  .ndp__footer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ndp__footer h4 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  color: var(--pc-gold-light);
+  font-size: clamp(22px, 2.6vw, 28px);
+  font-weight: 500;
+  margin: 0 0 20px;
+}
+
+.ndp__newsletter-form {
+  display: flex;
+  gap: 12px;
+  max-width: 420px;
+}
+
+.ndp__newsletter-form input {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--pc-line);
+  border-radius: 4px;
+  padding: 12px 14px;
+  color: var(--pc-ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+}
+
+.ndp__newsletter-form input:focus {
+  outline: none;
+  border-color: var(--pc-gold);
+}
+
+.ndp__newsletter-form button {
+  background: var(--pc-gold);
+  color: var(--pc-bg-deep);
+  border: none;
+  border-radius: 4px;
+  padding: 0 24px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.ndp__newsletter-form button:hover {
+  background: var(--pc-gold-light);
+}
+
+.ndp__footer-tagline {
+  color: var(--pc-ink-muted);
+  font-size: 15px;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.ndp__footer-contact {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13.5px;
+  color: var(--pc-ink-muted);
+}
+
+.ndp__footer-contact strong {
+  color: var(--pc-gold-light);
+  font-weight: 500;
+}
+
+.ndp__footer-bottom {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--pc-line);
+  font-size: 12px;
+  color: var(--pc-ink-muted);
+  text-align: center;
+}
+
+/* -------------------------------------------------------------------------
+   Reduced motion
+   ---------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .ndp * {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
