@@ -153,10 +153,10 @@ export default function Header({ onOpenModal }) {
         {/* Footer: logo + hotline */}
         <div className="hd__mobile-footer">
           <img src={logoRever} alt="Rever" />
-          <div className="hd__mobile-hotline">
+          {/* <div className="hd__mobile-hotline">
             <span>Hotline</span>
             <a href="tel:0939535111">0939 535 111</a>
-          </div>
+          </div> */}
         </div>
       </div>
     </>
