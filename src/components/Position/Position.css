@@ -85,7 +85,7 @@
 .desc {
   line-height: 1.5;
   text-align: left;
-  font-size: clamp(2rem, 1.2vw, 1.2rem);
+  font-size: clamp(1rem, 2vw, 1.5rem);
   font-family: "DVNBeaufort-Regular", sans-serif;
   color: #fff;
   opacity: 0.8;
@@ -446,7 +446,7 @@
     margin: 0 4rem;
   }
 
-  .vitri-cards {
+  .cards-wrap .vitri-cards {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -496,9 +496,20 @@
     margin: 0 3rem;
   }
 
-  .vitri-cards {
-    grid-template-columns: repeat(2, 1fr);
+  .cards-wrap .vitri-cards {
+    grid-template-columns: 1fr;
     margin: 2rem auto;
+  }
+
+  .card:not(:last-child) {
+    border-right: none;
+    border-bottom: 1px solid rgba(210, 181, 124, 0.35);
+  }
+
+  /* reset các border riêng được set ở breakpoint 1024px */
+  .card:nth-child(2),
+  .card:nth-child(3) {
+    border-top: none;
   }
 
   .card {
@@ -557,7 +568,7 @@
     margin: 0 1rem;
   }
 
-  .vitri-cards {
+  .cards-wrap .vitri-cards {
     grid-template-columns: 1fr;
     margin: 0.5rem auto;
   }

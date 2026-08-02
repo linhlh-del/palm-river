@@ -12,9 +12,7 @@
   width: 100%;
   height: 80px;
   padding: 0 80px;
-  /* background-color: #07443b;
-   */
-  background-color: #343f21;
+  background-image: url("../../assets/images/bg-header.jpg");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -136,8 +134,7 @@
   width: 100%;
   height: calc(100vh - 80px);
   overflow: hidden;
-
-  background-color: #07443b;
+  background-image: url("../../assets/images/bg-web.jpg");
 
   display: flex;
   flex-direction: column;
@@ -192,10 +189,10 @@
   cursor: pointer;
   margin: 1.5rem 2rem;
   margin-bottom: 4rem;
-  background: #ff6700;
+  background: #fff;
   border-radius: 0.5rem;
   padding: 14px 24px;
-  color: #d2b57c;
+  color: #c58911;
   font-family: "DVNBeaufort-Regular", sans-serif;
   font-size: 1rem;
   font-weight: 800;
