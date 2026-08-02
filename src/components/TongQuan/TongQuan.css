@@ -55,7 +55,7 @@
   text-align: center;
   letter-spacing: 3px;
   font-family: "DVNBeaufort-Regular", sans-serif;
-  font-size: clamp(28px, 4vw, 3rem);
+  font-size: clamp(1.5rem, 4vw, 3rem);
   font-weight: 400;
   line-height: 1.2;
   margin: 0;

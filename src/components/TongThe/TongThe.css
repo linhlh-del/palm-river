@@ -15,11 +15,10 @@
    HEADER (khối chữ)
 ════════════════════════════════════════ */
 .mb__header {
-  
   width: 100%;
   padding: 40px 20px;
   text-align: center;
-  background: #232d17; /* ⚠ chỉnh lại đúng mã màu xanh của thương hiệu bạn */
+  background-image: url(../../assets/images/bg-web.jpg);
   box-sizing: border-box;
 }
 .mb__header .container {
@@ -45,7 +44,7 @@
   line-height: 1.25;
   text-transform: uppercase;
   margin: 10px 0 16px;
-  font-size: clamp(24px, 6vw, 48px);
+  font-size: clamp(1rem, 6vw, 3rem);
 }
 
 .mb__desc {
@@ -141,6 +140,108 @@
 .masterplan_site .btn-building.building-5-btn {
   top: 74%;
   left: 32%;
+}
+
+/* ════════════════════════════════════════
+   HINT POPUP — luôn hiển thị, chỉ khu vực cần chú ý
+   Toạ độ (top/left) được set qua inline style
+   trong JSX (b.hintTop / b.hintLeft), không hardcode ở đây.
+════════════════════════════════════════ */
+.mb__hint {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 14px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.mb__hint-label {
+  background: rgba(210, 181, 124, 0.5);
+  backdrop-filter: blur(12.5px);
+  border: 1px solid rgba(210, 181, 124, 0.25);
+  color: #fbf7ee;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: capitalize;
+  white-space: nowrap;
+  padding: 6px 16px;
+  border-radius: 4px;
+}
+
+/* Stack ảnh — cùng kỹ thuật với ScrollDownButton, thu nhỏ cho phù hợp popup */
+.mb__hint-imgStack {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  animation: hint-float 1.6s ease-in-out infinite;
+}
+
+.mb__hint-imgBack {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.3;
+  transform: translateY(4px);
+  animation: hint-trail 1.6s ease-in-out infinite;
+}
+
+.mb__hint-imgFront {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+  opacity: 0.9;
+}
+.mb__hint-imgBack,
+.mb__hint-imgFront {
+  filter: brightness(0) saturate(100%) invert(80%) sepia(45%) saturate(500%)
+    hue-rotate(360deg) brightness(95%) contrast(90%);
+}
+@keyframes hint-float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes hint-trail {
+  0% {
+    transform: translateY(4px);
+    opacity: 0.18;
+  }
+  50% {
+    transform: translateY(7px);
+    opacity: 0.35;
+  }
+  100% {
+    transform: translateY(4px);
+    opacity: 0.18;
+  }
+}
+
+@media (max-width: 480px) {
+  .mb__hint-label {
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+  .mb__hint-imgStack {
+    width: 18px;
+    height: 18px;
+  }
 }
 
 body .btn-palm {

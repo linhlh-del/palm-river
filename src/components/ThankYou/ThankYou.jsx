@@ -51,7 +51,7 @@ export default function ThankYou() {
           Chúng tôi đã nhận được thông tin của bạn. Một chuyên viên sẽ liên hệ
           với bạn trong thời gian sớm nhất để tư vấn chi tiết về dự án{" "}
           <span className={styles.noWrap}>
-            <strong>Masterise Cosmo Central</strong>.
+            <strong>Palm River</strong>.
           </span>
         </p>
 
@@ -72,7 +72,7 @@ export default function ThankYou() {
         {/* Contact Info */}
         <p className={styles.contactInfo}>
           Nếu bạn có thắc mắc gấp, vui lòng gọi cho chúng tôi: <br />
-          <strong>0939 535 111</strong>
+          <strong>0877 191 940</strong>
         </p>
       </div>
     </div>

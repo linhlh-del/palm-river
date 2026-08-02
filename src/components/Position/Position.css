@@ -38,6 +38,17 @@
   margin: 0 auto;
 }
 
+.title span {
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  display: inline-block;
+  background: linear-gradient(187deg, #d2b57c, #c79022);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  width: fit-content;
+  text-align: center;
+  margin: 0 0.25em;
+}
+
 .title .title-line {
   display: inline-flex;
   align-items: center;
@@ -79,7 +90,6 @@
   color: #fff;
   opacity: 0.8;
   text-align: justify;
-  margin-right: 20rem;
 }
 .cards-wrap {
   background-image: url("../../assets/images/bg-web.jpg");
@@ -171,23 +181,32 @@
 
 .card-title-line .title-line {
   display: inline-flex;
-  align-items: center;
-  gap: 0.35em;
+  align-items: flex-start;
+  gap: 0.5em;
   justify-content: flex-start;
 }
 
-.card-title-line .title-label {
-  color: #d2b57c;
-  background: none;
-  -webkit-background-clip: initial;
-  -webkit-text-fill-color: currentColor;
+/* Diamond icon (fill bên trong, bo góc) - bám theo dòng đầu tiên của title */
+.card-diamond {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #d2b57c; /* màu fill của diamond */
+  margin-top: 0.55em; /* căn diamond ngang tâm chữ dòng đầu */
+  transform: translateY(-50%);
 }
 
-.card-title-line .title-sparkle {
-  width: 0.8rem;
-  height: 0.8rem;
-  filter: brightness(0) saturate(100%) invert(58%) sepia(66%) saturate(344%)
-    hue-rotate(355deg) brightness(90%) contrast(90%);
+.card-diamond svg {
+  display: block;
+}
+
+/* Title chữ trong card */
+.card-title-label {
+  color: #d2b57c;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+  font-size: clamp(0.85rem, 1.1vw, 1.1rem);
+  line-height: 1.4;
 }
 
 .card-desc p:last-child {

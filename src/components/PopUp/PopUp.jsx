@@ -92,7 +92,10 @@ export default function PopUp({ isOpen, onClose }) {
           <img src={logoLusso} alt="Lusso Saigon" className={styles.logo} />
 
           {/* Title */}
-          <h2>NHẬN BẢNG GIÁ VÀ CHÍNH SÁCH MỚI NHẤT PALM RIVER</h2>
+          <h2>
+            NHẬN BẢNG GIÁ VÀ <br />
+            CHÍNH SÁCH MỚI NHẤT <br /> PALM RIVER
+          </h2>
 
           <p>
             Để tiết kiệm thời gian tìm hiểu dự án, vui lòng để lại thông tin.
