@@ -6,6 +6,8 @@
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
+
+  /* background-image: url(../../assets/images/bg-web.jpg); */
   z-index: 999;
   animation: fadeIn 0.3s ease;
 }
@@ -16,7 +18,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #004380;
+  background-image: url(../../assets/images/bg-web.jpg);
   padding: 2.5rem;
   border-radius: 12px;
   z-index: 1000;
@@ -53,7 +55,7 @@
   position: absolute;
   top: 16px;
   right: 16px;
-  background: rgba(255, 255, 255, 0.2);
+  background-image: url(../../assets/images/bg-web.jpg);
   border: none;
   color: #fff;
   font-size: 28px;
@@ -128,7 +130,7 @@
 
 .form button {
   background: #fff;
-  color: #004380;
+  color: #07443b;
   padding: 1rem;
   border: none;
   border-radius: 6px;
@@ -271,4 +273,76 @@
     padding: 0.75rem;
     font-size: 0.875rem;
   }
+  .checkboxGroup {
+    gap: 0.5rem 0.75rem;
+  }
+
+  .checkboxItem {
+    font-size: 0.75rem;
+  }
+
+  .checkmark {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+/* CHECKBOX GROUP */
+.checkboxGroup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1rem;
+  text-align: left;
+  margin: 0.25rem 0;
+}
+
+.checkboxItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fff;
+  font-size: clamp(0.8125rem, 1.8vw, 0.9375rem);
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkboxItem input[type="checkbox"] {
+  /* ẩn checkbox mặc định, dùng span custom bên dưới */
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  padding: 0;
+}
+
+.checkmark {
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+  border: 2px solid #fff;
+  border-radius: 4px;
+  background: transparent;
+  position: relative;
+  transition: 0.2s;
+}
+
+.checkboxItem input[type="checkbox"]:checked + .checkmark {
+  background: #fff;
+}
+
+.checkboxItem input[type="checkbox"]:checked + .checkmark::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 9px;
+  border: solid #07443b;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkboxItem input[type="checkbox"]:focus-visible + .checkmark {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }

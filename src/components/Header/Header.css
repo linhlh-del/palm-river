@@ -12,7 +12,9 @@
   width: 100%;
   height: 80px;
   padding: 0 80px;
-  background-color: #004380;
+  /* background-color: #07443b;
+   */
+  background-color: #343f21;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -54,8 +56,8 @@
 }
 
 .hd__nav-link {
-  color: #fff;
-  font-family: "Montserrat", Helvetica, sans-serif;
+  color: #d2b57c;
+  font-family: "DVNBeaufort-Regular", sans-serif;
   font-size: 16px;
   font-weight: 900;
   letter-spacing: 0.5px;
@@ -64,18 +66,6 @@
   position: relative;
   padding-bottom: 2px;
   transition: color 0.2s ease;
-}
-
-/* Underline effect */
-.hd__nav-link::after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: #004380;
-  transition: width 0.25s ease;
 }
 
 .hd__nav-link:hover {
@@ -93,8 +83,9 @@
 
 /* ── Desktop CTA ── */
 .hd__cta {
-  background: #ff6700;
-  font-family: "Montserrat", Helvetica, sans-serif;
+  /* background: #ff6700; */
+  background: #d2b57c;
+  font-family: "DVNBeaufort-Regular", sans-serif;
   color: #fff;
   border: none;
   padding: 0.5rem 2rem;
@@ -108,10 +99,10 @@
 }
 
 .hd__cta:hover {
-  background: #004380;
+  background: #07443b;
   transform: translateY(-1px);
   box-shadow: 0 4px 16px rgba(211, 167, 105, 0.4);
-  color: #fff;
+  color: #d2b57c;
 }
 
 /* ── Hamburger (ẩn trên desktop) ── */
@@ -146,7 +137,7 @@
   height: calc(100vh - 80px);
   overflow: hidden;
 
-  background-color: #004380;
+  background-color: #07443b;
 
   display: flex;
   flex-direction: column;
@@ -173,8 +164,8 @@
 }
 
 .hd__mobile-link {
-  color: #fff;
-  font-family: "Reddit Sans", Helvetica, sans-serif;
+  color: #d2b57c;
+  font-family: "DVNBeaufort-Regular", sans-serif;
   font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: 0.8px;
@@ -204,8 +195,8 @@
   background: #ff6700;
   border-radius: 0.5rem;
   padding: 14px 24px;
-  color: #fff;
-  font-family: "Reddit Sans", Helvetica, sans-serif;
+  color: #d2b57c;
+  font-family: "DVNBeaufort-Regular", sans-serif;
   font-size: 1rem;
   font-weight: 800;
   letter-spacing: 1px;
@@ -254,7 +245,7 @@
   font-family: "Montserrat", Helvetica, sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #fff;
+  color: #d2b57c;
   text-decoration: none;
   letter-spacing: 0.03em;
   transition: color 0.2s;

@@ -89,81 +89,82 @@ export default function GetInfor() {
   };
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.container}>
-        <div className={styles.title}>
-          Đăng ký nhận báo giá và chính sách ưu đãi mới nhất
-        </div>
-
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <div className={styles.inputGroup} style={{ position: "relative" }}>
-            <label>Họ và tên*</label>
-            <input
-              type="text"
-              name="name"
-              placeholder="Vui lòng nhập họ và tên"
-              value={form.name}
-              onChange={handleChange}
-              required
-            />
-            {errors.name && (
-              <span
-                style={{
-                  color: "#004380",
-                  fontSize: "12px",
-                  position: "absolute",
-                  bottom: "-18px",
-                  left: 0,
-                }}
-              >
-                {errors.name}
-              </span>
-            )}
+    <div className={styles.wrapperContainer}>
+      <div className={styles.wrapper}>
+        <div className={styles.container}>
+          <div className={styles.title}>
+            Đăng ký nhận báo giá và chính sách ưu đãi mới nhất
           </div>
 
-          <div className={styles.inputGroup} style={{ position: "relative" }}>
-            <label>Email</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Nhập Email (không bắt buộc)"
-              value={form.email}
-              onChange={handleChange}
-            />
+          <form className={styles.form} onSubmit={handleSubmit}>
+            <div className={styles.inputGroup} style={{ position: "relative" }}>
+              <label>Họ và tên*</label>
+              <input
+                type="text"
+                name="name"
+                placeholder="Vui lòng nhập họ và tên"
+                value={form.name}
+                onChange={handleChange}
+                required
+              />
+              {errors.name && (
+                <span
+                  style={{
+                    color: "#004380",
+                    fontSize: "12px",
+                    position: "absolute",
+                    bottom: "-18px",
+                    left: 0,
+                  }}
+                >
+                  {errors.name}
+                </span>
+              )}
+            </div>
+
+            <div className={styles.inputGroup} style={{ position: "relative" }}>
+              <label>Số điện thoại*</label>
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Vui lòng nhập số điện thoại"
+                value={form.phone}
+                onChange={handleChange}
+                required
+              />
+              {errors.phone && (
+                <span
+                  style={{
+                    color: "#004380",
+                    fontSize: "12px",
+                    position: "absolute",
+                    bottom: "-1.25rem",
+                    left: 0,
+                  }}
+                >
+                  {errors.phone}
+                </span>
+              )}
+            </div>
+            <div className={styles.inputGroup} style={{ position: "relative" }}>
+              <label>Nhu cầu</label>
+              <input
+                type="email"
+                name="email"
+                placeholder="Loại hình căn hộ (không bắt buộc)"
+                value={form.email}
+                onChange={handleChange}
+              />
+            </div>
+
+            <button type="submit" className={styles.btn} disabled={loading}>
+              {loading ? "ĐANG GỬI..." : "NHẬN THÔNG TIN"}
+            </button>
+          </form>
+
+          <div className={styles.hotline}>
+            Hotline phòng kinh doanh: 0869 702 321
           </div>
-
-          <div className={styles.inputGroup} style={{ position: "relative" }}>
-            <label>Số điện thoại*</label>
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Vui lòng nhập số điện thoại"
-              value={form.phone}
-              onChange={handleChange}
-              required
-            />
-            {errors.phone && (
-              <span
-                style={{
-                  color: "#004380",
-                  fontSize: "12px",
-                  position: "absolute",
-                  bottom: "-1.25rem",
-                  left: 0,
-                }}
-              >
-                {errors.phone}
-              </span>
-            )}
-          </div>
-
-          <button type="submit" className={styles.btn} disabled={loading}>
-            {loading ? "ĐANG GỬI..." : "NHẬN THÔNG TIN"}
-          </button>
-        </form>
-
-        <div className={styles.hotline}>
-          Hotline phòng kinh doanh: 0939 535 111
         </div>
       </div>
     </div>

@@ -1,0 +1,320 @@
+/* TongThe.css */
+
+/* ════════════════════════════════════════
+   SECTION — mobile-first: 2 khối xếp dọc
+════════════════════════════════════════ */
+.mb {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* ════════════════════════════════════════
+   HEADER (khối chữ)
+════════════════════════════════════════ */
+.mb__header {
+  
+  width: 100%;
+  padding: 40px 20px;
+  text-align: center;
+  background: #232d17; /* ⚠ chỉnh lại đúng mã màu xanh của thương hiệu bạn */
+  box-sizing: border-box;
+}
+.mb__header .container {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.mb__cate {
+  margin: 0;
+  color: #fbf7ee;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 125%;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.mb__title {
+  font-family: "DVNBeaufort-Regular", sans-serif;
+  font-weight: 400;
+  color: #e6ce9e;
+  letter-spacing: 1px;
+  line-height: 1.25;
+  text-transform: uppercase;
+  margin: 10px 0 16px;
+  font-size: clamp(24px, 6vw, 48px);
+}
+
+.mb__desc {
+  margin: 0;
+  color: rgba(251, 247, 238, 0.8);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.mb__line {
+  width: 200px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.85);
+  margin: 16px auto 0;
+}
+
+/* ════════════════════════════════════════
+   IMAGE BLOCK (ảnh + overlay building)
+════════════════════════════════════════ */
+.mb__image-block {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3368 / 2106;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.mb__image-block::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+}
+
+/* ════════════════════════════════════════
+   BUILDING OVERLAY (glow luôn hiện + button hover)
+════════════════════════════════════════ */
+.mb__buildings {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.mb__building-glow {
+  position: absolute;
+  width: min(380px, 18vw);
+  height: auto;
+  aspect-ratio: 276 / 222;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.mb__building-glow svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.building {
+  opacity: 1; /* luôn hiện, không phụ thuộc hover */
+}
+
+/* Vị trí từng glow — chỉnh top/left ở đây để canh vào đúng toà nhà trên ảnh */
+.masterplan_site .mb__building-glow.building-5-glow {
+  top: 74%;
+  left: 32%;
+}
+
+/* ── Button "palm river" ── */
+.masterplan_site .btn-building {
+  position: absolute;
+  background: rgba(210, 181, 124, 0.5);
+  backdrop-filter: blur(12.5px);
+  border: 1px solid rgba(210, 181, 124, 0.25);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.35s ease,
+    visibility 0.35s ease;
+  pointer-events: auto;
+}
+
+.masterplan_site .btn-building.is-visible,
+.masterplan_site .btn-building:hover {
+  opacity: 1;
+  visibility: visible;
+}
+
+.masterplan_site .btn-building.building-5-btn {
+  top: 74%;
+  left: 32%;
+}
+
+body .btn-palm {
+  width: fit-content;
+  border: 1px solid rgba(251, 247, 238, 0.25);
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease;
+}
+
+/* ════════════════════════════════════════
+   MOBILE LIST  (ẩn mặc định, hiện <768px)
+════════════════════════════════════════ */
+.mb__mobile-list {
+  display: none;
+  width: 100%;
+  background: #930027;
+  padding: 16px 12px 12px;
+  border-radius: 8px;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mb__slider {
+  width: 100%;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.mb__track {
+  display: flex;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.mb__page {
+  flex: 0 0 100%;
+  width: 100%;
+}
+
+.mb__cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 8px;
+}
+
+.mb__col {
+  display: flex;
+  flex-direction: column;
+}
+
+.mb__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 4px 0;
+}
+
+.mb__badge {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+}
+
+.mb__badge svg,
+.mb__badge-num {
+  grid-area: 1 / 1;
+}
+
+.mb__badge svg {
+  width: 28px;
+  height: 28px;
+}
+
+.mb__badge-num {
+  color: #fff;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+}
+
+.mb__item-label {
+  color: #fff;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  line-height: 1.4;
+}
+
+.mb__dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 10px 0 2px;
+}
+
+.mb__dot {
+  all: unset;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  background: #d3a769;
+  opacity: 0.55;
+  transition:
+    width 0.25s,
+    height 0.25s,
+    background 0.25s,
+    opacity 0.25s;
+  display: block;
+}
+
+.mb__dot--active {
+  width: 16px;
+  height: 16px;
+  background: #f1e8ce;
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .mb__mobile-list {
+    display: flex;
+  }
+}
+
+@media (max-width: 480px) {
+  .mb__item-label {
+    font-size: 1rem;
+  }
+  .mb__badge-num {
+    font-size: 1rem;
+  }
+}
+
+/* ════════════════════════════════════════
+   DESKTOP (≥769px) — chuyển thành overlay
+   chữ đè lên ảnh, giống bản gốc
+════════════════════════════════════════ */
+@media (min-width: 769px) {
+  .mb {
+    display: block;
+    width: 100vw;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .mb__header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    background: transparent;
+    padding: 56px 20px;
+  }
+
+  .mb__title {
+    text-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  }
+
+  .mb__desc {
+    font-size: 16px;
+  }
+
+  .mb__image-block {
+    aspect-ratio: 3368 / 2106;
+  }
+}

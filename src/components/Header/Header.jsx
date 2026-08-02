@@ -1,19 +1,23 @@
 import { useState, useEffect } from "react";
-import logoOnePlus from "../../assets/images/logo-oneplus.png";
-import logo from "../../assets/images/logo-masterise.png";
+import { useNavigate, useLocation } from "react-router-dom";
+import logo from "../../assets/images/logo.webp";
 import menuIcon from "../../assets/images/logo-menu.png";
+import logoRever from "../../assets/images/logo-rever.png";
 import "./Header.css";
 
 const NAV_ITEMS = [
   { label: "TỔNG QUAN", href: "#tong-quan" },
   { label: "VỊ TRÍ", href: "#map" },
+  { label: "MẶT BẰNG", href: "#mat-bang-tong-the" },
   { label: "TIỆN ÍCH", href: "#tien-ich" },
-  { label: "MẶT BẰNG", href: "#mat-bang-tang" },
   { label: "CHÍNH SÁCH", href: "#ban-hang" },
   { label: "LIÊN HỆ", href: "#lien-he" },
+  { label: "TIN TỨC", href: "#tin-tuc" },
 ];
 
 export default function Header({ onOpenModal }) {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeHref, setActiveHref] = useState("");
@@ -61,6 +65,15 @@ export default function Header({ onOpenModal }) {
     e.preventDefault();
     setActiveHref(href);
     setMenuOpen(false);
+
+    const isSectionLink = href.startsWith("#");
+    const sectionId = href.replace("#", "");
+
+    if (isSectionLink && location.pathname !== "/") {
+      navigate(`/?section=${sectionId}`, { replace: false });
+      return;
+    }
+
     const target = document.querySelector(href);
     if (target) {
       target.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -77,8 +90,7 @@ export default function Header({ onOpenModal }) {
       <header className={`hd${scrolled ? " hd--scrolled" : ""}`}>
         {/* Logo */}
         <div className="hd__logo">
-          <img src={logoOnePlus} alt="OnePlus" />
-          <img src={logo} alt="Masterise" />
+          <img src={logo} alt="Palm City" />
         </div>
 
         {/* Desktop nav */}
@@ -141,7 +153,7 @@ export default function Header({ onOpenModal }) {
 
         {/* Footer: logo + hotline */}
         <div className="hd__mobile-footer">
-          <img src={logoOnePlus} alt="OnePlus" />
+          <img src={logoRever} alt="Rever" />
           <div className="hd__mobile-hotline">
             <span>Hotline</span>
             <a href="tel:0939535111">0939 535 111</a>

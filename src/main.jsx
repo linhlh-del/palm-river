@@ -7,7 +7,7 @@ import App from "./App.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter basename="/can-ho-cao-cap-masteri-cosmo-central-the-global-city">
+    <BrowserRouter>
       <App />
     </BrowserRouter>
   </StrictMode>,

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import bannerVideo from "../../assets/video/cosmo-central.mp4";
+import bannerVideo from "../../assets/video/palm-city.mp4";
 import "./Hero.css";
 
 export default function Hero() {
