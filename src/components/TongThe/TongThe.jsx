@@ -8,6 +8,18 @@ import { BUILDINGS } from "./data";
 // viewBox (đơn vị pixel trên ảnh gốc) sang % hiển thị tương ứng.
 const IMG_NATURAL_WIDTH = 3360;
 
+// Tỉ lệ độ mờ (blur) chuẩn, lấy từ building-5 gốc: stdDeviation=10 trên
+// viewBox rộng 276 đơn vị → tỉ lệ ~0.036. Áp tỉ lệ này cho MỌI building
+// để nét glow luôn mảnh/rõ đều nhau, không phụ thuộc building to hay nhỏ.
+// Muốn nét mảnh hơn nữa (rõ viền hơn) thì giảm số 10 xuống (vd 6-8);
+// muốn mờ lan rộng hơn thì tăng lên.
+const GLOW_BLUR_RATIO = 10 / 276;
+
+// Độ dày viền (stroke) — tỉ lệ theo kích thước building, để viền luôn
+// mảnh/dày đều nhau bất kể building to hay nhỏ. Tăng số 3 lên nếu muốn
+// viền dày/sáng rực hơn, giảm xuống nếu muốn viền mảnh hơn.
+const STROKE_WIDTH_RATIO = 2 / 276;
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 export default function TongThe() {
   const [page, setPage] = useState(0);
@@ -66,6 +78,11 @@ export default function TongThe() {
             // không dùng số cố định (min(380px, 18vw)) — nếu không, vùng nhỏ
             // (như building-10) sẽ bị phóng to bằng vùng lớn (building-5).
             const widthPercent = (vbW / IMG_NATURAL_WIDTH) * 100;
+            // Độ mờ (blur) cũng phải tỉ lệ theo kích thước viewBox — nếu để
+            // stdDeviation cố định, building nhỏ sẽ bị mờ lan rộng ra nhìn
+            // như "nét vẽ bị rộng ra", còn building to lại quá mảnh.
+            const blurStdDev = vbW * GLOW_BLUR_RATIO;
+            const strokeWidth = vbW * STROKE_WIDTH_RATIO;
             return (
               <div
                 key={b.id}
@@ -82,12 +99,19 @@ export default function TongThe() {
                   <defs>
                     <filter
                       id={`filter${b.id}_f_2009_202`}
-                      x="-50%"
-                      y="-50%"
-                      width="200%"
-                      height="200%"
+                      x="-60%"
+                      y="-60%"
+                      width="220%"
+                      height="220%"
                     >
-                      <feGaussianBlur stdDeviation="10" result="blur" />
+                      {/* Làm mờ để tạo hào quang (halo) quanh viền */}
+                      <feGaussianBlur stdDeviation={blurStdDev} result="blur" />
+                      {/* Chồng halo mờ + viền gốc sắc nét lên trên,
+                          tạo hiệu ứng "sáng viền, rõ nét" kiểu neon glow */}
+                      <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
                     </filter>
                     <linearGradient
                       id={`paint${b.id}_linear_2009_202`}
@@ -96,19 +120,26 @@ export default function TongThe() {
                       x2="100%"
                       y2="100%"
                     >
-                      <stop stopColor="#E6CE9E" />
-                      <stop offset="1" stopColor="#D2B57C" stopOpacity="0" />
+                      <stop offset="0" stopColor="#E0A83B" />
+                      <stop
+                        offset="0.55"
+                        stopColor="#dce653"
+                        stopOpacity="0.5"
+                      />
+                      <stop offset="1" stopColor="#D4FF00" stopOpacity="0" />
                     </linearGradient>
                   </defs>
 
                   <g
                     filter={`url(#filter${b.id}_f_2009_202)`}
                     className={`building building-${b.id}`}
-                    style={{ mixBlendMode: "soft-light" }}
                   >
                     <path
                       d={b.path}
                       fill={`url(#paint${b.id}_linear_2009_202)`}
+                      fillOpacity="0.16"
+                      stroke={`url(#paint${b.id}_linear_2009_202)`}
+                      strokeWidth={strokeWidth}
                     />
                   </g>
                 </svg>

@@ -3,46 +3,17 @@ import styles from "./FloatingButtons.module.css";
 const PHONE_NUMBER = "0877191940";
 const PHONE_DISPLAY = "0877 191 940";
 const ZALO_URL = "https://zalo.me/1717736678695240623";
+const PRICE_URL = "/bang-gia"; // TODO: đổi thành link Bảng Giá thực tế
 
 import zaloLogo from "../../assets/images/logo-zalo.webp";
+import phoneIcon from "../../assets/images/phone.png";
+import fileIcon from "../../assets/images/file.png";
 
-const PhoneIcon = () => (
-  <svg
-    width="22"
-    height="22"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.08 1.22 2 2 0 012 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z" />
-  </svg>
-);
-
-const ZaloFallback = () => (
-  <svg width="50" height="50" viewBox="0 0 48 48" fill="none">
-    <rect width="48" height="48" rx="12" fill="#0068FF" />
-    <text
-      x="50%"
-      y="54%"
-      dominantBaseline="middle"
-      textAnchor="middle"
-      fontFamily="Arial Black,Arial"
-      fontWeight="900"
-      fontSize="18"
-      fill="white"
-    >
-      Za
-    </text>
-  </svg>
-);
-
-export default function FloatingButtons() {
+export default function FloatingButtons({ onOpenModal }) {
   return (
     <div className={styles.fb__wrapper}>
       {/* ── Phone ── */}
+
       <a
         href={`tel:${PHONE_NUMBER}`}
         className={`${styles.fb__btn} ${styles["fb__btn--phone"]}`}
@@ -58,12 +29,13 @@ export default function FloatingButtons() {
           aria-hidden="true"
         />
         <span className={styles.fb__icon}>
-          <PhoneIcon />
+          <img src={phoneIcon} alt="Gọi điện" width={28} height={28} />
         </span>
         <span className={styles.fb__tooltip}>{PHONE_DISPLAY}</span>
       </a>
 
       {/* ── Zalo ── */}
+
       <a
         href={ZALO_URL}
         target="_blank"
@@ -86,10 +58,32 @@ export default function FloatingButtons() {
         />
         <span className={styles.fb__icon}>
           <img src={zaloLogo} alt="Zalo" width={50} height={50} />
-          {/* Khi có asset:  */}
         </span>
         <span className={styles.fb__tooltip}>Chat Zalo</span>
       </a>
+
+      {/* ── Bảng Giá ── */}
+
+      <button
+        type="button"
+        onClick={onOpenModal}
+        className={`${styles.fb__btn} ${styles["fb__btn--price"]}`}
+        title="Bảng Giá"
+        aria-label="Xem Bảng Giá"
+      >
+        <span
+          className={`${styles.fb__ring} ${styles["fb__ring--1"]}`}
+          aria-hidden="true"
+        />
+        <span
+          className={`${styles.fb__ring} ${styles["fb__ring--2"]}`}
+          aria-hidden="true"
+        />
+        <span className={styles.fb__icon}>
+          <img src={fileIcon} alt="Bảng Giá" width={26} height={26} />
+        </span>
+        <span className={styles.fb__tooltip}>Bảng Giá</span>
+      </button>
     </div>
   );
 }
