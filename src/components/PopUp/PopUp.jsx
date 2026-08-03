@@ -3,9 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./PopUp.module.css";
 import logoLusso from "../../assets/images/logo-rever.png";
 import Toast from "./Toast";
-
-const SHEET_URL =
-  "https://script.google.com/macros/s/AKfycbzKAY7Tvd8tZpsXyzG1TdF6Hi9OT0oC-VOr-2zdNvgvQ1qSLXNFJe9qWSvVQ_tnaf3m/exec";
+import { submitLead } from "../../services/leadService"; // chỉnh path cho đúng vị trí thực tế trong dự án
 
 const APARTMENT_TYPES = [
   "Căn Studio",
@@ -42,21 +40,9 @@ export default function PopUp({ isOpen, onClose }) {
     e.preventDefault();
     setLoading(true);
 
-    // Thêm dấu ' trước phone number để Google Sheet không bỏ số 0
-    const dataToSend = {
+    const { success } = await submitLead({
       ...form,
-      phone: `'${form.phone}`,
       apartmentTypes: selectedTypes.join(", "),
-    };
-
-    // Gửi request mà không cần đợi response (fire and forget)
-    fetch(SHEET_URL, {
-      method: "POST",
-      mode: "no-cors", // bắt buộc với Apps Script
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(dataToSend),
-    }).catch(() => {
-      // Bỏ qua lỗi vì mode no-cors không cho phép đọc response
     });
 
     // Reset form
@@ -64,9 +50,12 @@ export default function PopUp({ isOpen, onClose }) {
     setSelectedTypes([]);
     setLoading(false);
 
-    // Navigate to thank you page
-    onClose();
-    navigate("/thank-you");
+    if (success) {
+      onClose();
+      navigate("/thank-you");
+    } else {
+      setToast({ message: "Có lỗi xảy ra, vui lòng thử lại", type: "error" });
+    }
   };
 
   if (!isOpen) return null;

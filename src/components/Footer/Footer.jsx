@@ -66,7 +66,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="pn-footer">
+    <footer className="pn-footer" id="lien-he">
       <div className="pn-container">
         <div className="pn-footer-grid">
           <div>

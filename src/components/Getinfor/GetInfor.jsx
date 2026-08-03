@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./GetInfor.module.css";
 import toast from "react-hot-toast";
+import { submitLead } from "../../services/leadService"; // chỉnh path cho đúng vị trí thực tế trong dự án
 
 const APARTMENT_TYPES = [
   "Căn Studio",
@@ -11,8 +12,6 @@ const APARTMENT_TYPES = [
   "Garden House",
   "Shophouse Khối Đế",
 ];
-const SHEET_URL =
-  "https://script.google.com/macros/s/AKfycbzKAY7Tvd8tZpsXyzG1TdF6Hi9OT0oC-VOr-2zdNvgvQ1qSLXNFJe9qWSvVQ_tnaf3m/exec";
 
 export default function GetInfor() {
   const navigate = useNavigate();
@@ -62,24 +61,9 @@ export default function GetInfor() {
 
     setLoading(true);
 
-    // Thêm dấu ' trước phone number để Google Sheet không bỏ số 0
-    const dataToSend = {
-      ...form,
-      phone: `'${form.phone}`,
-    };
+    const { success } = await submitLead(form);
 
-    // Gửi request (fire and forget)
-    try {
-      fetch(SHEET_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dataToSend),
-      }).catch(() => {
-        // Bỏ qua lỗi vì mode no-cors không cho phép đọc response
-      });
-
-      // Show success toast
+    if (success) {
       toast.success("Gửi thông tin thành công!");
 
       // Reset form
@@ -90,11 +74,11 @@ export default function GetInfor() {
       setTimeout(() => {
         navigate("/thank-you");
       }, 1000);
-    } catch (error) {
+    } else {
       toast.error("Có lỗi xảy ra, vui lòng thử lại");
-    } finally {
-      setLoading(false);
     }
+
+    setLoading(false);
   };
 
   return (
