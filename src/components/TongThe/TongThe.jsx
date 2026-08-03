@@ -2,19 +2,11 @@ import "./TongThe.css";
 import { useState } from "react";
 import matBangImg from "../../assets/images/masterplan.jpg";
 import arrowImg from "../../assets/images/arrow-icon.png";
-// ── Data building/tiện ích trên mặt bằng ─────────────────────────────────────
-const BUILDINGS = [
-  {
-    id: "5",
-    name: "palm river",
-    top: "74%",
-    left: "32%",
-    hintTop: "66%", // ← toạ độ riêng của popup hint, chỉnh tuỳ ý
-    hintLeft: "32%", // ← toạ độ riêng của popup hint, chỉnh tuỳ ý
-    viewBox: "392 667 276 222",
-    path: "M622.5 687L638.5 691.5L640 692L641.5 824L645.5 829V839L648 849.5L541.5 868.5L521 863.5L484 858L472 859.5L427 854.5L420.5 719.5L412 714V701L414 695H469.5L474.5 826H482.5L478.5 698L487.5 696.5H533L537 837L554.5 835.5L550.5 696.5L601 693V689L622.5 687Z",
-  },
-];
+import { BUILDINGS } from "./data";
+
+// Kích thước pixel THẬT của ảnh masterplan.jpg gốc — dùng để quy đổi
+// viewBox (đơn vị pixel trên ảnh gốc) sang % hiển thị tương ứng.
+const IMG_NATURAL_WIDTH = 3360;
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 export default function TongThe() {
@@ -65,49 +57,64 @@ export default function TongThe() {
       >
         <div className="mb__buildings">
           {/* Glow SVG — luôn hiện */}
-          {BUILDINGS.map((b) => (
-            <div
-              key={b.id}
-              data-id={b.id}
-              className={`mb__building-glow building-${b.id}-glow`}
-            >
-              <svg viewBox={b.viewBox} preserveAspectRatio="xMidYMid meet">
-                <defs>
-                  <filter
-                    id={`filter${b.id}_f_2009_202`}
-                    x="-50%"
-                    y="-50%"
-                    width="200%"
-                    height="200%"
-                  >
-                    <feGaussianBlur stdDeviation="10" result="blur" />
-                  </filter>
-                  <linearGradient
-                    id={`paint${b.id}_linear_2009_202`}
-                    x1="412"
-                    y1="687"
-                    x2="648"
-                    y2="868.5"
-                    gradientUnits="userSpaceOnUse"
-                  >
-                    <stop stopColor="#E6CE9E" />
-                    <stop offset="1" stopColor="#D2B57C" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
+          {BUILDINGS.map((b) => {
+            // Mỗi building có viewBox riêng (kích thước/tỉ lệ vùng khoanh khác nhau),
+            // nên phải tự tính aspect-ratio theo viewBox của TỪNG building,
+            // không dùng chung 1 tỉ lệ cố định (276/222 chỉ đúng cho building-5).
+            const [, , vbW, vbH] = b.viewBox.split(" ").map(Number);
+            // width phải tỉ lệ THẬT theo kích thước vùng khoanh trên ảnh gốc,
+            // không dùng số cố định (min(380px, 18vw)) — nếu không, vùng nhỏ
+            // (như building-10) sẽ bị phóng to bằng vùng lớn (building-5).
+            const widthPercent = (vbW / IMG_NATURAL_WIDTH) * 100;
+            return (
+              <div
+                key={b.id}
+                data-id={b.id}
+                className={`mb__building-glow building-${b.id}-glow`}
+                style={{
+                  top: b.top,
+                  left: b.left,
+                  width: `${widthPercent}%`,
+                  aspectRatio: `${vbW} / ${vbH}`,
+                }}
+              >
+                <svg viewBox={b.viewBox} preserveAspectRatio="xMidYMid meet">
+                  <defs>
+                    <filter
+                      id={`filter${b.id}_f_2009_202`}
+                      x="-50%"
+                      y="-50%"
+                      width="200%"
+                      height="200%"
+                    >
+                      <feGaussianBlur stdDeviation="10" result="blur" />
+                    </filter>
+                    <linearGradient
+                      id={`paint${b.id}_linear_2009_202`}
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="100%"
+                    >
+                      <stop stopColor="#E6CE9E" />
+                      <stop offset="1" stopColor="#D2B57C" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
 
-                <g
-                  filter={`url(#filter${b.id}_f_2009_202)`}
-                  className={`building building-${b.id}`}
-                  style={{ mixBlendMode: "soft-light" }}
-                >
-                  <path
-                    d={b.path}
-                    fill={`url(#paint${b.id}_linear_2009_202)`}
-                  />
-                </g>
-              </svg>
-            </div>
-          ))}
+                  <g
+                    filter={`url(#filter${b.id}_f_2009_202)`}
+                    className={`building building-${b.id}`}
+                    style={{ mixBlendMode: "soft-light" }}
+                  >
+                    <path
+                      d={b.path}
+                      fill={`url(#paint${b.id}_linear_2009_202)`}
+                    />
+                  </g>
+                </svg>
+              </div>
+            );
+          })}
 
           {/* Button — hiện khi hover */}
           {BUILDINGS.map((b) => (
@@ -151,7 +158,6 @@ export default function TongThe() {
               </a>
             </div>
           ))}
-          {/* Popup luôn hiển thị — chỉ khu vực cần chú ý, toạ độ riêng */}
           {/* Popup luôn hiển thị — chỉ khu vực cần chú ý, toạ độ riêng */}
           {BUILDINGS.map((b) => (
             <div
