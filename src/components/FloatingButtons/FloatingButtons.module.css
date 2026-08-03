@@ -48,7 +48,7 @@
   white-space: nowrap;
 
   background: rgba(0, 0, 0, 0.75);
-  color: #fff;
+  color: #e0edc9;
   font-family: "Reddit Sans", Helvetica, sans-serif;
   font-size: 12px;
   font-weight: 600;
@@ -86,9 +86,9 @@
 .fb__btn--phone {
   width: 56px;
   height: 56px;
-  background: linear-gradient(135deg, #c8a96e, #e8c98a);
-  color: #0d1f1a;
-  box-shadow: 0 4px 20px rgba(200, 169, 110, 0.5);
+  background: #d3a769;
+  color: #e0edc9;
+  box-shadow: 0 4px 20px rgba(211, 167, 105, 0.5);
 }
 
 /* Wobble animation */
@@ -120,13 +120,13 @@
   0%,
   100% {
     box-shadow:
-      0 4px 20px rgba(200, 169, 110, 0.5),
-      0 0 0 0 rgba(200, 169, 110, 0.5);
+      0 4px 20px rgba(211, 167, 105, 0.5),
+      0 0 0 0 rgba(211, 167, 105, 0.5);
   }
   50% {
     box-shadow:
-      0 4px 28px rgba(200, 169, 110, 0.7),
-      0 0 0 12px rgba(200, 169, 110, 0);
+      0 4px 28px rgba(211, 167, 105, 0.7),
+      0 0 0 12px rgba(211, 167, 105, 0);
   }
 }
 
@@ -149,12 +149,12 @@
 }
 
 .fb__btn--phone .fb__ring--1 {
-  border: 2px solid rgba(200, 169, 110, 0.55);
+  border: 2px solid rgba(211, 167, 105, 0.55);
   animation: fb-phone-ring 2.2s ease-out infinite;
 }
 
 .fb__btn--phone .fb__ring--2 {
-  border: 2px solid rgba(200, 169, 110, 0.35);
+  border: 2px solid rgba(211, 167, 105, 0.35);
   animation: fb-phone-ring 2.2s ease-out infinite;
   animation-delay: 0.7s;
 }
@@ -162,7 +162,7 @@
 .fb__btn--phone:hover {
   animation-play-state: paused;
   transform: scale(1.12);
-  box-shadow: 0 6px 28px rgba(200, 169, 110, 0.65);
+  box-shadow: 0 6px 28px rgba(211, 167, 105, 0.65);
 }
 
 /* ════════════════════════════════════════
@@ -171,8 +171,9 @@
 .fb__btn--zalo {
   width: 50px;
   height: 50px;
-  background: transparent; /* logo ảnh tự có nền */
-  filter: drop-shadow(0 3px 10px rgba(0, 104, 255, 0.4));
+  background: #d3a769;
+  color: #e0edc9;
+  filter: drop-shadow(0 3px 10px rgba(211, 167, 105, 0.4));
 }
 
 /* Shake animation */
@@ -244,25 +245,25 @@
 }
 
 .fb__btn--zalo .fb__ring--1 {
-  background: rgba(0, 104, 255, 0.25);
+  background: rgba(211, 167, 105, 0.25);
   animation: fb-zalo-ring-1 2s ease-out infinite;
 }
 
 .fb__btn--zalo .fb__ring--2 {
-  background: rgba(0, 104, 255, 0.15);
+  background: rgba(211, 167, 105, 0.15);
   animation: fb-zalo-ring-2 2s ease-out infinite;
   animation-delay: 0.5s;
 }
 
 .fb__btn--zalo .fb__ring--3 {
-  background: rgba(0, 104, 255, 0.1);
+  background: rgba(211, 167, 105, 0.1);
   animation: fb-zalo-ring-3 2s ease-out infinite;
   animation-delay: 1s;
 }
 
 .fb__btn--zalo:hover {
   animation-play-state: paused;
-  filter: drop-shadow(0 5px 16px rgba(0, 104, 255, 0.65));
+  filter: drop-shadow(0 5px 16px rgba(211, 167, 105, 0.65));
   transform: scale(1.08);
 }
 
@@ -270,6 +271,63 @@
 .fb__btn--zalo:hover .fb__ring--2,
 .fb__btn--zalo:hover .fb__ring--3 {
   animation-play-state: paused;
+}
+
+/* ════════════════════════════════════════
+   PRICE (BẢNG GIÁ) BUTTON
+════════════════════════════════════════ */
+.fb__btn--price {
+  width: 52px;
+  height: 52px;
+  background: #d3a769;
+  color: #e0edc9;
+  box-shadow: 0 4px 20px rgba(211, 167, 105, 0.5);
+}
+
+@keyframes fb-price-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 4px 20px rgba(211, 167, 105, 0.5),
+      0 0 0 0 rgba(211, 167, 105, 0.5);
+  }
+  50% {
+    box-shadow:
+      0 4px 28px rgba(211, 167, 105, 0.7),
+      0 0 0 12px rgba(211, 167, 105, 0);
+  }
+}
+
+@keyframes fb-price-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.fb__btn--price {
+  animation: fb-price-glow 2.4s ease-in-out infinite;
+}
+
+.fb__btn--price .fb__ring--1 {
+  border: 2px solid rgba(211, 167, 105, 0.5);
+  animation: fb-price-ring 2.4s ease-out infinite;
+}
+
+.fb__btn--price .fb__ring--2 {
+  border: 2px solid rgba(211, 167, 105, 0.3);
+  animation: fb-price-ring 2.4s ease-out infinite;
+  animation-delay: 0.8s;
+}
+
+.fb__btn--price:hover {
+  animation-play-state: paused;
+  transform: scale(1.12);
+  box-shadow: 0 6px 28px rgba(211, 167, 105, 0.65);
 }
 
 /* ── Responsive: thu nhỏ trên mobile ── */
@@ -284,6 +342,10 @@
     height: 48px;
   }
   .fb__btn--zalo {
+    width: 44px;
+    height: 44px;
+  }
+  .fb__btn--price {
     width: 44px;
     height: 44px;
   }

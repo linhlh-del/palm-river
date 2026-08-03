@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./PopUp.module.css";
 import logoLusso from "../../assets/images/logo-rever.png";
+import shieldIcon from "../../assets/images/shield-half.png";
+import headsetIcon from "../../assets/images/headset.png";
 import Toast from "./Toast";
 import { submitLead } from "../../services/leadService"; // chỉnh path cho đúng vị trí thực tế trong dự án
 
@@ -129,6 +131,22 @@ export default function PopUp({ isOpen, onClose }) {
             <button type="submit" disabled={loading}>
               {loading ? "ĐANG GỬI..." : "ĐĂNG KÝ"}
             </button>
+
+            {/* CAM KẾT */}
+            <div className={styles.guarantees}>
+              <p>
+                <img src={shieldIcon} alt="" className={styles.guaranteeIcon} />
+                Tuyệt đối <strong>bảo mật</strong> thông tin cá nhân.
+              </p>
+              <p>
+                <img
+                  src={headsetIcon}
+                  alt=""
+                  className={styles.guaranteeIcon}
+                />
+                <strong>Giải đáp mọi thắc mắc</strong> của khách hàng.
+              </p>
+            </div>
           </form>
         </div>
       </div>

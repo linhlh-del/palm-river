@@ -11,7 +11,7 @@ import CanHo from "./components/CanHo/CanHo.jsx";
 import Chinhsachuudai from "./components/ChinhSachUuDai/ChinhSachUuDai.jsx";
 import CSBH from "./components/CSBH/CSBH.jsx";
 import Footer from "./components/Footer/Footer.jsx";
-import PositionMap from "./components/PositionMap/PositionMap.jsx";
+// import PositionMap from "./components/PositionMap/PositionMap.jsx";
 import FloatingButtons from "./components/FloatingButtons/FloatingButtons.jsx";
 import PopUp from "./components/PopUp/PopUp.jsx";
 import ScrollDownButton from "./components/ScrollDown/Scrolldownbutton.jsx";
@@ -65,7 +65,7 @@ function HomePage({ onOpenModal }) {
 
   return (
     <>
-      <FloatingButtons />
+      <FloatingButtons onOpenModal={onOpenModal} />
       <Headers onOpenModal={onOpenModal} />
       <Hero />
       <TongQuan ref={tongQuanRef} />

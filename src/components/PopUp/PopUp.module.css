@@ -107,6 +107,34 @@
   line-height: 1.4;
 }
 
+/* GUARANTEES (bảo mật / hỗ trợ) */
+.guarantees {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+}
+
+.guarantees p {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: clamp(0.8125rem, 1.8vw, 0.9375rem);
+  margin: 0;
+  opacity: 1;
+}
+
+.guaranteeIcon {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+  object-fit: contain;
+  filter: brightness(0) invert(1); /* icon trắng, bỏ nếu ảnh đã sẵn màu trắng */
+}
+
 /* FORM */
 .form {
   display: flex;
@@ -282,6 +310,15 @@
   }
 
   .checkmark {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .guarantees {
+    padding: 0.625rem 0.75rem;
+  }
+
+  .guaranteeIcon {
     width: 1rem;
     height: 1rem;
   }
