@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./ThankYou.module.css";
-import logo from "../../assets/images/logo.webp";
+import logo from "../../assets/images/logo.png";
 
 export default function ThankYou() {
   const navigate = useNavigate();
