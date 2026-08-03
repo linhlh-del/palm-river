@@ -84,12 +84,26 @@ export default function Header({ onOpenModal }) {
     if (onOpenModal) onOpenModal();
   };
 
+  const handleLogoClick = (event) => {
+    event.preventDefault();
+    setMenuOpen(false);
+
+    if (location.pathname !== "/") {
+      navigate("/", { replace: false });
+      return;
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <>
       <header className={`hd${scrolled ? " hd--scrolled" : ""}`}>
         {/* Logo */}
         <div className="hd__logo">
-          <img src={logo} alt="Palm City" />
+          <a href="#top" onClick={handleLogoClick}>
+            <img src={logo} alt="Palm City" />
+          </a>
         </div>
 
         {/* Desktop nav */}

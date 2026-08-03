@@ -81,7 +81,7 @@ function HomePage({ onOpenModal }) {
       {/* <GetInfor /> */}
       {/* <Chinhsachuudai /> */}
       {/* <CSBH /> */}
-      <Footer />
+      <Footer onOpenModal={onOpenModal} />
       <ScrollDownButton />
     </>
   );

@@ -19,12 +19,14 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 960px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 40px;
-  padding: 60px 24px 0;
+  padding: 60px 0 0;
+  /* Không đặt max-width ở đây vì .container bên trong TongQuanBody
+     đã tự xử lý max-width: calc(100% - 128px). Đặt trùng ở cả 2 lớp
+     sẽ khiến bị trừ 128px hai lần, làm khung bị co hẹp bất thường. */
 }
 
 /* ── Background image ── */
