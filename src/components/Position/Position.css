@@ -36,7 +36,7 @@
   text-align: center;
   max-width: 600px;
   margin: 0 auto;
-  line-height: 1.5;
+  line-height: 1.6; /* tăng nhẹ để chừa chỗ cho dấu tiếng Việt */
 }
 
 .title span {
@@ -49,7 +49,8 @@
   -webkit-text-fill-color: transparent;
   text-align: center;
   margin: 0 0.25em;
-  line-height: 1.3;
+  line-height: 1.5; /* tăng từ 1.3 lên 1.5 để Safari không clip dấu */
+  padding-top: 0.15em; /* chừa khoảng đệm phía trên cho dấu mũ/dấu thanh */
   vertical-align: middle;
   white-space: normal;
 }
@@ -76,6 +77,8 @@
   font-weight: 400 !important;
   font-family: "DVNBeaufort-Regular", sans-serif;
   font-size: 2rem;
+  line-height: 1.5; /* thêm line-height để tránh clip dấu trên Safari */
+  padding-top: 0.15em; /* chừa khoảng đệm phía trên cho dấu */
 }
 
 .title .title-sparkle {
@@ -558,7 +561,7 @@
   .title {
     display: block;
     font-size: 1.75rem;
-    line-height: 1.2;
+    line-height: 1.5; /* tăng từ 1.2 lên 1.5 để tránh cắt dấu trên Safari/Zalo */
   }
 
   .title span {
@@ -566,8 +569,14 @@
     align-items: center;
     justify-content: center;
     width: auto;
-    line-height: 1.3;
+    line-height: 1.5; /* tăng từ 1.3 lên 1.5 */
+    padding-top: 0.15em; /* chừa khoảng đệm cho dấu, đồng bộ với desktop */
     vertical-align: middle;
+  }
+
+  .title .title-label {
+    line-height: 1.5;
+    padding-top: 0.15em;
   }
 
   .desc {
