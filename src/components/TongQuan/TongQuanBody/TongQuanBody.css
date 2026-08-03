@@ -1,0 +1,258 @@
+.section {
+  padding: 3rem 0;
+}
+
+.section-tongquan .content-container {
+  align-items: flex-start;
+}
+
+.content-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 50px;
+}
+
+.container {
+  width: 100%;
+  max-width: calc(100% - 128px);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.text-content {
+  flex: 0.85;
+  min-width: 300px;
+}
+
+.tagline {
+  color: #d2b57c;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+  display: block;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+}
+
+.section-title {
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  font-family: "DVNBeaufort-Regular", sans-serif;
+  background: linear-gradient(187deg, #d2b57c, #c79022);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1.5rem;
+  font-weight: 400;
+  line-height: 1.5;
+  padding-top: 0.15em;
+  text-transform: uppercase;
+}
+
+.description {
+  color: #e0edc9;
+  margin: 0 auto 1.5rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  text-align: justify;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+}
+
+.btn-primary {
+  background-color: #d2b57c;
+  color: #1c2115;
+  text-decoration: none;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 24px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s ease;
+  text-align: center;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+}
+
+.btn-primary:hover {
+  background-color: #c79022;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem;
+}
+
+.mt-3 {
+  margin-top: 1rem;
+}
+
+.image-content {
+  flex: 1.35;
+  min-width: 380px;
+  position: relative;
+}
+
+.content-img {
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  width: 100%;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* BẢNG THÔNG SỐ — nền bg-web.jpg, "nổi khối" bằng shadow, khung kẻ ô vàng */
+.overview-stats-box {
+  position: relative;
+  z-index: 2;
+  margin-top: 24px;
+  background-image: url("../../../assets/images/bg-web.jpg");
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px;
+  width: 100%;
+  overflow: hidden; /* clip bo góc, tránh vỡ khung khi table cao hơn box */
+  border: 1px solid rgba(210, 181, 124, 0.5);
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(210, 181, 124, 0.15) inset;
+}
+
+.overview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+}
+
+.overview-table-heading {
+  background: linear-gradient(
+    90deg,
+    rgba(210, 181, 124, 0.18),
+    rgba(210, 181, 124, 0.05)
+  );
+  color: #d2b57c;
+  text-align: center !important;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 1rem !important;
+  font-weight: 600;
+  padding: 16px 10px !important;
+  border-bottom: 1px solid rgba(210, 181, 124, 0.5) !important;
+}
+
+.overview-table th,
+.overview-table td {
+  padding: 14px 16px;
+  border: 1px solid rgba(210, 181, 124, 0.35);
+  text-align: left;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.overview-table tbody th {
+  color: #d2b57c;
+  font-weight: 600;
+  width: 35%;
+  white-space: nowrap;
+  border-left: none;
+}
+
+.overview-table tbody td {
+  color: #e0edc9;
+  font-weight: 400;
+  border-right: none;
+}
+
+.overview-table tbody tr:last-child th,
+.overview-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.overview-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  list-style: disc;
+}
+
+.overview-list li {
+  color: #e0edc9;
+  line-height: 1.6;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .container {
+    max-width: 100%;
+    padding: 0 16px;
+  }
+
+  .content-container {
+    gap: 24px;
+  }
+
+  /* Bỏ flex:0.85/1.35 + min-width cố định của desktop — trên mobile
+     2 cột phải xếp dọc và chiếm full-width, không thì bị co hẹp lệch
+     hoặc tràn ngang khi min-width lớn hơn viewport. */
+  .text-content,
+  .image-content {
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .overview-stats-box {
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  .overview-table th,
+  .overview-table td {
+    font-size: 0.8rem;
+    padding: 10px 8px;
+  }
+
+  .overview-table th {
+    white-space: normal;
+  }
+}
+
+@media (max-width: 430px) {
+  .section-title {
+    font-size: 1.5rem;
+    line-height: 1.4;
+  }
+
+  .description {
+    font-size: 0.9rem;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .overview-table-heading {
+    font-size: 0.85rem !important;
+    padding: 12px 8px !important;
+  }
+
+  .overview-table tbody th {
+    width: 38%;
+    white-space: normal;
+    font-size: 0.7rem;
+  }
+
+  .overview-table tbody td {
+    font-size: 0.7rem;
+  }
+
+  .overview-table th,
+  .overview-table td {
+    padding: 8px 6px;
+  }
+}

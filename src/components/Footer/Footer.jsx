@@ -58,10 +58,17 @@ function UpArrowIcon() {
   );
 }
 
-export default function Footer() {
+export default function Footer({ onOpenModal }) {
   const scrollToTop = () => {
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const handleSubscribeClick = (event) => {
+    event.preventDefault();
+    if (typeof onOpenModal === "function") {
+      onOpenModal();
     }
   };
 
@@ -73,7 +80,11 @@ export default function Footer() {
             <h3 className="pn-footer-heading">
               Đăng ký nhận <br /> thông tin
             </h3>
-            <a className="pn-subscribe-btn" href="#">
+            <a
+              className="pn-subscribe-btn"
+              href="#"
+              onClick={handleSubscribeClick}
+            >
               Đăng ký <ArrowIcon />
             </a>
 

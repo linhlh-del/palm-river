@@ -5,7 +5,7 @@ export const FOOTER_CONTACT = [
     socialHref: "https://www.facebook.com/rever.vn",
   },
   {
-    label: "(T): (+84) 96 69 090 86",
+    label: "(T): (+84) 906.757.276",
     socialLabel: "Contact",
     socialHref: "https://www.youtube.com/@rever.vn",
   },
