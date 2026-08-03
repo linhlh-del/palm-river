@@ -103,7 +103,7 @@ export default function HinhAnh({ onOpenModal }) {
             <div className="tinb-grid-item" key={`${item.category}-${index}`}>
               <img src={item.src} alt={item.alt} loading="lazy" />
               <div className="tinb-grid-overlay">
-                <span>{item.label}</span>
+                {/* <span>{item.label}</span> */}
               </div>
             </div>
           ))}

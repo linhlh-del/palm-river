@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import logo from "../../assets/images/logo.webp";
+import logo from "../../assets/images/logo.png";
 import menuIcon from "../../assets/images/logo-menu.png";
 import logoRever from "../../assets/images/logo-rever.png";
 import "./Header.css";
