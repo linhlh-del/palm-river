@@ -27,10 +27,54 @@
 }
 
 .tinb-description {
-  color: var(--text-light, #6b7280);
+  color: #e0edc9;
   margin: 0 auto 1.5rem;
   font-size: 1.05rem;
   max-width: 800px;
+  line-height: 1.6;
+  text-align: justify;
+}
+
+@media (max-width: 768px) {
+  .tinb-description {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .tinb-description {
+    font-size: 0.85rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .tinb-description.expanded {
+    -webkit-line-clamp: unset;
+    overflow: visible;
+  }
+}
+
+.tinb-description-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--secondary-color, #d2b57c);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0 0 1rem;
+  margin: -0.5rem auto 1rem;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+}
+
+@media (max-width: 576px) {
+  .tinb-description-toggle {
+    display: inline-block;
+  }
 }
 
 .tinb-filters {

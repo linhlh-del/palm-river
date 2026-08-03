@@ -39,7 +39,14 @@ export default function HinhAnh({ onOpenModal }) {
     <section id="hinhanh" className="tinb-section tinb-bg-light">
       <div className="tinb-container">
         <h2 className="tinb-section-title">TIỆN ÍCH NỔI BẬT</h2>
-
+        <p className="tinb-description">
+          Palm River được phát triển theo mô hình "đô thị nghỉ dưỡng giữa lòng
+          thành phố", tích hợp với các phân khu nhà ở cao tầng và thấp tầng,
+          thương mại – dịch vụ, trường học quốc tế, bệnh viện quốc tế cùng hệ
+          thống tiện ích cộng đồng. Dự án hướng đến việc hình thành môi trường
+          sống đồng bộ, đáp ứng nhu cầu ở, học tập, làm việc và sử dụng dịch vụ
+          trong cùng khu đô thị.
+        </p>
         <div className="tinb-filters">
           {FILTERS.map((filter) => (
             <button
