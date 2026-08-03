@@ -93,11 +93,17 @@
 
 .mb__building-glow {
   position: absolute;
-  width: min(380px, 18vw);
+  width: min(
+    380px,
+    18vw
+  ); /* fallback — luôn bị inline style (width %) ghi đè */
   height: auto;
-  aspect-ratio: 276 / 222;
   transform: translate(-50%, -50%);
   pointer-events: none;
+  /* top/left/width/aspect-ratio giờ được set qua inline style trong JSX,
+     tính động theo viewBox của TỪNG building so với kích thước ảnh gốc
+     (3360px) — nhờ vậy building nhỏ sẽ hiện nhỏ, building to hiện to,
+     đúng tỉ lệ thật trên ảnh, không còn bị ép cứng cùng 1 kích thước. */
 }
 
 .mb__building-glow svg {
@@ -110,13 +116,7 @@
   opacity: 1; /* luôn hiện, không phụ thuộc hover */
 }
 
-/* Vị trí từng glow — chỉnh top/left ở đây để canh vào đúng toà nhà trên ảnh */
-.masterplan_site .mb__building-glow.building-5-glow {
-  top: 74%;
-  left: 32%;
-}
-
-/* ── Button "palm river" ── */
+/* ── Button building (dùng chung cho mọi building) ── */
 .masterplan_site .btn-building {
   position: absolute;
   background: rgba(210, 181, 124, 0.5);
@@ -129,17 +129,14 @@
     opacity 0.35s ease,
     visibility 0.35s ease;
   pointer-events: auto;
+  /* top/left được set qua inline style (style={{top: b.top, left: b.left}})
+     lấy từ data.js — không cần định nghĩa riêng theo từng id ở đây nữa. */
 }
 
 .masterplan_site .btn-building.is-visible,
 .masterplan_site .btn-building:hover {
   opacity: 1;
   visibility: visible;
-}
-
-.masterplan_site .btn-building.building-5-btn {
-  top: 74%;
-  left: 32%;
 }
 
 /* ════════════════════════════════════════
