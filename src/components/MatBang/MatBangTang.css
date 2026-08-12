@@ -29,6 +29,11 @@
   gap: 2rem;
 }
 
+@media (max-width: 1440px) {
+  .mbt-container {
+    max-width: 100%;
+  }
+}
 @media (min-width: 769px) {
   .mbt-content {
     flex-direction: row;
