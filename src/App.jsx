@@ -71,6 +71,7 @@ function HomePage({ onOpenModal }) {
       <TongQuan ref={tongQuanRef} />
       <Position />
       <TongThe />
+      <MatbangTang />
       <TienIch />
       <HinhAnh />
       <News />

@@ -1,4 +1,4 @@
-import heroBg from "../../assets/images/palm-city-hero.png";
+import heroBg from "../../assets/images/palm-city-hero.webp";
 import "./Hero.css";
 
 export default function Hero() {

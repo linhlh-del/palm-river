@@ -1,0 +1,191 @@
+.mbt-section {
+  padding: 50px 0;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+  background: #fff;
+}
+
+.mbt-container {
+  width: 100%;
+  max-width: 72%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.mbt-section-title {
+  font-size: clamp(1rem, 6vw, 3rem);
+  font-weight: 400;
+  color: #d2b57c;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+/* ==========================
+   LAYOUT: mobile mặc định = xếp chồng (text trên, ảnh dưới)
+   desktop = 2 cột nằm ngang (text trái, ảnh phải)
+   ========================== */
+.mbt-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (min-width: 769px) {
+  .mbt-content {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0;
+  }
+}
+
+/* ---- CỘT TEXT ---- */
+.mbt-text-col {
+  background-image: url(../../assets/images/bg-web.jpg);
+  color: #e0edc9;
+  padding: 2.5rem 2rem;
+  border-radius: 0.5rem;
+  text-align: left;
+}
+
+@media (min-width: 769px) {
+  .mbt-text-col {
+    flex: 0 0 30%;
+    max-width: 30%;
+    border-radius: 0.5rem 0 0 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+.mbt-section-title {
+  font-size: clamp(1rem, 6vw, 3rem);
+  font-weight: 400;
+  color: #d2b57c;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.mbt-description {
+  color: #e0edc9;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  /* .mbt-section-title {
+    font-size: 1.8rem;
+  } */
+
+  .mbt-description {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+}
+
+.mbt-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.mbt-filter-btn {
+  color: #e0edc9;
+  background: transparent;
+  border: 2px solid var(--border-color, #d2b57c);
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+}
+
+.mbt-filter-btn:hover {
+  border-color: var(--secondary-color, #d2b57c);
+  color: var(--secondary-color, #d2b57c);
+}
+
+.mbt-filter-btn.active {
+  background: var(--secondary-color, #d2b57c);
+  color: #1c2b18;
+  border-color: var(--secondary-color, #d2b57c);
+}
+
+/* ---- CỘT ẢNH ---- */
+.mbt-image-col {
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+@media (min-width: 769px) {
+  .mbt-image-col {
+    flex: 0 0 70%;
+    max-width: 70%;
+    border-radius: 0 0.5rem 0.5rem 0;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-left: none;
+  }
+}
+
+.mbt-gallery-single {
+  width: 100%;
+}
+
+.mbt-gallery-item {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mbt-gallery-item.show {
+  opacity: 1;
+}
+
+.mbt-gallery-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  cursor: pointer;
+}
+
+/* ---- GHI CHÚ ---- */
+.mbt-notes {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mbt-note-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  color: #1c2b18;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.mbt-note-icon {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  margin-top: 0.4rem;
+  background: #1c2b18;
+  transform: rotate(45deg);
+}
+
+@media (max-width: 576px) {
+  .mbt-note-item {
+    font-size: 0.9rem;
+  }
+}

@@ -5,12 +5,13 @@ import toast from "react-hot-toast";
 import { submitLead } from "../../services/leadService"; // chỉnh path cho đúng vị trí thực tế trong dự án
 
 const APARTMENT_TYPES = [
-  "Căn Studio",
-  "Căn 1 Phòng Ngủ",
-  "Căn 2 Phòng Ngủ",
-  "Căn 3 Phòng Ngủ",
-  "Garden House",
-  "Shophouse Khối Đế",
+  "Studio",
+  "Căn hộ 1 PN",
+  "Căn hộ 2 PN",
+  "Căn hộ 3 PN",
+  "Duplex",
+  "Penthouse",
+  "Shophouse",
 ];
 
 export default function GetInfor() {
