@@ -24,6 +24,7 @@
   font-family: var(--font-body);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  margin-top: 80px;
 }
 
 .ndp * {
@@ -573,13 +574,16 @@
 
 .ndp__footer-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 32px;
 }
 
 @media (max-width: 768px) {
   .ndp__footer-grid {
     grid-template-columns: 1fr;
+  }
+  .ndp__container {
+    max-width: 100%;
   }
 }
 

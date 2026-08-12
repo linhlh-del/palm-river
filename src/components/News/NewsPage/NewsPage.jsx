@@ -1,20 +1,82 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./NewsPage.css";
 import Header from "../../Header/Header.jsx";
 import Footer from "../../Footer/Footer.jsx";
 import {
-  NEWS_ARTICLES,
+  fetchNewsList,
   getFeatured,
   getHighlights,
   getHref,
-} from "../../../data/news";
+  formatDate,
+} from "../../../services/newsService";
 
 export default function NewsPage() {
-  const featured = getFeatured();
-  const highlights = getHighlights(featured.id, 2);
+  const [articles, setArticles] = useState(null); // null = đang tải
+  const [fetchError, setFetchError] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchNewsList()
+      .then((data) => {
+        if (!cancelled) setArticles(data);
+      })
+      .catch((err) => {
+        console.error("Lỗi tải danh sách tin tức:", err);
+        if (!cancelled) {
+          setFetchError(
+            "Không tải được danh sách tin tức. Vui lòng kiểm tra kết nối và thử lại.",
+          );
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Đang tải
+  if (!articles && !fetchError) {
+    return (
+      <div className="pn-page">
+        <Header />
+        <div className="pn-container" style={{ padding: "80px 0" }}>
+          <p>Đang tải tin tức...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Lỗi mạng / backend không phản hồi
+  if (fetchError) {
+    return (
+      <div className="pn-page">
+        <Header />
+        <div className="pn-container" style={{ padding: "80px 0" }}>
+          <p>{fetchError}</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Chưa có bài viết nào trong DB
+  if (articles.length === 0) {
+    return (
+      <div className="pn-page">
+        <Header />
+        <div className="pn-container" style={{ padding: "80px 0" }}>
+          <p>Chưa có bài viết nào.</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  const featured = getFeatured(articles);
+  const highlights = getHighlights(articles, featured.id, 2);
   // Toàn bộ tin còn lại (không tính tin nổi bật) hiển thị trong lưới "Điểm nổi bật"
-  const grid = NEWS_ARTICLES.filter((item) => item.id !== featured.id);
+  const grid = articles.filter((item) => item.id !== featured.id);
 
   return (
     <div className="pn-page">
@@ -46,12 +108,16 @@ export default function NewsPage() {
                   <span className="pn-hash">#</span>
                   {featured.tag}
                 </p>
-                <p>{featured.date}</p>
+                <p>{formatDate(featured.published_at)}</p>
               </div>
             </div>
             <figure>
               <Link to={getHref(featured.id)}>
-                <img src={featured.image} alt={featured.title} loading="lazy" />
+                <img
+                  src={featured.image_url}
+                  alt={featured.title}
+                  loading="lazy"
+                />
               </Link>
             </figure>
           </div>
@@ -67,7 +133,7 @@ export default function NewsPage() {
                     <span className="pn-hash">#</span>
                     {item.tag}
                   </p>
-                  <p>{item.date}</p>
+                  <p>{formatDate(item.published_at)}</p>
                 </div>
               </div>
             ))}
@@ -83,7 +149,7 @@ export default function NewsPage() {
             <article className="pn-news-item" key={item.id}>
               <figure>
                 <Link to={getHref(item.id)}>
-                  <img src={item.image} alt={item.title} loading="lazy" />
+                  <img src={item.image_url} alt={item.title} loading="lazy" />
                 </Link>
               </figure>
               <div className="pn-title-news">
@@ -97,7 +163,7 @@ export default function NewsPage() {
                   <span className="pn-hash">#</span>
                   {item.tag}
                 </p>
-                <p>{item.date}</p>
+                <p>{formatDate(item.published_at)}</p>
               </div>
             </article>
           ))}

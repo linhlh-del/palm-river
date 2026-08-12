@@ -1107,7 +1107,7 @@ export const SITE_INFO = {
   tagline:
     "Không chỉ là nơi để ở, Palm City là nơi mọi giá trị sống được cân bằng trọn vẹn – một Đô thị nghỉ dưỡng giữa lòng thành phố.",
   address: "Đường Song Hành, P. Bình Trưng (Quận 2 cũ), TP.HCM",
-  phone: "(+84) 96 69 090 86",
+  phone: "906 757 276",
   email: "sales@palm-city.com.vn",
   copyright: "Copyright © 2026 by Palm City. All rights reserved.",
 };

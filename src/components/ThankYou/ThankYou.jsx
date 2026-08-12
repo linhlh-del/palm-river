@@ -72,7 +72,7 @@ export default function ThankYou() {
         {/* Contact Info */}
         <p className={styles.contactInfo}>
           Nếu bạn có thắc mắc gấp, vui lòng gọi cho chúng tôi: <br />
-          <strong>0877 191 940</strong>
+          <strong>0906 757 276</strong>
         </p>
       </div>
     </div>

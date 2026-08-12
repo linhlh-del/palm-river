@@ -1,14 +1,17 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
-  getArticleById,
-  getBanner,
+  fetchNewsList,
+  getHref,
+  getBannerSrc,
   getHighlights,
   getRelated,
-  getHref,
-  SITE_INFO,
-} from "../../../data/news";
+  formatDate,
+} from "../../../services/newsService";
+import { SITE_INFO } from "../../../data/saleInfo";
 import "./NewsDetailPage.css";
+import Header from "../../Header/Header.jsx";
+import GetInfor from "../../Getinfor/GetInfor.jsx";
 
 /* ---------------------------------------------------------------------------
  * Icon set
@@ -115,54 +118,51 @@ function ArticleImage({ src, caption }) {
 /* ---------------------------------------------------------------------------
  * NewsDetailPage — bố cục theo mẫu single-page (banner + card đè lên banner
  * gồm 3 cột: share / nội dung / sidebar), tra cứu bài viết động theo
- * :articleId trong URL.
+ * :articleId trong URL. Data lấy từ backend API (Bước 8).
  * ------------------------------------------------------------------------ */
 export default function NewsDetailPage() {
   const { articleId } = useParams();
-  const article = getArticleById(articleId);
 
-  if (!article) {
-    return (
-      <div className="ndp">
-        <div className="ndp__container" style={{ padding: "80px 24px" }}>
-          <h1>Bài viết không tìm thấy</h1>
-          <p>
-            Xin lỗi, nội dung chi tiết của bài viết này chưa có hoặc đường dẫn
-            không hợp lệ.
-          </p>
-          <Link to="/tin-tuc">Quay lại trang Tin tức</Link>
-        </div>
-      </div>
-    );
-  }
-
-  const { id, tag: category, title, date, excerpt } = article;
-  const categoryHref = "/tin-tuc";
-  const heroImage = { src: getBanner(id), alt: title };
-
-  const content =
-    article.content && article.content.length > 0
-      ? article.content
-      : [{ type: "p", text: excerpt }];
-
-  // Chưa có field "tags" riêng trong data -> tạm fallback dùng category
-  const tags = article.tags && article.tags.length ? article.tags : [category];
-
-  const highlights = getHighlights(id, 2);
-  const related = getRelated(id, 2);
-
+  // --- state & refs: khai báo TẤT CẢ hook trước mọi return sớm bên dưới,
+  // để không vi phạm Rules of Hooks khi thêm trạng thái loading/error ---
+  const [articles, setArticles] = useState(null); // null = đang tải
+  const [fetchError, setFetchError] = useState(null);
   const trackRef = useRef(null);
   const [copied, setCopied] = useState(false);
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const [slideIndex, setSlideIndex] = useState(0);
 
+  useEffect(() => {
+    let cancelled = false;
+    fetchNewsList()
+      .then((data) => {
+        if (!cancelled) setArticles(data);
+      })
+      .catch((err) => {
+        console.error("Lỗi tải danh sách bài viết:", err);
+        if (!cancelled) {
+          setFetchError(
+            "Không tải được bài viết. Vui lòng kiểm tra kết nối và thử lại.",
+          );
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const article = articles
+    ? articles.find((a) => a.id === articleId) || null
+    : null;
+
   // Reset UI (carousel, scroll) khi chuyển sang bài viết khác
   useEffect(() => {
+    if (!article) return;
     setSlideIndex(0);
     if (trackRef.current) trackRef.current.scrollTo({ left: 0 });
     window.scrollTo({ top: 0 });
-  }, [id]);
+  }, [article?.id]);
 
   const handleCopyLink = useCallback(async () => {
     try {
@@ -183,6 +183,73 @@ export default function NewsDetailPage() {
     );
   }, []);
 
+  // --- Hết phần hook, từ đây trở đi mới được return sớm ---
+
+  // Đang tải
+  if (!articles && !fetchError) {
+    return (
+      <>
+        <Header />
+        <div className="ndp">
+          <div className="ndp__container" style={{ padding: "80px 24px" }}>
+            <p>Đang tải bài viết...</p>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // Lỗi mạng / backend không phản hồi
+  if (fetchError) {
+    return (
+      <>
+        <Header />
+        <div className="ndp">
+          <div className="ndp__container" style={{ padding: "80px 24px" }}>
+            <h1>Có lỗi xảy ra</h1>
+            <p>{fetchError}</p>
+            <Link to="/tin-tuc">Quay lại trang Tin tức</Link>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // Không tìm thấy bài viết theo id trong URL
+  if (!article) {
+    return (
+      <>
+        <Header />
+        <div className="ndp">
+          <div className="ndp__container" style={{ padding: "80px 24px" }}>
+            <h1>Bài viết không tìm thấy</h1>
+            <p>
+              Xin lỗi, nội dung chi tiết của bài viết này chưa có hoặc đường dẫn
+              không hợp lệ.
+            </p>
+            <Link to="/tin-tuc">Quay lại trang Tin tức</Link>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  const { id, tag: category, title, published_at, excerpt } = article;
+  const date = formatDate(published_at);
+  const categoryHref = "/tin-tuc";
+  const heroImage = { src: getBannerSrc(article), alt: title };
+
+  const content =
+    article.content && article.content.length > 0
+      ? article.content
+      : [{ type: "p", text: excerpt }];
+
+  // Chưa có field "tags" riêng có dữ liệu -> tạm fallback dùng category
+  const tags = article.tags && article.tags.length ? article.tags : [category];
+
+  const highlights = getHighlights(articles, id, 2);
+  const related = getRelated(articles, id, 2);
+
   const scrollRelated = (dir) => {
     const track = trackRef.current;
     if (!track) return;
@@ -201,232 +268,220 @@ export default function NewsDetailPage() {
   };
 
   return (
-    <div className="ndp">
-      {/* Banner */}
-      <div className="ndp__hero">
-        {heroImage?.src && (
-          <img src={heroImage.src} alt={heroImage.alt || title} />
-        )}
-      </div>
+    <>
+      <Header />
 
-      {/* Card nội dung — đè lên banner */}
-      <div className="ndp__page">
-        <div className="ndp__container">
-          <div className="ndp__block">
-            <div className="ndp__grid">
-              {/* Share */}
-              <div className="ndp__share">
-                <button
-                  type="button"
-                  className="ndp__share-btn"
-                  onClick={handleFacebookShare}
-                  aria-label="Chia sẻ lên Facebook"
-                  title="Chia sẻ lên Facebook"
-                >
-                  <FacebookIcon />
-                </button>
-                <button
-                  type="button"
-                  className="ndp__share-btn"
-                  onClick={handleCopyLink}
-                  aria-label="Sao chép liên kết"
-                  title="Sao chép liên kết"
-                >
-                  <LinkIcon />
-                </button>
-                {copied && (
-                  <span className="ndp__share-copied">Đã copy link</span>
-                )}
-              </div>
-
-              {/* Article */}
-              <article className="ndp__article">
-                <div className="ndp__head">
-                  <span className="ndp__cate">
-                    <Link to={categoryHref}>{category}</Link>
-                  </span>
-                  <h1 className="ndp__title">{title}</h1>
-                  <p className="ndp__date">{date}</p>
-                </div>
-
-                <div className="ndp__content">
-                  {content.map((block, i) => {
-                    if (block.type === "h2") {
-                      return (
-                        <h2 key={block.id || i} id={block.id}>
-                          {block.text}
-                        </h2>
-                      );
-                    }
-                    if (block.type === "img") {
-                      return (
-                        <ArticleImage
-                          key={i}
-                          src={block.src}
-                          caption={block.caption}
-                        />
-                      );
-                    }
-                    if (block.type === "source") {
-                      return (
-                        <p className="ndp__source" key={i}>
-                          {block.text}
-                        </p>
-                      );
-                    }
-                    return <p key={i}>{block.text}</p>;
-                  })}
-                </div>
-
-                <div className="ndp__tags">
-                  <span className="ndp__tags-label">Tags:</span>
-                  <ul>
-                    {tags.map((t) => (
-                      <li key={t}>
-                        <span>{t}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </article>
-
-              {/* Sidebar */}
-              <aside className="ndp__aside">
-                <p className="ndp__sidebar-title">Điểm nổi bật</p>
-                <div className="ndp__highlight-list">
-                  {highlights.map((h) => (
-                    <Link
-                      className="ndp__highlight"
-                      key={h.id}
-                      to={getHref(h.id)}
-                    >
-                      <div className="ndp__highlight-title">{h.title}</div>
-                      <div className="ndp__highlight-meta">
-                        <span className="tag">{h.tag}</span>
-                        <span>{h.date}</span>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </aside>
-            </div>
-          </div>
+      <div className="ndp">
+        {/* Banner */}
+        <div className="ndp__hero">
+          {heroImage?.src && (
+            <img src={heroImage.src} alt={heroImage.alt || title} />
+          )}
         </div>
-      </div>
 
-      {/* Bài viết liên quan */}
-      <section className="ndp__related">
-        <div className="ndp__container">
-          <div className="ndp__related-head">
-            <h3>Bài viết liên quan</h3>
-            <p>
-              Cập nhật những thông báo mới nhất, các cột mốc dự án và những sự
-              kiện độc quyền từ Palm City.
-            </p>
-          </div>
+        {/* Card nội dung — đè lên banner */}
+        <div className="ndp__page">
+          <div className="ndp__container">
+            <div className="ndp__block">
+              <div className="ndp__grid">
+                {/* Share */}
+                <div className="ndp__share">
+                  <button
+                    type="button"
+                    className="ndp__share-btn"
+                    onClick={handleFacebookShare}
+                    aria-label="Chia sẻ lên Facebook"
+                    title="Chia sẻ lên Facebook"
+                  >
+                    <FacebookIcon />
+                  </button>
+                  <button
+                    type="button"
+                    className="ndp__share-btn"
+                    onClick={handleCopyLink}
+                    aria-label="Sao chép liên kết"
+                    title="Sao chép liên kết"
+                  >
+                    <LinkIcon />
+                  </button>
+                  {copied && (
+                    <span className="ndp__share-copied">Đã copy link</span>
+                  )}
+                </div>
 
-          <div className="ndp__related-toolbar">
-            <div className="ndp__related-arrows">
-              <button
-                type="button"
-                className="ndp__arrow-btn"
-                onClick={() => scrollRelated(-1)}
-                disabled={slideIndex === 0}
-                aria-label="Bài viết trước"
-              >
-                <ArrowIcon flip />
-              </button>
-              <button
-                type="button"
-                className="ndp__arrow-btn"
-                onClick={() => scrollRelated(1)}
-                disabled={slideIndex >= related.length - 1}
-                aria-label="Bài viết tiếp theo"
-              >
-                <ArrowIcon />
-              </button>
-            </div>
-
-            <Link className="ndp__related-more" to="/tin-tuc">
-              Xem thêm <ArrowIcon />
-            </Link>
-          </div>
-
-          <div className="ndp__related-track" ref={trackRef}>
-            {related.map((item) => (
-              <Link
-                className="ndp__news-card"
-                to={getHref(item.id)}
-                key={item.id}
-              >
-                <figure>
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    loading="lazy"
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                    }}
-                  />
-                </figure>
-                <div className="ndp__news-card-body">
-                  <h4 className="ndp__news-card-title">{item.title}</h4>
-                  <p className="ndp__news-card-excerpt">{item.excerpt}</p>
-                  <div className="ndp__news-card-meta">
-                    <span className="tag">{item.tag}</span>
-                    <span>{item.date}</span>
+                {/* Article */}
+                <article className="ndp__article">
+                  <div className="ndp__head">
+                    <span className="ndp__cate">
+                      <Link to={categoryHref}>{category}</Link>
+                    </span>
+                    <h1 className="ndp__title">{title}</h1>
+                    <p className="ndp__date">{date}</p>
                   </div>
-                </div>
-              </Link>
-            ))}
+
+                  <div className="ndp__content">
+                    {content.map((block, i) => {
+                      if (block.type === "h2") {
+                        return (
+                          <h2 key={block.id || i} id={block.id}>
+                            {block.text}
+                          </h2>
+                        );
+                      }
+                      if (block.type === "img") {
+                        return (
+                          <ArticleImage
+                            key={i}
+                            src={block.src}
+                            caption={block.caption}
+                          />
+                        );
+                      }
+                      if (block.type === "source") {
+                        return (
+                          <p className="ndp__source" key={i}>
+                            {block.text}
+                          </p>
+                        );
+                      }
+                      return <p key={i}>{block.text}</p>;
+                    })}
+                  </div>
+
+                  <div className="ndp__tags">
+                    <span className="ndp__tags-label">Tags:</span>
+                    <ul>
+                      {tags.map((t) => (
+                        <li key={t}>
+                          <span>{t}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </article>
+
+                {/* Sidebar */}
+                <aside className="ndp__aside">
+                  <p className="ndp__sidebar-title">Điểm nổi bật</p>
+                  <div className="ndp__highlight-list">
+                    {highlights.map((h) => (
+                      <Link
+                        className="ndp__highlight"
+                        key={h.id}
+                        to={getHref(h.id)}
+                      >
+                        <div className="ndp__highlight-title">{h.title}</div>
+                        <div className="ndp__highlight-meta">
+                          <span className="tag">{h.tag}</span>
+                          <span>{formatDate(h.published_at)}</span>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </aside>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
 
-      {/* Newsletter / footer */}
-      <footer className="ndp__footer">
-        <div className="ndp__container">
-          <div className="ndp__footer-grid">
-            <div>
-              <h4>Đăng ký nhận thông tin</h4>
-              <form className="ndp__newsletter-form" onSubmit={handleSubscribe}>
-                <input
-                  type="email"
-                  required
-                  placeholder="Nhập email của bạn"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  aria-label="Địa chỉ email"
-                />
-                <button type="submit">
-                  {subscribed ? "Đã đăng ký" : "Đăng ký"}
+        {/* Bài viết liên quan */}
+        <section className="ndp__related">
+          <div className="ndp__container">
+            <div className="ndp__related-head">
+              <h3>Bài viết liên quan</h3>
+              <p>
+                Cập nhật những thông báo mới nhất, các cột mốc dự án và những sự
+                kiện độc quyền từ Palm City.
+              </p>
+            </div>
+
+            <div className="ndp__related-toolbar">
+              <div className="ndp__related-arrows">
+                <button
+                  type="button"
+                  className="ndp__arrow-btn"
+                  onClick={() => scrollRelated(-1)}
+                  disabled={slideIndex === 0}
+                  aria-label="Bài viết trước"
+                >
+                  <ArrowIcon flip />
                 </button>
-              </form>
+                <button
+                  type="button"
+                  className="ndp__arrow-btn"
+                  onClick={() => scrollRelated(1)}
+                  disabled={slideIndex >= related.length - 1}
+                  aria-label="Bài viết tiếp theo"
+                >
+                  <ArrowIcon />
+                </button>
+              </div>
 
-              <div className="ndp__footer-contact">
-                <span>
-                  <strong>Địa chỉ: </strong>
-                  {SITE_INFO.address}
-                </span>
-                <span>
-                  <strong>Điện thoại: </strong>
-                  {SITE_INFO.phone}
-                </span>
-                <span>
-                  <strong>Email: </strong>
-                  {SITE_INFO.email}
-                </span>
+              <Link className="ndp__related-more" to="/tin-tuc">
+                Xem thêm <ArrowIcon />
+              </Link>
+            </div>
+
+            <div className="ndp__related-track" ref={trackRef}>
+              {related.map((item) => (
+                <Link
+                  className="ndp__news-card"
+                  to={getHref(item.id)}
+                  key={item.id}
+                >
+                  <figure>
+                    <img
+                      src={item.image_url}
+                      alt={item.title}
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.style.display = "none";
+                      }}
+                    />
+                  </figure>
+                  <div className="ndp__news-card-body">
+                    <h4 className="ndp__news-card-title">{item.title}</h4>
+                    <p className="ndp__news-card-excerpt">{item.excerpt}</p>
+                    <div className="ndp__news-card-meta">
+                      <span className="tag">{item.tag}</span>
+                      <span>{formatDate(item.published_at)}</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Newsletter / footer */}
+        <footer className="ndp__footer">
+          <div className="ndp__container">
+            <div className="ndp__footer-grid">
+              <div>
+                <h4>Đăng ký nhận thông tin</h4>
+                <GetInfor />
+
+                <div className="ndp__footer-contact">
+                  <span>
+                    <strong>Địa chỉ: </strong>
+                    {SITE_INFO.address}
+                  </span>
+                  <span>
+                    <strong>Điện thoại: </strong>
+                    {SITE_INFO.phone}
+                  </span>
+                  <span>
+                    <strong>Email: </strong>
+                    {SITE_INFO.email}
+                  </span>
+                </div>
               </div>
             </div>
 
-            <div>
-              <p className="ndp__footer-tagline">{SITE_INFO.tagline}</p>
-            </div>
+            <div className="ndp__footer-bottom">{SITE_INFO.copyright}</div>
           </div>
-
-          <div className="ndp__footer-bottom">{SITE_INFO.copyright}</div>
-        </div>
-      </footer>
-    </div>
+        </footer>
+      </div>
+    </>
   );
 }

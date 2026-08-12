@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "./News.css";
 import arrowLeft from "../../assets/images/arrow-left.png";
 import arrowRight from "../../assets/images/arrow-right.png";
-import { NEWS_ARTICLES, getHref } from "../../data/news";
+import { fetchNewsList, getHref, formatDate } from "../../services/newsService";
 
 function ArrowIcon({ direction = "right" }) {
   const src = direction === "left" ? arrowLeft : arrowRight;
@@ -11,16 +11,42 @@ function ArrowIcon({ direction = "right" }) {
   return <img src={src} alt="" className="pc-news__arrow-img" />;
 }
 
+/**
+ * items: nếu component cha đã có sẵn danh sách bài viết thì truyền vào,
+ * News.jsx sẽ dùng luôn (không fetch lại). Nếu không truyền (dùng mặc định
+ * <News /> như ở trang chủ), component tự fetch từ API.
+ */
 export default function News({
-  items = NEWS_ARTICLES,
+  items,
   heading = "Tin tức & Sự kiện",
   subheading = "Cập nhật những thông báo mới nhất, các cột mốc quan trọng của dự án và những sự kiện độc quyền từ Palm City.",
   moreHref = "/tin-tuc",
 }) {
+  const [fetchedItems, setFetchedItems] = useState(null);
+  const [fetchError, setFetchError] = useState(null);
   const trackRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
+
+  // Chỉ tự fetch khi không có items truyền từ props
+  useEffect(() => {
+    if (items) return;
+    let cancelled = false;
+    fetchNewsList()
+      .then((data) => {
+        if (!cancelled) setFetchedItems(data);
+      })
+      .catch((err) => {
+        console.error("Lỗi tải tin tức:", err);
+        if (!cancelled) setFetchError("Không tải được tin tức.");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [items]);
+
+  const displayItems = items ?? fetchedItems;
 
   const updateEdges = useCallback(() => {
     const el = trackRef.current;
@@ -42,7 +68,8 @@ export default function News({
       el.removeEventListener("scroll", updateEdges);
       window.removeEventListener("resize", updateEdges);
     };
-  }, [updateEdges]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateEdges, displayItems]);
 
   const scrollByCard = (direction) => {
     const el = trackRef.current;
@@ -51,6 +78,36 @@ export default function News({
     const distance = card ? card.offsetWidth + 24 : el.clientWidth * 0.8;
     el.scrollBy({ left: direction * distance, behavior: "smooth" });
   };
+
+  // --- Hết phần hook, từ đây mới được return sớm ---
+
+  if (!displayItems && !fetchError) {
+    return (
+      <section className="pc-news" id="tin-tuc">
+        <div className="pc-news__inner">
+          <header className="pc-news__header">
+            <h2 className="pc-news__heading">{heading}</h2>
+          </header>
+          <p style={{ textAlign: "center", marginTop: 24 }}>
+            Đang tải tin tức...
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  if (fetchError) {
+    return (
+      <section className="pc-news" id="tin-tuc">
+        <div className="pc-news__inner">
+          <header className="pc-news__header">
+            <h2 className="pc-news__heading">{heading}</h2>
+          </header>
+          <p style={{ textAlign: "center", marginTop: 24 }}>{fetchError}</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="pc-news" id="tin-tuc">
@@ -95,7 +152,7 @@ export default function News({
         </div>
 
         <div className="pc-news__track" ref={trackRef}>
-          {items.map((item) => {
+          {displayItems.map((item) => {
             const href = getHref(item.id);
             return (
               <article className="pc-card" key={item.id}>
@@ -104,7 +161,7 @@ export default function News({
                   to={href}
                   aria-label={item.title}
                 >
-                  <img src={item.image} alt={item.title} loading="lazy" />
+                  <img src={item.image_url} alt={item.title} loading="lazy" />
                   <span className="pc-card__tag">{item.tag}</span>
                 </Link>
 
@@ -115,7 +172,9 @@ export default function News({
                   <p className="pc-card__excerpt">{item.excerpt}</p>
 
                   <div className="pc-card__foot">
-                    <span className="pc-card__date">{item.date}</span>
+                    <span className="pc-card__date">
+                      {formatDate(item.published_at)}
+                    </span>
                     <Link className="pc-card__link" to={href}>
                       Đọc thêm
                       <ArrowIcon />
@@ -132,7 +191,7 @@ export default function News({
           role="tablist"
           aria-label="Vị trí tin tức"
         >
-          {items.map((item, i) => (
+          {displayItems.map((item, i) => (
             <span
               key={item.id}
               className={

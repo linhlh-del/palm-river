@@ -1,35 +1,65 @@
 // src/services/leadService.js
+// Gửi lead (form liên hệ) tới backend palm-river-backend, backend sẽ insert
+// vào bảng `leads` trên Supabase bằng service_role (bypass RLS).
 
-// URL này trỏ tới Cloudflare Worker trung gian, KHÔNG phải URL Google Sheet thật.
-// Worker sẽ giữ URL Google Sheet dưới dạng secret, không lộ ra frontend.
-// Đặt trong file .env: VITE_LEAD_WEBHOOK_URL=https://lead-webhook-worker.your-subdomain.workers.dev
-const LEAD_WEBHOOK_URL = import.meta.env.VITE_LEAD_WEBHOOK_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 /**
- * Gửi thông tin lead đi qua Worker trung gian.
- * Sau này đổi sang database/backend khác chỉ cần sửa trong Worker,
- * không cần sửa component nào ở đây.
- *
- * @param {Object} data - dữ liệu form, ví dụ { name, phone, email, message, apartmentTypes }
- * @returns {Promise<{ success: boolean, error?: unknown }>}
+ * Gửi thông tin lead từ form (PopUp, GetInfor, CSBH...) lên backend.
+ * @param {Object} leadData
+ * @param {string} leadData.name
+ * @param {string} leadData.phone
+ * @param {string} [leadData.email]
+ * @param {string} [leadData.message]
+ * @param {string} [leadData.apartmentTypes]
+ * @param {string} [leadData.source] - nguồn form (vd: "popup", "csbh"...)
+ * @returns {Promise<{ success: boolean, error?: string }>}
  */
-export async function submitLead(data) {
-  // Thêm dấu ' trước phone number để Google Sheet không bị mất số 0 đầu
-  const payload = {
-    ...data,
-    phone: data.phone ? `'${data.phone}` : data.phone,
-  };
+export async function submitLead(leadData) {
+  if (!API_BASE_URL) {
+    console.error("VITE_API_BASE_URL chưa được cấu hình trong .env");
+    return {
+      success: false,
+      error: "Cấu hình hệ thống chưa đầy đủ. Vui lòng thử lại sau.",
+    };
+  }
 
   try {
-    const res = await fetch(LEAD_WEBHOOK_URL, {
+    const response = await fetch(`${API_BASE_URL}/api/leads`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: leadData.name,
+        phone: leadData.phone,
+        email: leadData.email ?? null,
+        message: leadData.message ?? null,
+        apartment_types: leadData.apartmentTypes ?? null,
+        source: leadData.source ?? null,
+      }),
     });
 
-    if (!res.ok) throw new Error("Request failed");
+    if (!response.ok) {
+      // Backend trả lỗi có cấu trúc (vd: thiếu field bắt buộc) -> đọc message nếu có
+      let errorMessage = "Gửi thông tin thất bại. Vui lòng thử lại.";
+      try {
+        const data = await response.json();
+        if (data?.error) errorMessage = data.error;
+      } catch {
+        // response không phải JSON, giữ nguyên message mặc định
+      }
+      return { success: false, error: errorMessage };
+    }
+
     return { success: true };
-  } catch (error) {
-    return { success: false, error };
+  } catch (err) {
+    // Lỗi mạng (backend chưa chạy, mất kết nối...)
+    console.error("submitLead network error:", err);
+    return {
+      success: false,
+      error:
+        "Không thể kết nối tới máy chủ. Vui lòng kiểm tra mạng và thử lại.",
+    };
   }
 }
