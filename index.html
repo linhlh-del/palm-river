@@ -17,6 +17,23 @@
 
       gtag("config", "AW-18110702521");
     </script>
+
+    <!-- Event snippet for Submit Form conversion page
+In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
+    <script>
+      function gtag_report_conversion(url) {
+        var callback = function () {
+          if (typeof url != "undefined") {
+            window.location = url;
+          }
+        };
+        gtag("event", "conversion", {
+          send_to: "AW-18110702521/DruQCKynruAcELnH7btD",
+          event_callback: callback,
+        });
+        return false;
+      }
+    </script>
     <meta
       name="google-site-verification"
       content="B4BgcjmxS1ziiB_YF-NllsbW4xwAYL-mD2msFOlw7JE"
