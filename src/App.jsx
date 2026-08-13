@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Headers from "./components/Header/Header.jsx";
 import "./App.css";
@@ -22,30 +22,9 @@ import HinhAnh from "./components/HinhAnh/HinhAnh.jsx";
 import News from "./components/News/News.jsx";
 import NewsPage from "./components/News/NewsPage/NewsPage.jsx";
 import NewsDetailPage from "./components/News/NewsDetailPage/NewsDetailPage.jsx";
-
+import Layout from "./components/Layout/Layout.jsx";
 function HomePage({ onOpenModal }) {
   const location = useLocation();
-  const tongQuanRef = useRef(null);
-  const hasTriggeredRef = useRef(false);
-
-  // Auto-open popup when scrolling to TongQuan section (first time only)
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasTriggeredRef.current) {
-          hasTriggeredRef.current = true;
-          onOpenModal();
-        }
-      },
-      { threshold: 0.3 },
-    );
-
-    if (tongQuanRef.current) {
-      observer.observe(tongQuanRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [onOpenModal]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -58,6 +37,10 @@ function HomePage({ onOpenModal }) {
 
     const scrollToSection = () => {
       target.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      // Xóa ?section=... khỏi URL sau khi đã cuộn tới,
+      // không tạo thêm entry mới trong lịch sử trình duyệt
+      window.history.replaceState(null, "", window.location.pathname);
     };
 
     requestAnimationFrame(scrollToSection);
@@ -68,10 +51,11 @@ function HomePage({ onOpenModal }) {
       <FloatingButtons onOpenModal={onOpenModal} />
       <Headers onOpenModal={onOpenModal} />
       <Hero />
-      <TongQuan ref={tongQuanRef} />
+      <TongQuan />
       <Position />
       <TongThe />
       <MatbangTang />
+      <Layout />
       <TienIch />
       <HinhAnh />
       <News />

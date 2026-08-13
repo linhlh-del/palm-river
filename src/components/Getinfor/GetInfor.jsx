@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./GetInfor.module.css";
 import toast from "react-hot-toast";
-import { submitLead } from "../../services/leadService"; // chỉnh path cho đúng vị trí thực tế trong dự án
+import { submitLead } from "../../services/leadService";
 
 const APARTMENT_TYPES = [
   "Studio",
@@ -14,7 +14,11 @@ const APARTMENT_TYPES = [
   "Shophouse",
 ];
 
-export default function GetInfor() {
+export default function GetInfor({
+  showTitle = true,
+  title,
+  embedded = false,
+}) {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
@@ -27,12 +31,13 @@ export default function GetInfor() {
   });
   const [loading, setLoading] = useState(false);
 
+  const cx = (base) => (embedded ? `${base} ${styles.embedded}` : base);
+
   const handleChange = (e) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
-    // Clear error when user starts typing
     setErrors({
       ...errors,
       [e.target.name]: "",
@@ -43,7 +48,6 @@ export default function GetInfor() {
     e.preventDefault();
     const newErrors = { name: "", phone: "" };
 
-    // Validation
     if (!form.name.trim()) {
       newErrors.name = "Vui lòng nhập họ và tên";
     }
@@ -55,7 +59,6 @@ export default function GetInfor() {
 
     setErrors(newErrors);
 
-    // If there are errors, don't proceed
     if (newErrors.name || newErrors.phone) {
       return;
     }
@@ -66,12 +69,8 @@ export default function GetInfor() {
 
     if (success) {
       toast.success("Gửi thông tin thành công!");
-
-      // Reset form
       setForm({ name: "", email: "", phone: "" });
       setErrors({ name: "", phone: "" });
-
-      // Delay navigation to let user see success message
       setTimeout(() => {
         navigate("/thank-you");
       }, 1000);
@@ -83,12 +82,14 @@ export default function GetInfor() {
   };
 
   return (
-    <div className={styles.wrapperContainer}>
-      <div className={styles.wrapper}>
-        <div className={styles.container}>
-          <div className={styles.title}>
-            Đăng ký nhận báo giá và chính sách ưu đãi mới nhất
-          </div>
+    <div className={cx(styles.wrapperContainer)}>
+      <div className={cx(styles.wrapper)}>
+        <div className={cx(styles.container)}>
+          {showTitle && (
+            <div className={cx(styles.title)}>
+              {title || "Đăng ký nhận báo giá và chính sách ưu đãi mới nhất"}
+            </div>
+          )}
 
           <form className={styles.form} onSubmit={handleSubmit}>
             <div className={styles.inputGroup} style={{ position: "relative" }}>

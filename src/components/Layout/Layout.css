@@ -1,0 +1,296 @@
+.lo-section {
+  padding: 50px 0;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+  background: #fff;
+}
+
+.lo-container {
+  width: 100%;
+  max-width: 72%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+@media (max-width: 1440px) {
+  .lo-container {
+    max-width: 100%;
+  }
+}
+
+/* ==========================
+   LAYOUT: mobile = xếp chồng (text trên, mặt bằng dưới)
+   desktop = 2 cột nằm ngang (text trái, mặt bằng phải)
+   ========================== */
+.lo-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (min-width: 769px) {
+  .lo-content {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0;
+  }
+}
+
+/* ---- CỘT TEXT ---- */
+.lo-text-col {
+  background-image: url(../../assets/images/bg-web.jpg);
+  color: #e0edc9;
+  padding: 2.5rem 2rem;
+  border-radius: 0.5rem;
+  text-align: left;
+}
+
+@media (min-width: 769px) {
+  .lo-text-col {
+    flex: 0 0 30%;
+    max-width: 30%;
+    border-radius: 0.5rem 0 0 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+.lo-section-title {
+  font-size: clamp(1rem, 6vw, 3rem);
+  font-weight: 400;
+  color: #d2b57c;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.lo-description {
+  color: #e0edc9;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .lo-description {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+}
+
+.lo-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.lo-filter-btn {
+  color: #e0edc9;
+  background: transparent;
+  border: 2px solid var(--border-color, #d2b57c);
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+}
+
+.lo-filter-btn:hover {
+  border-color: var(--secondary-color, #d2b57c);
+  color: var(--secondary-color, #d2b57c);
+}
+
+.lo-filter-btn.active {
+  background: var(--secondary-color, #d2b57c);
+  color: #1c2b18;
+  border-color: var(--secondary-color, #d2b57c);
+}
+
+/* ---- CỘT MẶT BẰNG: 2 ảnh dọc (3:4) cùng nhóm đặt cạnh nhau ---- */
+.lo-image-col {
+  background: #faf8f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 2rem;
+  overflow: hidden;
+}
+
+@media (min-width: 769px) {
+  .lo-image-col {
+    flex: 0 0 70%;
+    max-width: 70%;
+    border-radius: 0 0.5rem 0.5rem 0;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-left: none;
+  }
+}
+
+.lo-plan-wrap {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  /* 0.38s phải khớp với GROUP_SWITCH_MS trong Layout.jsx */
+  transition:
+    opacity 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
+}
+
+.lo-plan-wrap.is-hidden {
+  opacity: 0;
+  transform: translateY(10px) scale(0.94);
+}
+
+.lo-plan-wrap.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lo-plan-wrap,
+  .lo-plan-frame {
+    transition: none !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .lo-plan-wrap {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+  }
+}
+
+/* Khung ảnh: bo góc mềm, bóng đổ nhẹ.
+   is-active = ảnh thuộc btn đang chọn -> phóng to, rõ nét.
+   is-inactive = ảnh còn lại trong cặp -> thu nhỏ, mờ hơn,
+   đóng vai trò "gợi ý" người dùng bấm để xem loại còn lại. */
+.lo-plan-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: #fff;
+  cursor: pointer;
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease,
+    opacity 0.35s ease;
+}
+
+.lo-plan-frame.is-active {
+  max-width: 300px;
+  transform: scale(1);
+  opacity: 1;
+  box-shadow: 0 22px 48px rgba(28, 43, 24, 0.16);
+  border: 1px solid rgba(210, 181, 124, 0.4);
+  z-index: 2;
+}
+
+.lo-plan-frame.is-inactive {
+  max-width: 220px;
+  transform: scale(0.92);
+  opacity: 0.55;
+  box-shadow: 0 10px 24px rgba(28, 43, 24, 0.08);
+  border: 1px solid rgba(28, 43, 24, 0.08);
+}
+
+.lo-plan-frame.is-inactive:hover {
+  opacity: 0.85;
+  transform: scale(0.96);
+}
+
+.lo-plan-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.lo-corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d2b57c;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.lo-corner-tl {
+  top: 10px;
+  left: 10px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.lo-corner-tr {
+  top: 10px;
+  right: 10px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.lo-corner-bl {
+  bottom: 10px;
+  left: 10px;
+  border-right: none;
+  border-top: none;
+}
+
+.lo-corner-br {
+  bottom: 10px;
+  right: 10px;
+  border-left: none;
+  border-top: none;
+}
+
+/* Nhãn tên loại căn, hiện dưới đáy ảnh */
+.lo-plan-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.6rem 0.75rem 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-align: center;
+  color: #fff;
+  text-transform: uppercase;
+  background: linear-gradient(
+    to top,
+    rgba(28, 43, 24, 0.75),
+    rgba(28, 43, 24, 0)
+  );
+  pointer-events: none;
+}
+
+.lo-plan-frame.is-inactive .lo-plan-label {
+  font-size: 0.72rem;
+}
+
+@media (max-width: 768px) {
+  .lo-image-col {
+    padding: 2rem 1.25rem;
+  }
+
+  .lo-plan-frame.is-active {
+    max-width: 220px;
+  }
+
+  .lo-plan-frame.is-inactive {
+    max-width: 170px;
+  }
+}

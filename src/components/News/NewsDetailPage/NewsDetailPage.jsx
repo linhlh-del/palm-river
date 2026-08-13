@@ -189,7 +189,7 @@ export default function NewsDetailPage() {
   if (!articles && !fetchError) {
     return (
       <>
-        <Header />
+        <Header variant="minimal" />
         <div className="ndp">
           <div className="ndp__container" style={{ padding: "80px 24px" }}>
             <p>Đang tải bài viết...</p>
@@ -203,7 +203,7 @@ export default function NewsDetailPage() {
   if (fetchError) {
     return (
       <>
-        <Header />
+        <Header variant="minimal" />
         <div className="ndp">
           <div className="ndp__container" style={{ padding: "80px 24px" }}>
             <h1>Có lỗi xảy ra</h1>
@@ -219,7 +219,7 @@ export default function NewsDetailPage() {
   if (!article) {
     return (
       <>
-        <Header />
+        <Header variant="minimal" />
         <div className="ndp">
           <div className="ndp__container" style={{ padding: "80px 24px" }}>
             <h1>Bài viết không tìm thấy</h1>
@@ -269,7 +269,7 @@ export default function NewsDetailPage() {
 
   return (
     <>
-      <Header />
+      <Header variant="minimal" />
 
       <div className="ndp">
         {/* Banner */}
@@ -459,7 +459,7 @@ export default function NewsDetailPage() {
             <div className="ndp__footer-grid">
               <div>
                 <h4>Đăng ký nhận thông tin</h4>
-                <GetInfor />
+                <GetInfor showTitle={false} embedded />
 
                 <div className="ndp__footer-contact">
                   <span>

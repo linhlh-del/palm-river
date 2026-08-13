@@ -334,3 +334,36 @@
     width: 80px;
   }
 }
+
+/* ════════════════════════════════════════
+   MINIMAL HEADER (dùng cho NewsDetailPage)
+════════════════════════════════════════ */
+.hd--minimal {
+  justify-content: space-between;
+}
+
+.hd--minimal .hd__logo {
+  cursor: pointer;
+}
+
+/* CTA trong header minimal luôn hiển thị, kể cả ở mobile/tablet,
+   vì không có mobile menu để chứa nút thay thế */
+.hd__cta--minimal {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 1024px) {
+  .hd__cta--minimal {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hd__cta--minimal {
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+  }
+}

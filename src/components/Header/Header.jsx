@@ -14,12 +14,14 @@ const NAV_ITEMS = [
   { label: "LIÊN HỆ", href: "#lien-he" },
 ];
 
-export default function Header({ onOpenModal }) {
+export default function Header({ onOpenModal, variant = "full" }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeHref, setActiveHref] = useState("");
+
+  const isMinimal = variant === "minimal";
 
   // Shadow khi scroll
   useEffect(() => {
@@ -88,6 +90,12 @@ export default function Header({ onOpenModal }) {
     event.preventDefault();
     setMenuOpen(false);
 
+    if (isMinimal) {
+      // Từ trang tin tức: về trang chủ và tự cuộn xuống mục Tin tức
+      navigate("/?section=tin-tuc", { replace: false });
+      return;
+    }
+
     if (location.pathname !== "/") {
       navigate("/", { replace: false });
       return;
@@ -98,7 +106,9 @@ export default function Header({ onOpenModal }) {
 
   return (
     <>
-      <header className={`hd${scrolled ? " hd--scrolled" : ""}`}>
+      <header
+        className={`hd${scrolled ? " hd--scrolled" : ""}${isMinimal ? " hd--minimal" : ""}`}
+      >
         {/* Logo */}
         <div className="hd__logo">
           <a href="#top" onClick={handleLogoClick}>
@@ -106,73 +116,88 @@ export default function Header({ onOpenModal }) {
           </a>
         </div>
 
-        {/* Desktop nav */}
-        <nav className="hd__nav" aria-label="Main navigation">
-          {NAV_ITEMS.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className={`hd__nav-link${activeHref === item.href ? " hd__nav-link--active" : ""}`}
-              onClick={(e) => handleNav(e, item.href)}
+        {!isMinimal && (
+          <>
+            {/* Desktop nav */}
+            <nav className="hd__nav" aria-label="Main navigation">
+              {NAV_ITEMS.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className={`hd__nav-link${activeHref === item.href ? " hd__nav-link--active" : ""}`}
+                  onClick={(e) => handleNav(e, item.href)}
+                >
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+
+            {/* Desktop CTA */}
+            <button className="hd__cta" onClick={handleCTA}>
+              NHẬN BÁO GIÁ
+            </button>
+
+            {/* Hamburger */}
+            <button
+              className="hd__burger"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label="Mở menu"
+              aria-expanded={menuOpen}
             >
-              {item.label}
-            </a>
-          ))}
-        </nav>
+              <img src={menuIcon} alt="Menu" />
+            </button>
+          </>
+        )}
 
-        {/* Desktop CTA */}
-        <button className="hd__cta" onClick={handleCTA}>
-          NHẬN BÁO GIÁ
-        </button>
-
-        {/* Hamburger */}
-        <button
-          className="hd__burger"
-          onClick={() => setMenuOpen((v) => !v)}
-          aria-label="Mở menu"
-          aria-expanded={menuOpen}
-        >
-          <img src={menuIcon} alt="Menu" />
-        </button>
+        {isMinimal && (
+          <button
+            className="hd__cta hd__cta--minimal"
+            onClick={handleCTA}
+          >
+            NHẬN BÁO GIÁ
+          </button>
+        )}
       </header>
 
       {/* Overlay */}
-      {menuOpen && (
+      {!isMinimal && menuOpen && (
         <div className="hd__overlay" onClick={() => setMenuOpen(false)} />
       )}
 
       {/* Mobile menu */}
-      <div
-        className={`hd__mobile-menu${menuOpen ? " hd__mobile-menu--open" : ""}`}
-      >
-        {/* Nav links */}
-        <nav className="hd__mobile-nav">
-          {NAV_ITEMS.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className={`hd__mobile-link${activeHref === item.href ? " hd__mobile-link--active" : ""}`}
-              onClick={(e) => handleNav(e, item.href)}
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
+      {!isMinimal && (
+        <div
+          className={`hd__mobile-menu${menuOpen ? " hd__mobile-menu--open" : ""}`}
+        >
+          {/* Nav links */}
+          <nav className="hd__mobile-nav">
+            {NAV_ITEMS.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className={`hd__mobile-link${activeHref === item.href ? " hd__mobile-link--active" : ""}`}
+                onClick={(e) => handleNav(e, item.href)}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
 
-        {/* CTA */}
-        <button className="hd__mobile-cta" onClick={handleCTA}>
-          NHẬN BÁO GIÁ
-        </button>
+          {/* CTA */}
+          <button className="hd__mobile-cta" onClick={handleCTA}>
+            NHẬN BÁO GIÁ
+          </button>
 
-        {/* Footer: logo + hotline */}
-        <div className="hd__mobile-footer">
-          <img src={logoRever} alt="Rever" />
-          {/* <div className="hd__mobile-hotline">
-            <span>Hotline</span>
-            <a href="tel:0939535111">0939 535 111</a>
-          </div> */}
+          {/* Footer: logo + hotline */}
+          <div className="hd__mobile-footer">
+            <img src={logoRever} alt="Rever" />
+            {/* <div className="hd__mobile-hotline">
+              <span>Hotline</span>
+              <a href="tel:0939535111">0939 535 111</a>
+            </div> */}
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

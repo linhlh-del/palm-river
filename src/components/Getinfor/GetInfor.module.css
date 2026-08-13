@@ -213,3 +213,39 @@
     font-size: 0.95rem;
   }
 }
+/* ─────────────────────────────────────────────────────────────
+   EMBEDDED VARIANT
+   Dùng khi GetInfor được nhúng vào 1 layout đã tự kiểm soát width
+   (ví dụ: cột bên trong footer của NewsDetailPage) — bỏ padding,
+   bỏ background, bỏ auto-center để form thẳng hàng với nội dung
+   xung quanh thay vì tự co giữa.
+───────────────────────────────────────────────────────────── */
+.wrapperContainer.embedded {
+  border-top: none;
+  background-image: none;
+}
+
+.wrapper.embedded {
+  padding: 0;
+  justify-content: flex-start;
+}
+
+.container.embedded {
+  max-width: 100%;
+}
+
+.title.embedded {
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .wrapper.embedded {
+    padding: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .wrapper.embedded {
+    padding: 0;
+  }
+}

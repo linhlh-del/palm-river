@@ -68,9 +68,9 @@ const TongQuanBody = () => {
             2,7km.
           </p>
 
-          <a href="#tien-ich" className="btn btn-primary mt-3 mb-4">
+          {/* <a href="#tien-ich" className="btn btn-primary mt-3 mb-4">
             KHÁM PHÁ TIỆN ÍCH
-          </a>
+          </a> */}
         </div>
 
         <div className="image-content">

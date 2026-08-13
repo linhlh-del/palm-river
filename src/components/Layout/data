@@ -1,0 +1,47 @@
+// src/components/Layout/data.js
+import img2pn from "../../assets/images/layout/2pn.jpg";
+import img2pnGoc from "../../assets/images/layout/2pn-goc.jpg";
+import img3pn from "../../assets/images/layout/3pn.jpg";
+import img3pnGoc from "../../assets/images/layout/3pn-goc.jpg";
+
+// 4 nút filter, mỗi nút gắn với 1 "group" -
+// 2 nút cùng group sẽ hiển thị chung 1 cặp ảnh bên cột phải.
+export const LAYOUT_FILTERS = [
+  { key: "2pn", label: "2PN", group: "pn2" },
+  { key: "2pn-goc", label: "2PN Góc", group: "pn2" },
+  { key: "3pn", label: "3PN", group: "pn3" },
+  { key: "3pn-goc", label: "3PN Góc", group: "pn3" },
+];
+
+// Mỗi item = 1 ảnh mặt bằng thật, group để biết ảnh nào
+// đi theo cặp với ảnh nào bên cột phải.
+export const LAYOUT_ITEMS = [
+  {
+    key: "2pn",
+    group: "pn2",
+    src: img2pn,
+    alt: "Mặt bằng căn hộ 2 phòng ngủ",
+    name: "Căn 2 Phòng Ngủ",
+  },
+  {
+    key: "2pn-goc",
+    group: "pn2",
+    src: img2pnGoc,
+    alt: "Mặt bằng căn hộ 2 phòng ngủ căn góc",
+    name: "Căn 2 Phòng Ngủ – Góc",
+  },
+  {
+    key: "3pn",
+    group: "pn3",
+    src: img3pn,
+    alt: "Mặt bằng căn hộ 3 phòng ngủ",
+    name: "Căn 3 Phòng Ngủ",
+  },
+  {
+    key: "3pn-goc",
+    group: "pn3",
+    src: img3pnGoc,
+    alt: "Mặt bằng căn hộ 3 phòng ngủ căn góc",
+    name: "Căn 3 Phòng Ngủ – Góc",
+  },
+];
