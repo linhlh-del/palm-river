@@ -56,7 +56,10 @@
   font-size: 1rem;
   padding: 0.3125rem 0.625rem;
   outline: none;
+  color: #333;
+  background-color: #fff;
 }
+
 .select {
   border: none;
   border-bottom: 1px solid #d2b57c;
@@ -73,6 +76,11 @@
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%23333' stroke-width='2' fill='none'/></svg>");
   background-repeat: no-repeat;
   background-position: right 0.625rem center;
+}
+
+.select option {
+  color: #333;
+  background-color: #fff;
 }
 
 .select option[value=""] {
@@ -190,6 +198,7 @@
     font-size: 14px;
     height: 2rem;
     background: none;
+    color: #fff;
     opacity: 0.5;
     padding: 0;
   }
@@ -198,8 +207,14 @@
     font-size: 14px;
     height: 2rem;
     background-color: transparent;
+    color: #fff;
     opacity: 0.5;
     padding: 0 1.25rem 0 0;
+  }
+
+  .select option {
+    color: #333;
+    background-color: #fff;
   }
 
   .btn {

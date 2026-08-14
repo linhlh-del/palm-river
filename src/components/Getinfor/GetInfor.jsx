@@ -23,7 +23,7 @@ export default function GetInfor({
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
-    email: "",
+    apartmentType: "",
     phone: "",
   });
   const [errors, setErrors] = useState({
@@ -66,11 +66,16 @@ export default function GetInfor({
 
     setLoading(true);
 
-    const { success } = await submitLead({ ...form, formType });
+    const { success } = await submitLead({
+      name: form.name,
+      phone: form.phone,
+      apartmentTypes: form.apartmentType,
+      formType,
+    });
 
     if (success) {
       toast.success("Gửi thông tin thành công!");
-      setForm({ name: "", email: "", phone: "" });
+      setForm({ name: "", apartmentType: "", phone: "" });
       setErrors({ name: "", phone: "" });
       setTimeout(() => {
         navigate("/thank-you");
@@ -145,8 +150,8 @@ export default function GetInfor({
             <div className={styles.inputGroup} style={{ position: "relative" }}>
               <label>Nhu cầu</label>
               <select
-                name="email"
-                value={form.email}
+                name="apartmentType"
+                value={form.apartmentType}
                 onChange={handleChange}
                 className={styles.select}
               >
