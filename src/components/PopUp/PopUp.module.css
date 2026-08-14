@@ -1,8 +1,8 @@
 /* ============================================================
    Theme dùng chung với toàn site (forest + gold).
-   Các biến --color-* giả định đã khai báo global (index.css/App.css).
-   Có fallback ngay trong var() để phòng khi module này được preview
-   độc lập hoặc biến global chưa load kịp.
+   Các biến --color-* / --font-* giả định đã khai báo global
+   (index.css/App.css). Có fallback ngay trong var() để phòng khi
+   module này được preview độc lập hoặc biến global chưa load kịp.
    ============================================================ */
 
 /* OVERLAY */
@@ -18,7 +18,9 @@
 }
 
 /* MODAL — nền là bg-web.jpg giống Header/Footer/NewsDetailPage,
-   có lớp phủ forest bán trong để chữ luôn đọc rõ trên mọi vùng ảnh */
+   có lớp phủ forest bán trong để chữ luôn đọc rõ trên mọi vùng ảnh.
+   overflow-x: hidden là lớp chặn an toàn cuối cùng, tránh mọi trường
+   hợp nội dung con lỡ tràn vẫn không kéo giãn được modal. */
 .modal {
   position: fixed;
   top: 50%;
@@ -37,6 +39,7 @@
   max-width: 71.25rem; /* ~1140px — ưu tiên rộng cho ảnh 1920x1080 */
   max-height: 92vh;
   overflow: hidden;
+  overflow-x: hidden;
   animation: slideIn 0.3s ease;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
 }
@@ -98,6 +101,7 @@
   grid-template-columns: 1fr;
   max-height: 92vh;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 @media (min-width: 900px) {
@@ -116,22 +120,32 @@
 /* ------------------------------------------------------------
    CỘT TRÁI — ảnh dự án FULL từ trên xuống dưới (không còn logo
    bar riêng, logo đã chuyển sang cột phải)
+
+   Lưu ý: min-width: 0 là fix bắt buộc cho grid item — mặc định
+   grid item có min-width: auto (co giãn theo nội dung con), nên
+   nếu không set min-width: 0, cột này có thể bị đẩy rộng hơn track
+   grid cho phép khi ảnh/nội dung bên trong "cứng đầu" ở màn hẹp.
    ------------------------------------------------------------ */
 .visual {
   position: relative;
-  display: flex;
+  display: block;
+  width: 100%;
+  min-width: 0;
   min-height: 220px;
+  overflow: hidden;
 }
 
 @media (min-width: 900px) {
   .visual {
+    height: 100%;
     min-height: 100%;
   }
 }
 
 .visualImageWrap {
   position: relative;
-  flex: 1;
+  width: 100%;
+  height: 100%;
   min-height: 220px;
   aspect-ratio: 16 / 9;
   overflow: hidden;
@@ -208,6 +222,7 @@
   font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: 0.02em;
+  font-family: var(--font-body, "BeVietnamPro-Light", sans-serif);
   z-index: 1;
 }
 
@@ -216,8 +231,18 @@
   flex-shrink: 0;
 }
 
+.visualCaption span {
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
 /* ------------------------------------------------------------
    CỘT PHẢI — logo + nội dung + checklist + form
+   Font mặc định cho toàn bộ panel là Be Vietnam Pro (Light);
+   .title override riêng sang font display (DVN).
+
+   min-width: 0 ở đây cũng là fix bắt buộc, tương tự .visual.
    ------------------------------------------------------------ */
 .panel {
   padding: 2rem 1.75rem 1.75rem;
@@ -226,6 +251,9 @@
   flex-direction: column;
   gap: 0.8rem;
   overflow-y: auto;
+  overflow-x: hidden;
+  min-width: 0;
+  font-family: var(--font-body, "BeVietnamPro-Light", sans-serif);
 }
 
 .panelLogo {
@@ -242,6 +270,7 @@
   font-weight: 400;
   line-height: 1.3;
   color: var(--color-gold-light, #e8d9b0);
+  overflow-wrap: break-word;
 }
 
 /* CHECKLIST — 6 gạch đầu dòng highlight */
@@ -252,6 +281,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  min-width: 0;
 }
 
 .checklist li {
@@ -261,6 +291,14 @@
   font-size: 0.875rem;
   line-height: 1.4;
   color: var(--color-text, #e9e7dd);
+  font-family: var(--font-body, "BeVietnamPro-Light", sans-serif);
+  min-width: 0;
+}
+
+.checklist li span:last-child {
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .checkIcon {
@@ -282,12 +320,15 @@
   flex-direction: column;
   gap: 0.8rem;
   margin-top: 0.2rem;
+  min-width: 0;
+  font-family: var(--font-body-regular, "BeVietnamPro-Regular", sans-serif);
 }
 
 .inputRow {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.8rem;
+  min-width: 0;
 }
 
 @media (min-width: 480px) {
@@ -298,6 +339,8 @@
 
 .form input {
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   padding: 0.8rem 1rem;
   border-radius: 8px;
   border: 1px solid var(--color-gold-line, rgba(201, 169, 97, 0.32));
@@ -334,6 +377,7 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-top: 0.2rem;
+  font-family: var(--font-body-regular, "BeVietnamPro-Regular", sans-serif);
 }
 
 @keyframes buttonJump {
@@ -357,7 +401,7 @@
   animation: none;
 }
 
-/* GUARANTEES (bảo mật / hỗ trợ) — thay cho .secureNote trước đây */
+/* GUARANTEES (bảo mật / hỗ trợ) */
 .guarantees {
   display: flex;
   flex-direction: column;
@@ -368,6 +412,7 @@
   border-radius: 8px;
   padding: 0.75rem 1rem;
   margin-top: 0.1rem;
+  min-width: 0;
 }
 
 .guarantees p {
@@ -377,6 +422,18 @@
   font-size: clamp(0.8125rem, 1.8vw, 0.9375rem);
   margin: 0;
   color: var(--color-text, #e9e7dd);
+  font-family: var(--font-body, "BeVietnamPro-Light", sans-serif);
+  min-width: 0;
+}
+
+.guarantees p span,
+.guarantees p strong {
+  min-width: 0;
+}
+
+.guarantees p {
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .guaranteeIcon {
@@ -393,6 +450,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 0.55rem 1rem;
   margin: 0.1rem 0 0.1rem;
+  min-width: 0;
 }
 
 .checkboxItem {
@@ -403,6 +461,14 @@
   font-size: 0.83rem;
   cursor: pointer;
   user-select: none;
+  font-family: var(--font-body, "BeVietnamPro-Light", sans-serif);
+  min-width: 0;
+}
+
+.checkboxItem span:last-child {
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .checkboxItem input[type="checkbox"] {
@@ -480,5 +546,28 @@
 
   .checkboxItem {
     font-size: 0.75rem;
+  }
+}
+
+/* Màn rất hẹp (<400px): checklist/checkboxGroup 2 cột dễ bị bóp chật
+   -> chuyển checkboxGroup về 1 cột để chữ có đủ chỗ wrap thay vì tràn */
+@media (max-width: 400px) {
+  .modal {
+    width: 96%;
+    border-radius: 12px;
+  }
+
+  .panel {
+    padding: 1rem 0.875rem 1.125rem;
+  }
+
+  .checkboxGroup {
+    grid-template-columns: 1fr;
+  }
+
+  .checklist li,
+  .guarantees p,
+  .checkboxItem {
+    font-size: 0.8rem;
   }
 }
