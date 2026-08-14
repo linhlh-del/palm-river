@@ -1,3 +1,10 @@
+/* ============================================================
+   Theme dùng chung với toàn site (forest + gold).
+   Các biến --color-* giả định đã khai báo global (index.css/App.css).
+   Có fallback ngay trong var() để phòng khi module này được preview
+   độc lập hoặc biến global chưa load kịp.
+   ============================================================ */
+
 /* OVERLAY */
 .overlay {
   position: fixed;
@@ -5,29 +12,33 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-
-  /* background-image: url(../../assets/images/bg-web.jpg); */
+  background: rgba(10, 14, 8, 0.65);
   z-index: 999;
   animation: fadeIn 0.3s ease;
 }
 
-/* MODAL */
+/* MODAL — nền là bg-web.jpg giống Header/Footer/NewsDetailPage,
+   có lớp phủ forest bán trong để chữ luôn đọc rõ trên mọi vùng ảnh */
 .modal {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-image: url(../../assets/images/bg-web.jpg);
-  padding: 2.5rem;
-  border-radius: 12px;
+  background-image:
+    linear-gradient(160deg, rgba(22, 32, 15, 0.9), rgba(51, 63, 38, 0.86)),
+    url(../../assets/images/bg-web.jpg);
+  background-size: cover;
+  background-position: center;
+  background-color: var(--color-forest-deep, #16200f);
+  border: 1px solid var(--color-gold-line, rgba(201, 169, 97, 0.32));
+  border-radius: 16px;
   z-index: 1000;
-  max-width: 37.5rem;
-  width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
+  width: 94%;
+  max-width: 71.25rem; /* ~1140px — ưu tiên rộng cho ảnh 1920x1080 */
+  max-height: 92vh;
+  overflow: hidden;
   animation: slideIn 0.3s ease;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
 }
 
 @keyframes fadeIn {
@@ -55,119 +66,274 @@
   position: absolute;
   top: 16px;
   right: 16px;
-  background-image: url(../../assets/images/bg-web.jpg);
-  border: none;
-  color: #fff;
-  font-size: 28px;
+  background: rgba(22, 32, 15, 0.55);
+  border: 1px solid var(--color-gold, #d2b57c);
+  color: var(--color-cream, #e0edc9);
+  font-size: 16px;
   cursor: pointer;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.2s;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease,
+    background 0.2s ease;
   z-index: 1001;
 }
 
 .closeBtn:hover {
-  background: rgba(255, 255, 255, 0.4);
-  transform: scale(1.1);
+  color: var(--color-gold, #d2b57c);
+  background: rgba(22, 32, 15, 0.85);
+  transform: scale(1.08);
 }
 
-/* CONTAINER */
-.container {
+/* ============================================================
+   GRID 2 CỘT (desktop) — ảnh 1920x1080 nên ưu tiên rộng hơn form
+   ============================================================ */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  max-height: 92vh;
+  overflow-y: auto;
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: 56% 44%;
+    overflow: hidden;
+  }
+}
+
+@media (min-width: 1200px) {
+  .grid {
+    grid-template-columns: 60% 40%;
+  }
+}
+
+/* ------------------------------------------------------------
+   CỘT TRÁI — ảnh dự án FULL từ trên xuống dưới (không còn logo
+   bar riêng, logo đã chuyển sang cột phải)
+   ------------------------------------------------------------ */
+.visual {
+  position: relative;
+  display: flex;
+  min-height: 220px;
+}
+
+@media (min-width: 900px) {
+  .visual {
+    min-height: 100%;
+  }
+}
+
+.visualImageWrap {
+  position: relative;
+  flex: 1;
+  min-height: 220px;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: linear-gradient(
+    160deg,
+    var(--color-forest-alt, #3a4830) 0%,
+    var(--color-forest-deep, #16200f) 100%
+  );
+}
+
+@media (min-width: 900px) {
+  .visualImageWrap {
+    aspect-ratio: auto; /* desktop: lấp đầy toàn bộ chiều cao cột trái */
+  }
+}
+
+.visualImageWrap img {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  text-align: center;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
-/* LOGO */
-.logo {
-  width: 11.25rem;
-  height: auto;
-  margin: 0 auto;
+.visualImageWrap[data-broken="true"] img {
+  display: none;
 }
 
-/* TITLE & DESCRIPTION */
-.container h2 {
-  font-size: clamp(1.25rem, 4vw, 1.75rem) !important;
-  font-weight: 600;
-  margin: 0;
-  line-height: 1.3;
+.visualFallback {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at 30% 20%,
+      var(--color-gold-line, rgba(201, 169, 97, 0.32)),
+      transparent 60%
+    ),
+    linear-gradient(
+      160deg,
+      var(--color-forest-alt, #3a4830) 0%,
+      var(--color-forest-deep, #16200f) 100%
+    );
 }
 
-.container p {
-  font-size: clamp(0.875rem, 2vw, 1rem);
-  opacity: 0.9;
-  margin: 0;
-  line-height: 1.4;
+.visualImageWrap[data-broken="true"] .visualFallback {
+  display: block;
 }
 
-/* GUARANTEES (bảo mật / hỗ trợ) */
-.guarantees {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  text-align: left;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  padding: 0.75rem 1rem;
+/* lớp phủ tối dần phía dưới để chữ location luôn đọc được */
+.visualImageWrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.2) 45%,
+    transparent 70%
+  );
+  pointer-events: none;
 }
 
-.guarantees p {
+.visualCaption {
+  position: absolute;
+  left: 1.25rem;
+  bottom: 1.1rem;
+  right: 1.25rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: clamp(0.8125rem, 1.8vw, 0.9375rem);
-  margin: 0;
-  opacity: 1;
+  gap: 0.4rem;
+  color: var(--color-ink, #f3f1e7);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  z-index: 1;
 }
 
-.guaranteeIcon {
-  width: 1.125rem;
-  height: 1.125rem;
+.visualCaption svg {
+  color: var(--color-gold, #d2b57c);
   flex-shrink: 0;
-  object-fit: contain;
-  filter: brightness(0) invert(1); /* icon trắng, bỏ nếu ảnh đã sẵn màu trắng */
+}
+
+/* ------------------------------------------------------------
+   CỘT PHẢI — logo + nội dung + checklist + form
+   ------------------------------------------------------------ */
+.panel {
+  padding: 2rem 1.75rem 1.75rem;
+  color: var(--color-text, #e9e7dd);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  overflow-y: auto;
+}
+
+.panelLogo {
+  width: 6.5rem;
+  height: auto;
+  margin: 0 auto 0.2rem;
+  display: block;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display, "DVNBeaufort-Regular", serif);
+  font-size: clamp(1.2rem, 2.4vw, 1.6rem);
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--color-gold-light, #e8d9b0);
+}
+
+/* CHECKLIST — 6 gạch đầu dòng highlight */
+.checklist {
+  list-style: none;
+  margin: 0.2rem 0 0.4rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--color-text, #e9e7dd);
+}
+
+.checkIcon {
+  flex-shrink: 0;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  background: rgba(201, 169, 97, 0.16);
+  color: var(--color-gold, #d2b57c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
 }
 
 /* FORM */
 .form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 0.8rem;
+  margin-top: 0.2rem;
 }
 
-.form input,
-.form textarea {
-  padding: 0.875rem;
-  border-radius: 6px;
-  border: none;
-  font-size: clamp(0.875rem, 2vw, 1rem);
-  font-family: "Reddit Sans", Helvetica, sans-serif;
+.inputRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.8rem;
 }
 
-.form textarea {
-  min-height: 7.5rem;
-  resize: none;
+@media (min-width: 480px) {
+  .inputRow {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.form input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-gold-line, rgba(201, 169, 97, 0.32));
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-ink, #f3f1e7);
+  font-size: 0.9375rem;
+  font-family: var(--font-body-regular, "BeVietnamPro-Regular", sans-serif);
+}
+
+.form input::placeholder {
+  color: var(--color-ink-muted, #c7cdbc);
+}
+
+.form input:focus {
+  outline: none;
+  border-color: var(--color-gold, #d2b57c);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .form button {
-  background: #fff;
-  color: #07443b;
+  background: linear-gradient(
+    135deg,
+    var(--color-gold, #d2b57c) 0%,
+    var(--color-gold-strong, #c79022) 100%
+  );
+  color: var(--color-forest-deep, #16200f);
   padding: 1rem;
   border: none;
-  border-radius: 6px;
-  font-size: clamp(0.875rem, 2vw, 1.125rem);
-  font-weight: 900;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 800;
   cursor: pointer;
   animation: buttonJump 1.5s ease-in-out infinite;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  margin-top: 0.2rem;
 }
 
 @keyframes buttonJump {
@@ -176,175 +342,70 @@
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-12px);
+    transform: translateY(-8px);
   }
 }
 
 .form button:hover {
-  opacity: 0.85;
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  opacity: 0.92;
+  box-shadow: 0 6px 18px rgba(199, 144, 34, 0.35);
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .modal {
-    padding: 1.5rem;
-    width: 95%;
-    max-width: 32.5rem;
-  }
-
-  .closeBtn {
-    font-size: 1.5rem;
-    width: 2.25rem;
-    height: 2.25rem;
-  }
-
-  .container {
-    gap: 1.25rem;
-  }
-
-  .logo {
-    width: 8rem;
-  }
-
-  .form {
-    gap: 0.875rem;
-  }
+.form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  animation: none;
 }
 
-@media (max-width: 600px) {
-  .modal {
-    padding: 1.25rem;
-    width: 92%;
-    max-width: 28rem;
-  }
-
-  .closeBtn {
-    font-size: 1.25rem;
-    width: 2rem;
-    height: 2rem;
-    top: 12px;
-    right: 12px;
-  }
-
-  .container {
-    gap: 1rem;
-  }
-
-  .logo {
-    width: 7rem;
-  }
-
-  .form input,
-  .form textarea {
-    padding: 0.75rem;
-    font-size: 0.875rem;
-  }
-
-  .form textarea {
-    min-height: 6.25rem;
-  }
-
-  .form button {
-    padding: 0.875rem;
-    font-size: 1rem;
-  }
+/* GUARANTEES (bảo mật / hỗ trợ) — thay cho .secureNote trước đây */
+.guarantees {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--color-gold-line, rgba(201, 169, 97, 0.32));
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-top: 0.1rem;
 }
 
-@media (max-width: 480px) {
-  .modal {
-    padding: 1rem;
-    width: 90%;
-    max-width: 90vw;
-  }
-
-  .closeBtn {
-    font-size: 1.125rem;
-    width: 1.75rem;
-    height: 1.75rem;
-    top: 8px;
-    right: 8px;
-  }
-
-  .container {
-    gap: 0.875rem;
-  }
-
-  .logo {
-    width: 6rem;
-  }
-
-  h2 {
-    font-size: 1.25rem;
-  }
-
-  p {
-    font-size: 0.75rem;
-  }
-
-  .form {
-    gap: 0.75rem;
-  }
-
-  .form input,
-  .form textarea {
-    padding: 0.625rem;
-    font-size: 0.75rem;
-  }
-
-  .form textarea {
-    min-height: 5.625rem;
-  }
-
-  .form button {
-    padding: 0.75rem;
-    font-size: 0.875rem;
-  }
-  .checkboxGroup {
-    gap: 0.5rem 0.75rem;
-  }
-
-  .checkboxItem {
-    font-size: 0.75rem;
-  }
-
-  .checkmark {
-    width: 1rem;
-    height: 1rem;
-  }
-
-  .guarantees {
-    padding: 0.625rem 0.75rem;
-  }
-
-  .guaranteeIcon {
-    width: 1rem;
-    height: 1rem;
-  }
+.guarantees p {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: clamp(0.8125rem, 1.8vw, 0.9375rem);
+  margin: 0;
+  color: var(--color-text, #e9e7dd);
 }
 
-/* CHECKBOX GROUP */
+.guaranteeIcon {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+  object-fit: contain;
+  filter: brightness(0) invert(1); /* icon trắng trên nền forest tối */
+}
+
+/* CHECKBOX GROUP — giữ chức năng chọn loại hình căn hộ */
 .checkboxGroup {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.75rem 1rem;
-  text-align: left;
-  margin: 0.25rem 0;
+  gap: 0.55rem 1rem;
+  margin: 0.1rem 0 0.1rem;
 }
 
 .checkboxItem {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #fff;
-  font-size: clamp(0.8125rem, 1.8vw, 0.9375rem);
+  color: var(--color-text, #e9e7dd);
+  font-size: 0.83rem;
   cursor: pointer;
   user-select: none;
 }
 
 .checkboxItem input[type="checkbox"] {
-  /* ẩn checkbox mặc định, dùng span custom bên dưới */
   position: absolute;
   opacity: 0;
   width: 0;
@@ -354,9 +415,9 @@
 
 .checkmark {
   flex-shrink: 0;
-  width: 1.125rem;
-  height: 1.125rem;
-  border: 2px solid #fff;
+  width: 1.05rem;
+  height: 1.05rem;
+  border: 2px solid var(--color-gold, #d2b57c);
   border-radius: 4px;
   background: transparent;
   position: relative;
@@ -364,22 +425,60 @@
 }
 
 .checkboxItem input[type="checkbox"]:checked + .checkmark {
-  background: #fff;
+  background: var(--color-gold, #d2b57c);
+  border-color: var(--color-gold, #d2b57c);
 }
 
 .checkboxItem input[type="checkbox"]:checked + .checkmark::after {
   content: "";
   position: absolute;
-  left: 5px;
-  top: 1px;
+  left: 4px;
+  top: 0px;
   width: 5px;
   height: 9px;
-  border: solid #07443b;
+  border: solid var(--color-forest-deep, #16200f);
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
 
 .checkboxItem input[type="checkbox"]:focus-visible + .checkmark {
-  outline: 2px solid #fff;
+  outline: 2px solid var(--color-gold, #d2b57c);
   outline-offset: 2px;
+}
+
+/* ============================================================
+   RESPONSIVE — mobile: 1 cột, ảnh lên trên
+   ============================================================ */
+@media (max-width: 899px) {
+  .panel {
+    padding: 1.5rem 1.25rem 1.5rem;
+    gap: 0.7rem;
+  }
+
+  .panelLogo {
+    width: 5.5rem;
+    margin: 0 auto 0.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .closeBtn {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+    top: 12px;
+    right: 12px;
+  }
+
+  .panel {
+    padding: 1.25rem 1rem 1.25rem;
+  }
+
+  .checkboxGroup {
+    gap: 0.5rem 0.75rem;
+  }
+
+  .checkboxItem {
+    font-size: 0.75rem;
+  }
 }
