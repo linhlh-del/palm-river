@@ -62,6 +62,10 @@ export default function Header({ onOpenModal, variant = "full" }) {
     return () => document.removeEventListener("mousedown", close);
   }, [menuOpen]);
 
+  // Điều hướng nav: nếu đang ở trang chủ -> scroll trực tiếp tới section.
+  // Nếu đang ở trang khác (vd: /tin-tuc/:id) -> navigate về "/" và gửi
+  // section cần cuộn tới qua location.state (KHÔNG dùng query string),
+  // nên URL không bao giờ hiện ra dạng /?section=... trên thanh địa chỉ.
   const handleNav = (e, href) => {
     e.preventDefault();
     setActiveHref(href);
@@ -71,7 +75,7 @@ export default function Header({ onOpenModal, variant = "full" }) {
     const sectionId = href.replace("#", "");
 
     if (isSectionLink && location.pathname !== "/") {
-      navigate(`/?section=${sectionId}`, { replace: false });
+      navigate("/", { state: { scrollTo: sectionId } });
       return;
     }
 
@@ -92,7 +96,7 @@ export default function Header({ onOpenModal, variant = "full" }) {
 
     if (isMinimal) {
       // Từ trang tin tức: về trang chủ và tự cuộn xuống mục Tin tức
-      navigate("/?section=tin-tuc", { replace: false });
+      navigate("/", { state: { scrollTo: "tin-tuc" } });
       return;
     }
 
@@ -150,10 +154,7 @@ export default function Header({ onOpenModal, variant = "full" }) {
         )}
 
         {isMinimal && (
-          <button
-            className="hd__cta hd__cta--minimal"
-            onClick={handleCTA}
-          >
+          <button className="hd__cta hd__cta--minimal" onClick={handleCTA}>
             NHẬN BÁO GIÁ
           </button>
         )}

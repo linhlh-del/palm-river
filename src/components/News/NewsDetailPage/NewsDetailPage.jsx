@@ -119,8 +119,11 @@ function ArticleImage({ src, caption }) {
  * NewsDetailPage — bố cục theo mẫu single-page (banner + card đè lên banner
  * gồm 3 cột: share / nội dung / sidebar), tra cứu bài viết động theo
  * :articleId trong URL. Data lấy từ backend API (Bước 8).
+ *
+ * onOpenModal: nhận từ App.jsx để Header (variant="full") có thể mở popup
+ * "Nhận báo giá" giống như ở trang chủ.
  * ------------------------------------------------------------------------ */
-export default function NewsDetailPage() {
+export default function NewsDetailPage({ onOpenModal }) {
   const { articleId } = useParams();
 
   // --- state & refs: khai báo TẤT CẢ hook trước mọi return sớm bên dưới,
@@ -189,7 +192,7 @@ export default function NewsDetailPage() {
   if (!articles && !fetchError) {
     return (
       <>
-        <Header variant="minimal" />
+        <Header variant="full" onOpenModal={onOpenModal} />
         <div className="ndp">
           <div className="ndp__container" style={{ padding: "80px 24px" }}>
             <p>Đang tải bài viết...</p>
@@ -203,7 +206,7 @@ export default function NewsDetailPage() {
   if (fetchError) {
     return (
       <>
-        <Header variant="minimal" />
+        <Header variant="full" onOpenModal={onOpenModal} />
         <div className="ndp">
           <div className="ndp__container" style={{ padding: "80px 24px" }}>
             <h1>Có lỗi xảy ra</h1>
@@ -219,7 +222,7 @@ export default function NewsDetailPage() {
   if (!article) {
     return (
       <>
-        <Header variant="minimal" />
+        <Header variant="full" onOpenModal={onOpenModal} />
         <div className="ndp">
           <div className="ndp__container" style={{ padding: "80px 24px" }}>
             <h1>Bài viết không tìm thấy</h1>
@@ -269,7 +272,7 @@ export default function NewsDetailPage() {
 
   return (
     <>
-      <Header variant="minimal" />
+      <Header variant="full" onOpenModal={onOpenModal} />
 
       <div className="ndp">
         {/* Banner */}
@@ -459,7 +462,8 @@ export default function NewsDetailPage() {
             <div className="ndp__footer-grid">
               <div>
                 <h4>Đăng ký nhận thông tin</h4>
-                <GetInfor showTitle={false} embedded />
+                <h4>Đăng ký nhận thông tin</h4>
+                <GetInfor showTitle={false} embedded formType="footer_news" />
 
                 <div className="ndp__footer-contact">
                   <span>

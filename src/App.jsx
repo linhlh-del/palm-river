@@ -23,13 +23,16 @@ import News from "./components/News/News.jsx";
 import NewsPage from "./components/News/NewsPage/NewsPage.jsx";
 import NewsDetailPage from "./components/News/NewsDetailPage/NewsDetailPage.jsx";
 import Layout from "./components/Layout/Layout.jsx";
+
 function HomePage({ onOpenModal }) {
   const location = useLocation();
 
+  // Cuộn tới section được yêu cầu từ trang khác (vd: Header ở NewsDetailPage
+  // gửi qua navigate("/", { state: { scrollTo: "tin-tuc" } })).
+  // Dùng location.state thay vì query string để URL luôn sạch, không hiện
+  // ra dạng /?section=... trên thanh địa chỉ dù chỉ trong tích tắc.
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const section = params.get("section");
-
+    const section = location.state?.scrollTo;
     if (!section) return;
 
     const target = document.getElementById(section);
@@ -38,13 +41,13 @@ function HomePage({ onOpenModal }) {
     const scrollToSection = () => {
       target.scrollIntoView({ behavior: "smooth", block: "start" });
 
-      // Xóa ?section=... khỏi URL sau khi đã cuộn tới,
-      // không tạo thêm entry mới trong lịch sử trình duyệt
-      window.history.replaceState(null, "", window.location.pathname);
+      // Xóa state khỏi history entry hiện tại sau khi đã cuộn tới,
+      // để reload / back không bị cuộn lại lần nữa.
+      window.history.replaceState({}, "");
     };
 
     requestAnimationFrame(scrollToSection);
-  }, [location.search]);
+  }, [location.state]);
 
   return (
     <>
@@ -83,7 +86,10 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage onOpenModal={openModal} />} />
         <Route path="/tin-tuc" element={<NewsPage />} />
-        <Route path="/tin-tuc/:articleId" element={<NewsDetailPage />} />
+        <Route
+          path="/tin-tuc/:articleId"
+          element={<NewsDetailPage onOpenModal={openModal} />}
+        />
         <Route path="/thank-you" element={<ThankYou />} />
       </Routes>
       <PopUp isOpen={showModal} onClose={closeModal} />
