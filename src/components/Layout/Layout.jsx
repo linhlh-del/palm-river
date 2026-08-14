@@ -72,10 +72,7 @@ export default function Layout({ onOpenModal }) {
         <div className="lo-content">
           {/* CỘT TRÁI (desktop) / HÀNG TRÊN (mobile): text + filter */}
           <div className="lo-text-col">
-            <h2 className="lo-section-title">
-              MẶT BẰNG <br />
-              CĂN HỘ
-            </h2>
+            <h2 className="lo-section-title">MẶT BẰNG CĂN HỘ</h2>
 
             <p className="lo-description">
               4 loại mặt bằng được nghiên cứu kỹ lưỡng, tối ưu công năng sử dụng
@@ -84,17 +81,26 @@ export default function Layout({ onOpenModal }) {
 
             {LAYOUT_FILTERS.length > 1 && (
               <div className="lo-filters">
-                {LAYOUT_FILTERS.map((filter) => (
-                  <button
-                    key={filter.key}
-                    type="button"
-                    className={`lo-filter-btn ${
-                      activeCategory === filter.key ? "active" : ""
-                    }`}
-                    onClick={() => handleCategoryChange(filter.key)}
-                  >
-                    {filter.label}
-                  </button>
+                {Object.entries(
+                  LAYOUT_FILTERS.reduce((acc, filter) => {
+                    (acc[filter.group] ??= []).push(filter);
+                    return acc;
+                  }, {}),
+                ).map(([groupKey, filters]) => (
+                  <div className="lo-filter-group" key={groupKey}>
+                    {filters.map((filter) => (
+                      <button
+                        key={filter.key}
+                        type="button"
+                        className={`lo-filter-btn ${
+                          activeCategory === filter.key ? "active" : ""
+                        }`}
+                        onClick={() => handleCategoryChange(filter.key)}
+                      >
+                        {filter.label}
+                      </button>
+                    ))}
+                  </div>
                 ))}
               </div>
             )}

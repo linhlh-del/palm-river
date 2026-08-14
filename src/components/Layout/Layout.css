@@ -1,5 +1,5 @@
 .lo-section {
-  padding: 50px 0;
+  padding-bottom: 50px;
   font-family: "DVNBeaufort-Regular", sans-serif;
   background: #fff;
 }
@@ -83,6 +83,17 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+}
+
+/* Mỗi group (vd: 2PN + 2PN Góc) luôn nằm CÙNG 1 hàng, không tách rời.
+   .lo-filters ở trên mới là chỗ được phép wrap -> khi đủ chỗ ngang,
+   2 group nằm chung 1 hàng; khi chật, wrap sẽ đẩy CẢ group xuống dòng
+   mới chứ không bao giờ cắt lẻ 1 nút ra riêng. */
+.lo-filter-group {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  flex: 0 0 auto;
 }
 
 .lo-filter-btn {
