@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-// import mapImage from "../../assets/images/map1.jpg";
 import sparkle from "../../assets/images/sparkle.png";
 import "./Position.css";
 import GetInfor from "../Getinfor/GetInfor.jsx";

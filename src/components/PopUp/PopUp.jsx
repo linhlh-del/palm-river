@@ -46,6 +46,7 @@ export default function PopUp({ isOpen, onClose }) {
     const { success } = await submitLead({
       ...form,
       apartmentTypes: selectedTypes.join(", "),
+      formType: "popup",
     });
 
     // Reset form

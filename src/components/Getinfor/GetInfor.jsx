@@ -18,6 +18,7 @@ export default function GetInfor({
   showTitle = true,
   title,
   embedded = false,
+  formType = "getinfor",
 }) {
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -65,7 +66,7 @@ export default function GetInfor({
 
     setLoading(true);
 
-    const { success } = await submitLead(form);
+    const { success } = await submitLead({ ...form, formType });
 
     if (success) {
       toast.success("Gửi thông tin thành công!");
