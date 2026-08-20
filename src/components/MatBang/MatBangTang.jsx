@@ -469,6 +469,11 @@ export default function MatBangTang({
               onBlur={handleLegendLeave}
               onClick={(e) => {
                 e.stopPropagation();
+                if (pinned && hoverTypeId === id) {
+                  setPinned(false);
+                  setHoverTypeId(null);
+                  return;
+                }
                 setHoverTypeId(id);
                 setHoverZoneId(null);
                 setPinned(true);
