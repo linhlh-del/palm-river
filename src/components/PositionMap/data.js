@@ -50,6 +50,10 @@ const BASE_APARTMENT_TYPES = {
   },
 };
 
+// `area`: diện tích chính xác (m²) — đồng bộ theo file data.js dùng cho
+// Mặt Bằng Tầng (các hằng T3_*_CHIP / T4_*_CHIP). Chỉ chép giá trị qua,
+// KHÔNG import chung file để 2 luồng (Tiện ích / Mặt bằng tầng) độc lập
+// nhau, tránh 1 bên sửa làm vỡ bên kia.
 const createTowerApartmentTypes = (positions, typeIds) => {
   const types = {
     "2pn-goc": {
@@ -104,24 +108,49 @@ export const TIEN_ICH_APARTMENT_TYPES = BASE_APARTMENT_TYPES;
 
 export const TOWER_3_APARTMENT_TYPES = createTowerApartmentTypes(
   {
-    "2pn-goc": { labelTop: "12%", labelLeft: "17%" },
-    "2pn-goc-2": { labelTop: "88%", labelLeft: "80%" },
-    "2pn-goc-120m": { labelTop: "12%", labelLeft: "78%" },
-    "2pn": { labelTop: "12%", labelLeft: "55%" },
-    "3pn": { labelTop: "88%", labelLeft: "50%" },
-    "3pn-goc": { labelTop: "88%", labelLeft: "17%" },
+    "2pn-goc": { labelTop: "12%", labelLeft: "17%", area: 84.9 },
+    "2pn-goc-2": { labelTop: "88%", labelLeft: "80%", area: 84.9 },
+    "2pn-goc-120m": { labelTop: "12%", labelLeft: "78%", area: 120.2 },
+    "2pn": { labelTop: "12%", labelLeft: "55%", area: 85.9 },
+    "3pn": { labelTop: "88%", labelLeft: "50%", area: 126.1 },
+    "3pn-goc": { labelTop: "88%", labelLeft: "17%", area: 125.3 },
   },
   ["2pn-goc", "2pn-goc-2", "2pn-goc-120m", "2pn", "3pn", "3pn-goc"],
 );
 
 export const TOWER_4_APARTMENT_TYPES = createTowerApartmentTypes(
   {
-    "2pn-goc": { labelTop: "10%", labelLeft: "17%", color: "#DCDCDC" },
-    "2pn": { labelTop: "10%", labelLeft: "50%", color: "#D6C47A" },
-    "2pn-db": { labelTop: "10%", labelLeft: "83%", color: "#767667" },
-    "2pn-db-2": { labelTop: "90%", labelLeft: "17%", color: "#DAC2A8" },
-    "3pn": { labelTop: "90%", labelLeft: "50%", color: "#C89A70" },
-    "3pn-db": { labelTop: "90%", labelLeft: "83%", color: "#6EBCC9" },
+    "2pn-goc": {
+      labelTop: "10%",
+      labelLeft: "17%",
+      color: "#DCDCDC",
+      area: 84.9,
+    },
+    "2pn": { labelTop: "10%", labelLeft: "50%", color: "#D6C47A", area: 85.9 },
+    "2pn-db": {
+      labelTop: "10%",
+      labelLeft: "83%",
+      color: "#767667",
+      area: 121.9,
+    },
+    "2pn-db-2": {
+      labelTop: "90%",
+      labelLeft: "17%",
+      color: "#DAC2A8",
+      area: 120.2,
+    },
+    "3pn": {
+      labelTop: "90%",
+      labelLeft: "50%",
+      color: "#C89A70",
+      area: 126.1,
+    },
+    "3pn-db": {
+      labelTop: "90%",
+      labelLeft: "83%",
+      color: "#6EBCC9",
+      area: 157.0,
+    },
   },
   ["2pn-goc", "2pn", "2pn-db", "2pn-db-2", "3pn", "3pn-db"],
 );

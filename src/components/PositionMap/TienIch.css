@@ -811,3 +811,146 @@
     animation: none;
   }
 }
+
+/* ================= BẢNG LOẠI HÌNH CĂN HỘ (aside bên phải modal mặt bằng) ================= */
+.building-detail-overlay .building-apartment-info {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.building-detail-overlay .building-apartment-header {
+  text-align: center;
+}
+
+.building-detail-overlay .building-apartment-eyebrow {
+  display: inline-block;
+  font-size: 1rem;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #d2b57c;
+  margin-bottom: 6px;
+}
+
+.building-detail-overlay .building-apartment-header h4 {
+  margin: 0 0 6px;
+  color: #e0edc9;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+  font-size: 22px;
+  text-transform: uppercase;
+}
+
+.building-detail-overlay .building-apartment-sub {
+  margin: 0;
+  color: rgba(224, 237, 201, 0.75);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.building-detail-overlay .apartment-type-table {
+  border: 1px solid rgba(210, 181, 124, 0.3);
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(7, 68, 59, 0.35);
+}
+
+.building-detail-overlay .apartment-type-table-head,
+.building-detail-overlay .apartment-type-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) 0.85fr;
+  gap: 8px;
+  align-items: center;
+}
+
+.building-detail-overlay .apartment-type-table-head {
+  padding: 10px 14px;
+  background: rgba(210, 181, 124, 0.14);
+  color: #d2b57c;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.building-detail-overlay .apartment-type-table-head span:not(:first-child),
+.building-detail-overlay .apartment-type-row span:not(:first-child) {
+  text-align: right;
+}
+
+.building-detail-overlay .apartment-type-table-body {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.building-detail-overlay .apartment-type-row {
+  padding: 10px 14px;
+  cursor: pointer;
+  border-top: 1px solid rgba(210, 181, 124, 0.14);
+  transition: background 0.2s ease;
+}
+
+.building-detail-overlay .apartment-type-row:hover,
+.building-detail-overlay .apartment-type-row.is-active {
+  background: rgba(210, 181, 124, 0.14);
+}
+
+.building-detail-overlay .apartment-type-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #e0edc9;
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.building-detail-overlay .apartment-type-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--zone-color, #d2b57c);
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.building-detail-overlay .apartment-type-area,
+.building-detail-overlay .apartment-type-price {
+  color: rgba(224, 237, 201, 0.85);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.building-detail-overlay .apartment-type-price {
+  color: #d2b57c;
+  font-weight: 600;
+}
+
+.building-detail-overlay .btn-cta-quote {
+  margin-top: auto;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #d2b57c 0%, #c79022 100%);
+  color: #07443b;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.building-detail-overlay .btn-cta-quote:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(199, 144, 34, 0.35);
+}
+
+@media (max-width: 640px) {
+  .building-detail-overlay .apartment-type-table-body {
+    max-height: 260px;
+  }
+}

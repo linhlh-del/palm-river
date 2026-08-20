@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./PopUp.module.css";
 import logo from "../../assets/images/logo.png";
@@ -92,17 +92,29 @@ function PopupVisual() {
   );
 }
 
-export default function PopUp({ isOpen, onClose }) {
+// `initialMessage` (optional): cho phép nơi mở popup (VD: TienIch — khi bấm
+// "Đăng ký nhận báo giá" từ 1 toà cụ thể) gửi kèm nội dung gợi ý vào ô
+// message, thay vì luôn để trống. Không truyền thì hành vi y hệt bản gốc.
+export default function PopUp({ isOpen, onClose, initialMessage = "" }) {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
     phone: "",
     email: "",
-    message: "",
+    message: initialMessage,
   });
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState({ message: "", type: "success" });
+
+  // Mỗi lần popup được mở lại với 1 initialMessage mới (VD: đổi toà rồi bấm
+  // CTA lần nữa) thì đồng bộ lại ô message — không đụng name/phone/email
+  // người dùng có thể đã gõ dở trước đó trong cùng phiên mở.
+  useEffect(() => {
+    if (isOpen) {
+      setForm((prev) => ({ ...prev, message: initialMessage }));
+    }
+  }, [isOpen, initialMessage]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });

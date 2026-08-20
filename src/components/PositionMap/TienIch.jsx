@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { AREAS, AMENITY_GROUPS, POINTS } from "./TienIchData.js";
 import { PALM_RIVER_BUILDINGS } from "./PalmRiverBuildingsData.js";
-import { TIEN_ICH_APARTMENT_TYPES } from "./data.js";
 import MatBangTang from "../MatBang/MatBangTang";
+import PopUp from "../PopUp/PopUp"; // ⚠️ sửa lại path nếu khác trong project của bạn
 // import mapImage from "../../assets/images/amen-map-4.jpg";
 import mapImage from "../../assets/images/map.png";
 import chevronDown from "../../assets/images/chevron-down.png";
@@ -39,6 +39,11 @@ export default function TienIch() {
   const [selectedApartmentZone, setSelectedApartmentZone] = useState(null);
   const [selectedApartmentTypeId, setSelectedApartmentTypeId] = useState(null);
 
+  // ── Popup "Đăng ký nhận báo giá" — dùng chung PopUp có sẵn của site ──
+  const [isQuoteOpen, setIsQuoteOpen] = useState(false);
+  const handleOpenQuote = () => setIsQuoteOpen(true);
+  const handleCloseQuote = () => setIsQuoteOpen(false);
+
   const [expandedGroups, setExpandedGroups] = useState(() =>
     Object.fromEntries(AMENITY_GROUPS.map((group) => [group.title, true])),
   );
@@ -50,24 +55,14 @@ export default function TienIch() {
     (b) => b.id === activeBuildingId,
   );
 
-  const selectedApartmentType = useMemo(() => {
-    const typeId = selectedApartmentZone?.typeId || selectedApartmentTypeId;
-    const availableTypes = activeBuilding
-      ? activeBuilding.apartmentTypes
-      : TIEN_ICH_APARTMENT_TYPES;
-    return typeId ? availableTypes[typeId] || null : null;
-  }, [activeBuilding, selectedApartmentTypeId, selectedApartmentZone]);
-
-  const selectedTypeZones = useMemo(() => {
-    if (!selectedApartmentTypeId || !activeBuilding) return [];
-    return activeBuilding.zones.filter(
-      (zone) => zone.typeId === selectedApartmentTypeId,
-    );
-  }, [activeBuilding, selectedApartmentTypeId]);
-
   const formatArea = (value) => {
     if (value == null || value === "") return "—";
-    return `${value} m²`;
+    const num = Number(value);
+    if (Number.isNaN(num)) return "—";
+    const text = Number.isInteger(num)
+      ? `${num}`
+      : num.toFixed(1).replace(".", ",");
+    return `${text} m²`;
   };
 
   const formatPrice = (from, to) => {
@@ -81,6 +76,52 @@ export default function TienIch() {
     }
     return fmt(from ?? to);
   };
+
+  // ── Bảng tổng hợp TOÀN BỘ loại hình căn hộ của toà đang mở ──
+  // Thay cho luồng cũ "chỉ hiện info của 1 căn/1 loại đã chọn". Diện tích ưu
+  // tiên lấy từ `type.area` (số chính xác, đồng bộ theo data Mặt Bằng Tầng);
+  // nếu type chưa khai báo area thì fallback tính min–max từ các zone cùng
+  // typeId trong toà (giữ tương thích ngược, không bắt buộc phải điền đủ).
+  const buildingTypesSummary = useMemo(() => {
+    if (!activeBuilding) return [];
+    const types = activeBuilding.apartmentTypes || {};
+
+    return Object.entries(types).map(([typeId, type]) => {
+      const zones = activeBuilding.zones.filter((z) => z.typeId === typeId);
+
+      const areaText =
+        type.area != null
+          ? formatArea(type.area)
+          : zones.length
+            ? (() => {
+                const areas = zones.map((z) => z.area);
+                const min = Math.min(...areas);
+                const max = Math.max(...areas);
+                return min === max ? formatArea(min) : `${min} – ${max} m²`;
+              })()
+            : "—";
+
+      const priceText = zones.length
+        ? formatPrice(
+            Math.min(...zones.map((z) => z.priceFrom)),
+            Math.max(...zones.map((z) => z.priceTo)),
+          )
+        : "—";
+
+      const isSelected =
+        selectedApartmentTypeId === typeId ||
+        selectedApartmentZone?.typeId === typeId;
+
+      return {
+        typeId,
+        label: type.short || type.label,
+        color: type.color,
+        areaText,
+        priceText,
+        isSelected,
+      };
+    });
+  }, [activeBuilding, selectedApartmentTypeId, selectedApartmentZone]);
 
   const handleSelectApartment = (zone) => {
     setSelectedApartmentZone(zone);
@@ -514,109 +555,73 @@ export default function TienIch() {
                 imageHeight={activeBuilding.viewBox.height}
               />
 
+              {/* ===== CỘT PHẢI: bảng liệt kê TOÀN BỘ loại hình căn hộ của toà
+                  + CTA "Đăng ký nhận báo giá" ở cuối. Thay cho luồng cũ chỉ
+                  hiện thông tin của 1 căn/1 loại đã chọn. Bấm 1 dòng trong
+                  bảng vẫn highlight đồng bộ với zone tương ứng trên ảnh. ===== */}
               <aside className="building-apartment-info" aria-live="polite">
-                {!selectedApartmentType ? (
-                  <div className="building-apartment-empty">
-                    <span className="building-apartment-eyebrow">
-                      MẶT BẰNG CĂN HỘ
-                    </span>
-                    <div className="building-apartment-empty-icon">+</div>
-                    <h4>Chọn một căn hộ</h4>
-                    <p>
-                      Nhấn vào từng căn hộ trên mặt bằng để xem thông tin chi
-                      tiết.
-                    </p>
+                <div className="building-apartment-header">
+                  <span className="building-apartment-eyebrow">
+                    MẶT BẰNG CĂN HỘ ĐIỂN HÌNH
+                  </span>
+                  <h4>{activeBuilding.name}</h4>
+                  <p className="building-apartment-sub">
+                    Nhấn vào từng căn trên mặt bằng để xem vị trí tương ứng,
+                    hoặc xem nhanh toàn bộ loại hình căn hộ của toà trong bảng
+                    bên dưới.
+                  </p>
+                </div>
+
+                <div className="apartment-type-table">
+                  <div className="apartment-type-table-head">
+                    <span>Loại căn hộ</span>
+                    <span>Diện tích</span>
+              
                   </div>
-                ) : selectedApartmentZone ? (
-                  <>
-                    <span
-                      className="building-apartment-eyebrow"
-                      style={{ "--zone-color": selectedApartmentType.color }}
-                    >
-                      {selectedApartmentZone.code}
-                    </span>
-                    <h4>{selectedApartmentType.label}</h4>
-                    <div className="building-apartment-stats">
-                      <div>
-                        <span>Diện tích</span>
-                        <strong>
-                          {formatArea(selectedApartmentZone.area)}
-                        </strong>
+                  <div className="apartment-type-table-body">
+                    {buildingTypesSummary.map((row) => (
+                      <div
+                        key={row.typeId}
+                        className={`apartment-type-row ${
+                          row.isSelected ? "is-active" : ""
+                        }`}
+                        style={{ "--zone-color": row.color }}
+                        onClick={() => handleSelectApartmentType(row.typeId)}
+                      >
+                        <span className="apartment-type-name">
+                          <i className="apartment-type-dot" />
+                          {row.label}
+                        </span>
+                        <span className="apartment-type-area">
+                          {row.areaText}
+                        </span>
+                        
                       </div>
-                      <div>
-                        <span>Tỷ lệ căn hộ</span>
-                        <strong>{selectedApartmentZone.ratio ?? "—"}%</strong>
-                      </div>
-                      <div className="is-price">
-                        <span>Giá dự kiến</span>
-                        <strong>
-                          {formatPrice(
-                            selectedApartmentZone.priceFrom,
-                            selectedApartmentZone.priceTo,
-                          )}
-                        </strong>
-                      </div>
-                    </div>
-                    <p className="building-apartment-desc">
-                      {selectedApartmentType.desc}
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <span
-                      className="building-apartment-eyebrow"
-                      style={{ "--zone-color": selectedApartmentType.color }}
-                    >
-                      {selectedTypeZones.length} vị trí trên mặt bằng
-                    </span>
-                    <h4>{selectedApartmentType.label}</h4>
-                    <div className="building-apartment-stats">
-                      <div>
-                        <span>Diện tích</span>
-                        <strong>
-                          {selectedTypeZones.length
-                            ? `${Math.min(...selectedTypeZones.map((zone) => zone.area))} – ${Math.max(...selectedTypeZones.map((zone) => zone.area))} m²`
-                            : "—"}
-                        </strong>
-                      </div>
-                      <div>
-                        <span>Tỷ lệ căn hộ</span>
-                        <strong>
-                          {selectedTypeZones.length
-                            ? `${selectedTypeZones.reduce((sum, zone) => sum + (zone.ratio || 0), 0)}%`
-                            : "—"}
-                        </strong>
-                      </div>
-                      <div className="is-price">
-                        <span>Giá dự kiến</span>
-                        <strong>
-                          {selectedTypeZones.length
-                            ? formatPrice(
-                                Math.min(
-                                  ...selectedTypeZones.map(
-                                    (zone) => zone.priceFrom,
-                                  ),
-                                ),
-                                Math.max(
-                                  ...selectedTypeZones.map(
-                                    (zone) => zone.priceTo,
-                                  ),
-                                ),
-                              )
-                            : "—"}
-                        </strong>
-                      </div>
-                    </div>
-                    <p className="building-apartment-desc">
-                      {selectedApartmentType.desc}
-                    </p>
-                  </>
-                )}
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className="btn-cta-quote"
+                  onClick={handleOpenQuote}
+                >
+                  Đăng ký nhận báo giá
+                </button>
               </aside>
             </div>
           </div>
         </div>
       )}
+
+      {/* ================= POPUP ĐĂNG KÝ NHẬN BÁO GIÁ (dùng chung của site) ================= */}
+      <PopUp
+        isOpen={isQuoteOpen}
+        onClose={handleCloseQuote}
+        initialMessage={
+          activeBuilding ? `Tôi quan tâm căn hộ tại ${activeBuilding.name}` : ""
+        }
+      />
     </div>
   );
 }
