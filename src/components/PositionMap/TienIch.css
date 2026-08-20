@@ -73,6 +73,8 @@
 /* ================= MAP ================= */
 .amen_site .map-amen {
   position: relative;
+  aspect-ratio: 1680 / 900;
+  overflow: hidden; /* bắt buộc — clip nội dung khi Panzoom scale to lên */
   background-image: url(../../assets/images/bg-web.jpg);
   background-position: center center;
   background-size: cover;
@@ -87,6 +89,7 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
+  z-index: 2; /* PHẢI nổi trên ảnh nền (.img-fluid, z-index:1) để path bắt được hover/click */
 }
 
 .amen_site .map-amen svg g {
@@ -102,6 +105,9 @@
      -> tạo cảm giác sáng lan lần lượt qua từng vùng thay vì nhấp nháy đồng loạt */
   animation: areaWave 2.4s ease-in-out infinite;
   filter: drop-shadow(0 0 0 rgba(210, 255, 85, 0));
+  will-change:
+    opacity, filter; /* gợi ý browser tạo layer riêng, đỡ lag khi
+                                    filter (drop-shadow/blur) animate liên tục */
 }
 
 .amen_site .map-amen svg g path:nth-child(2) {
@@ -225,20 +231,20 @@
    ⚠️ chỉ có area-popup-1 là số liệu thật (top:30%, left:60%) — 2/3/4 đang tạm,
    cần bạn đo lại đúng vị trí trên ảnh map thật rồi thay vào */
 .amen_site .map-amen .area-popup.area-popup-1 {
+  top: 20%;
+  left: 30%;
+}
+.amen_site .map-amen .area-popup.area-popup-2 {
+  top: 46%;
+  left: 50%;
+}
+.amen_site .map-amen .area-popup.area-popup-3 {
   top: 30%;
   left: 60%;
 }
-.amen_site .map-amen .area-popup.area-popup-2 {
-  top: 45%;
-  left: 75%;
-}
-.amen_site .map-amen .area-popup.area-popup-3 {
-  top: 60%;
-  left: 65%;
-}
 .amen_site .map-amen .area-popup.area-popup-4 {
-  top: 32%;
-  left: 20%;
+  top: 20%;
+  left: 10%;
 }
 
 /* Bootstrap-lite grid, scope trong .amen_site để không phụ thuộc Bootstrap ngoài */
@@ -581,5 +587,227 @@
     width: 1rem;
     height: 1rem;
     font-size: 0.5rem;
+  }
+}
+/* ================= ZOOM SCENE (Panzoom) ================= */
+.amen_site .map-amen .zoom-scene {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1680px;
+  height: 900px;
+  transform-origin: 0 0;
+}
+
+.amen_site .map-amen .zoom-scene .img-fluid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none; /* ghi đè .img-fluid { max-width:100% } gốc */
+  object-fit: cover;
+  z-index: 1; /* nằm DƯỚI svg (z-index:2) — trước đây không có z-index nên
+                 vẽ theo thứ tự DOM: img render SAU svg trong JSX => đè lên
+                 svg => toàn bộ 4 vùng path (area-map) bị che, không click được */
+}
+
+/* ================= BUILDING HOTSPOT (4 toà trong Palm River) ================= */
+.amen_site .building-hotspot {
+  cursor: pointer;
+  pointer-events: all;
+  transition:
+    fill-opacity 0.25s ease,
+    stroke-opacity 0.25s ease;
+}
+.amen_site .building-hotspot.is-disabled {
+  cursor: not-allowed;
+}
+
+/* ================= VIỀN SÁNG NHẤP NHÁY (chỉ toà ĐÃ có ảnh mặt bằng thay thế) =================
+   Thay cho building-glow (ellipse blob) cũ. Đây chính là polygon rooftop,
+   tự phát sáng viền để làm "mồi" thu hút click — không tạo thêm hình dạng lạ
+   không ăn khớp với khung toà nhà. */
+.amen_site .building-outline {
+  fill: none;
+  stroke: #d2ff55;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+  opacity: 0.4;
+  /* CHỈ animate opacity lúc idle — rẻ, không đụng filter, đỡ lag khi
+     nhiều toà cùng nhấp nháy song song với các animation khác trên map. */
+  animation: buildingOutlinePulse 2.4s ease-in-out infinite;
+}
+
+.amen_site .building-outline.is-focused {
+  animation-play-state: paused;
+  opacity: 1;
+  stroke-width: 3;
+  /* filter chỉ bật ở trạng thái tương tác thật sự (hover/active/đã-zoom-tới),
+     không chạy vô hạn -> tránh tốn GPU liên tục. */
+  filter: drop-shadow(0 0 6px rgba(210, 255, 85, 0.8));
+}
+
+@keyframes buildingOutlinePulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .amen_site .building-outline {
+    animation: none;
+    opacity: 0.6;
+  }
+}
+
+/* ================= NÚT QUAY LẠI TOÀN CẢNH ================= */
+.amen_site .btn-zoom-back {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.6);
+  color: #d2ff55;
+  border: 1px solid rgba(210, 255, 85, 0.4);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+}
+.amen_site .btn-zoom-back:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* ================= MODAL MẶT BẰNG TOÀ NHÀ ================= */
+.building-detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 10, 3, 0.92);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: buildingDetailFadeIn 0.25s ease;
+}
+
+@keyframes buildingDetailFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.building-detail-overlay .btn-close-detail {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.building-detail-overlay .building-detail-inner {
+  width: 100%;
+  max-width: 1240px;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.building-detail-overlay .building-detail-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.8fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.building-detail-overlay .building-detail-columns > .mbt,
+.building-detail-overlay .building-apartment-info {
+  min-width: 0;
+}
+
+.building-detail-overlay .building-apartment-info {
+  min-height: 100%;
+  padding: 28px 24px;
+  border: 1px solid rgba(201, 161, 90, 0.35);
+  border-radius: 14px;
+  background: #0b2a3d url(../../assets/images/bg-web.jpg) center / cover;
+  color: #fff;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+}
+
+.building-detail-overlay .building-detail-title {
+  color: #d2b57c;
+  font-family: "DVNBeaufort-Regular", sans-serif;
+  margin: 0 0 12px;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .building-detail-overlay .building-detail-inner {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .building-detail-overlay {
+    padding: 48px 12px 16px;
+    align-items: flex-start;
+  }
+
+  .building-detail-overlay .building-detail-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .building-detail-overlay .building-apartment-info {
+    min-height: auto;
+  }
+}
+
+.floor-zone {
+  fill: var(--zone-color);
+  fill-opacity: 0.18;
+  stroke: var(--zone-color);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  cursor: pointer;
+  /* CHỈ animate opacity — rẻ, không đụng filter khi idle */
+  animation: floorZoneBreathe 2.2s ease-in-out infinite;
+}
+
+@keyframes floorZoneBreathe {
+  0%,
+  100% {
+    fill-opacity: 0.14;
+  }
+  50% {
+    fill-opacity: 0.32;
+  }
+}
+
+/* filter/drop-shadow chỉ bật cho ĐÚNG 1 phần tử đang hover/active */
+.floor-zone:hover,
+.floor-zone.is-active {
+  animation-play-state: paused;
+  fill-opacity: 0.5;
+  filter: drop-shadow(0 0 8px var(--zone-color));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floor-zone {
+    animation: none;
   }
 }

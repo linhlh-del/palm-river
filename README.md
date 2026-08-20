@@ -15,7 +15,12 @@ palm-river-mkt/
 │  ├─ index.css
 │  ├─ main.jsx
 │  ├─ assets/
-│  │  └─ images/
+│  │  ├─ fonts/
+│  │  ├─ images/
+│  │  ├─ video/
+│  │  ├─ hero.png
+│  │  ├─ react.svg
+│  │  └─ vite.svg
 │  ├─ components/
 │  │  ├─ CanHo/
 │  │  ├─ ChinhSachUuDai/
@@ -29,6 +34,7 @@ palm-river-mkt/
 │  │  ├─ Layout/
 │  │  ├─ MapPrime/
 │  │  ├─ MatBang/
+│  │  ├─ MatBang_old/
 │  │  ├─ News/
 │  │  ├─ PopUp/
 │  │  ├─ Position/
@@ -44,6 +50,9 @@ palm-river-mkt/
 │  │  ├─ leadService.js
 │  │  └─ newsService.js
 │  ├─ styles/
+│  │  ├─ global.css
+│  │  ├─ reset.css
+│  │  └─ variables.css
 │  └─ utils/
 │     └─ leadTracking.js
 ├─ .env
@@ -193,3 +202,34 @@ Trang chủ (/) -> các section giới thiệu dự án
 ## 7. Ghi chú
 
 Dự án này chủ yếu là marketing website / landing page cho dự án bất động sản, tập trung vào việc tăng tỷ lệ chuyển đổi qua lead capture, quảng bá dự án và cập nhật tin tức cho khách hàng.
+
+## 6. Luồng zoom lồng: TienIch → toà nhà → MatBangTang
+
+Dùng chung engine Panzoom (`@panzoom/panzoom`) như bản demo gốc
+(`index.html`), áp dụng lại đúng công thức zoom-tới-điểm
+(`path.getBBox()` → tính tâm → `panzoom.zoom()/pan()`), khác biệt chính:
+`TienIch` responsive nên cần 1 lớp "scene" kích thước cố định (1680×900,
+khớp viewBox svg) được Panzoom scale/pan, còn khung ngoài (`.map-amen`)
+tự tính `fitScale = viewportWidth / 1680` để scene luôn vừa khít màn hình
+(qua `ResizeObserver`), thay vì scale cố định "1" như demo full-viewport.
+
+**Luồng tương tác:**
+
+1. Click vùng "PALM RIVER" (area id `"1"`) → zoom tới tâm vùng đó
+   (`ZOOM_LEVEL_PALM_RIVER = 2.2 × fitScale`), lộ ra 4 hotspot toà nhà
+   (`PalmRiverBuildingsData.js`), hiện nút "Quay lại toàn cảnh".
+2. Hover 1 toà → zoom tiếp (`ZOOM_LEVEL_BUILDING = 4 × fitScale`) làm
+   preview; rời chuột (khi chưa mở modal) → tự zoom lùi về mức Palm River.
+3. Click 1 toà → zoom như hover, sau ~550ms (chờ animation xong) mở modal
+   full-screen chứa `<MatBangTang {...building.matBangProps} />` — mặt
+   bằng tầng riêng của toà đó.
+4. Đóng modal hoặc bấm "Quay lại toàn cảnh" → reset Panzoom về `fitScale`.
+
+**Data cần bổ sung để lên thật:**
+
+- Path SVG thật cho 4 toà trong `PalmRiverBuildingsData.js` (hiện là ô
+  vuông placeholder).
+- Với mỗi toà, nếu mặt bằng khác nhau: tạo `data.<tênToà>.js` riêng
+  (theo đúng shape `IMAGE_WIDTH/HEIGHT, APARTMENT_TYPES, ZONES` của
+  `MatBangTang/data.js`), rồi truyền `{ imageSrc, zones, types }` vào
+  `matBangProps` của toà tương ứng.

@@ -1,196 +1,416 @@
-.mbt-section {
-  padding: 50px 0;
-  font-family: "DVNBeaufort-Regular", sans-serif;
-  background: #fff;
-}
+/* Font chính (tiêu đề) và font phụ (nội dung) dùng chung font-family đã khai
+   báo sẵn trong dự án (TongThe.css) — không import lại từ Google Fonts. */
 
-.mbt-container {
+/* ==========================================================================
+   Tokens
+   ========================================================================== */
+.mbt {
+  --mbt-navy: #0b2a3d;
+  --mbt-navy-2: #123952;
+  --mbt-gold: #c9a15a;
+  --mbt-sand: #f3ecdd;
+  --mbt-ink: #0d1b24;
+  --mbt-muted: #6b7c86;
+  --mbt-white: #ffffff;
+  --mbt-radius: clamp(10px, 2.2vw, 14px);
+  --mbt-font-display: "DVNBeaufort-Regular", sans-serif;
+  --mbt-font-body: "BeVietnamPro-Regular", sans-serif;
+
+  /* Tốc độ — chỉnh qua prop breatheSpeed / transitionSpeed / popupSpeed
+     ở component, hoặc override trực tiếp bằng cách set các biến này. */
+  --mbt-zone-breathe-speed: 1s;
+  --mbt-transition-speed: 0.25s;
+  --mbt-popup-in-speed: 0.16s;
+  --mbt-chip-speed: 0.2s;
+
+  /* Kích thước popup — chỉnh qua prop popupWidth / popupImageWidth.
+     Popup là 2 CỘT: cột ảnh (trái, tỉ lệ CỐ ĐỊNH 960x1280 = 3:4, chiều cao
+     tự tính theo width) + cột chữ (phải, giãn theo chiều cao của ảnh). */
+  --mbt-popup-width: clamp(280px, 94vw, 860px);
+  --mbt-popup-image-width: clamp(112px, 36vw, 420px);
+
+  position: relative;
   width: 100%;
-  max-width: 72%;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-.mbt-section-title {
-  font-size: clamp(1rem, 6vw, 3rem);
-  font-weight: 400;
-  color: #d2b57c;
-  margin-bottom: 1.5rem;
-  letter-spacing: 0.5px;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-/* ==========================
-   LAYOUT: mobile mặc định = xếp chồng (text trên, ảnh dưới)
-   desktop = 2 cột nằm ngang (text trái, ảnh phải)
-   ========================== */
-.mbt-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  font-family: var(--mbt-font-body);
+  color: var(--mbt-ink);
+  /* Tạo stacking context riêng, chặn CSS/element ngoài xen vào giữa các lớp */
+  isolation: isolate;
 }
 
-@media (max-width: 1440px) {
-  .mbt-container {
-    max-width: 100%;
-  }
-}
-@media (min-width: 769px) {
-  .mbt-content {
-    flex-direction: row;
-    align-items: stretch;
-    gap: 0;
-  }
+/* Reset box-sizing cho toàn bộ cây con, tránh site global set content-box/khác */
+.mbt,
+.mbt * {
+  box-sizing: border-box !important;
 }
 
-/* ---- CỘT TEXT ---- */
-.mbt-text-col {
-  background-image: url(../../assets/images/bg-web.jpg);
-  color: #e0edc9;
-  padding: 2.5rem 2rem;
-  border-radius: 0.5rem;
-  text-align: left;
+/* ==========================================================================
+   Stage (image + svg overlay)
+   ========================================================================== */
+.mbt__stage {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+  border-radius: var(--mbt-radius);
+  overflow: hidden;
+  isolation: isolate;
+  z-index: 0;
 }
 
-@media (min-width: 769px) {
-  .mbt-text-col {
-    flex: 0 0 30%;
-    max-width: 30%;
-    border-radius: 0.5rem 0 0 0.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+.mbt__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
 }
 
-.mbt-section-title {
-  font-size: clamp(1rem, 6vw, 3rem);
-  font-weight: 400;
-  color: #d2b57c;
-  margin-bottom: 1.5rem;
-  letter-spacing: 0.5px;
-  line-height: 1.2;
-  text-transform: uppercase;
+.mbt__overlay {
+  position: absolute !important;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
 }
 
-.mbt-description {
-  color: #e0edc9;
-  font-size: 1rem;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-@media (max-width: 768px) {
-  /* .mbt-section-title {
-    font-size: 1.8rem;
-  } */
-
-  .mbt-description {
-    font-size: 0.9rem;
-    line-height: 1.5;
-  }
-}
-
-.mbt-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.mbt-filter-btn {
-  color: #e0edc9;
-  background: transparent;
-  border: 2px solid var(--border-color, #d2b57c);
-  padding: 0.5rem 1.5rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  font-size: 0.9rem;
+/* ==========================================================================
+   Zones — soft breathing glow, sharpens on hover/focus.
+   Khi có 1 zone/legend đang active, các zone khác bị "is-dimmed" để làm nổi
+   bật đúng zone đang chọn.
+   ========================================================================== */
+.mbt__zone {
+  fill: var(--zone-color);
+  fill-opacity: 0.22;
+  stroke: var(--zone-color);
+  stroke-width: clamp(2.5px, 0.5vw, 4px);
+  stroke-linejoin: round;
   cursor: pointer;
-  transition: all 0.25s ease;
-  font-family: "DVNBeaufort-Regular", sans-serif;
+  opacity: 0.55;
+  outline: none;
+  vector-effect: non-scaling-stroke;
+  transition:
+    fill-opacity var(--mbt-transition-speed) ease,
+    opacity var(--mbt-transition-speed) ease,
+    filter var(--mbt-transition-speed) ease,
+    stroke-width var(--mbt-transition-speed) ease;
+  animation: mbt-breathe var(--mbt-zone-breathe-speed) ease-in-out infinite;
 }
 
-.mbt-filter-btn:hover {
-  border-color: var(--secondary-color, #d2b57c);
-  color: var(--secondary-color, #d2b57c);
+.mbt__zone:hover,
+.mbt__zone:focus-visible,
+.mbt__zone.is-active {
+  opacity: 1;
+  fill-opacity: 0.55;
+  stroke-width: clamp(3.5px, 0.8vw, 4px);
+  animation-play-state: paused;
+  filter: drop-shadow(0 0 10px var(--zone-color))
+    drop-shadow(0 0 26px var(--zone-color));
 }
 
-.mbt-filter-btn.active {
-  background: var(--secondary-color, #d2b57c);
-  color: #1c2b18;
-  border-color: var(--secondary-color, #d2b57c);
+/* Zone KHÔNG được chọn khi đang có 1 zone/legend khác active -> mờ hẳn xuống
+   để người dùng thấy rõ đâu là căn đang được xem. */
+.mbt__zone.is-dimmed {
+  opacity: 0.12 !important;
+  fill-opacity: 0.06 !important;
+  animation-play-state: paused;
+  filter: none !important;
 }
 
-/* ---- CỘT ẢNH ---- */
-.mbt-image-col {
-  background: #ffffff;
+@keyframes mbt-breathe {
+  0%,
+  100% {
+    fill-opacity: 0.16;
+    filter: drop-shadow(0 0 0 transparent);
+  }
+  50% {
+    fill-opacity: 0.3;
+    filter: drop-shadow(0 0 14px var(--zone-color));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mbt__zone {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   Popup card — the signature element: a glass "concierge card".
+   Vị trí CỐ ĐỊNH: luôn neo bên TRÁI, canh giữa theo chiều dọc MÀN HÌNH
+   (position: fixed so với viewport, không phụ thuộc zone/chip nào đang
+   được chọn hay vị trí cuộn trang) — ảnh mặt bằng dồn nội dung sang phải
+   nên đặt cố định 1 chỗ bên trái sẽ không bao giờ bị đè/tràn.
+   Layout 2 CỘT: cột ảnh (trái, tỉ lệ CỐ ĐỊNH 960x1280 = 3:4, chiều cao tự
+   tính theo width qua aspect-ratio) + cột chữ (phải, nền bg-web.jpg + lớp
+   phủ tối, giãn theo chiều cao của ảnh — cùng tinh thần với .modal bên
+   ProjectModal).
+   Lưu ý: các thuộc tính layout cốt lõi (background, size) còn được ép lại
+   bằng JS (setProperty ... "important") ở component để thắng tuyệt đối mọi
+   CSS global của site — xem hook useForceImportant trong MatBangTang.jsx.
+   ========================================================================== */
+.mbt__popup {
+  position: fixed !important;
+  top: 50%;
+  left: clamp(12px, 3vw, 32px);
+  z-index: 999 !important;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: min(var(--mbt-popup-width), calc(100vw - 48px));
+  max-width: calc(100vw - 48px);
+  border-radius: var(--mbt-radius);
+  border: 1px solid rgba(201, 161, 90, 0.35);
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.25);
+  color: var(--mbt-white) !important;
+  overflow: hidden;
+  pointer-events: auto;
+  animation: mbt-pop-in var(--mbt-popup-in-speed) ease-out;
+  transform: translateY(-50%);
+}
+
+@keyframes mbt-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+}
+
+.mbt__popup-close {
+  all: unset;
+  box-sizing: border-box;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--mbt-white);
+  font-size: clamp(14px, 3.5vw, 17px);
+  line-height: 1;
+  cursor: pointer;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+}
+.mbt__popup-close:hover {
+  background: rgba(0, 0, 0, 0.55);
 }
 
-@media (min-width: 769px) {
-  .mbt-image-col {
-    flex: 0 0 70%;
-    max-width: 70%;
-    border-radius: 0 0.5rem 0.5rem 0;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    border-left: none;
+/* CỘT TRÁI — ảnh layout căn hộ, LUÔN tỉ lệ 960x1280 (3:4). Chiều cao tự
+   tính theo chiều rộng cột (aspect-ratio), KHÔNG co theo cột chữ — ngược
+   lại, cột chữ bên phải sẽ giãn (align-items: stretch mặc định của grid)
+   để bằng chiều cao này. */
+.mbt__popup-image {
+  align-self: start;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background-image: var(--mbt-popup-img, none) !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-color: var(--mbt-navy-2) !important;
+}
+
+/* CỘT PHẢI — nền bg-web.jpg + lớp phủ tối (navy) để chữ luôn đọc rõ,
+   cùng cách làm với .modal trong ProjectModal.module.css. Mặc định
+   align-items: stretch của .mbt__popup sẽ giãn cột này bằng chiều cao
+   của ảnh bên trái. */
+.mbt__popup-body {
+  position: relative;
+  padding: clamp(16px, 4vw, 28px) clamp(16px, 4.5vw, 32px)
+    clamp(18px, 4.5vw, 32px);
+  max-height: min(80vh, 640px);
+  overflow-y: auto;
+  background-image: url(../../assets/images/bg-web.jpg);
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+.mbt__popup-eyebrow {
+  display: inline-block;
+  font-size: clamp(10px, 2.4vw, 11px);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--zone-color, var(--mbt-gold));
+}
+
+.mbt__popup-title {
+  all: unset;
+  display: block;
+  margin: clamp(3px, 1vw, 4px) 0 clamp(6px, 1.6vw, 8px);
+  font-family: var(--mbt-font-display);
+  font-size: clamp(16px, 4.2vw, 22px);
+  font-weight: 700;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  padding-bottom: clamp(6px, 1.6vw, 8px);
+  border-bottom: 1px solid rgba(201, 161, 90, 0.45);
+  color: var(--mbt-white);
+}
+
+.mbt__popup-stats {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: clamp(6px, 1.6vw, 8px) clamp(8px, 2vw, 10px);
+  margin: clamp(8px, 2vw, 10px) 0 0;
+}
+
+.mbt__popup-stat {
+  display: flex !important;
+  flex-direction: column !important;
+  position: static !important;
+  gap: 2px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.mbt__popup-stat-label {
+  display: block;
+  font-size: clamp(9.5px, 2vw, 10.5px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  font-family: var(--mbt-font-body);
+}
+
+.mbt__popup-stat-value {
+  display: block;
+  font-weight: 600;
+  font-size: clamp(13px, 2.8vw, 15px);
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-family: var(--mbt-font-body);
+}
+
+.mbt__popup-stat--price {
+  grid-column: 1 / -1 !important;
+}
+.mbt__popup-stat--price .mbt__popup-stat-value {
+  font-family: var(--mbt-font-display);
+  font-size: clamp(16px, 3.6vw, 20px);
+  color: var(--mbt-gold);
+}
+
+.mbt__popup-desc {
+  all: unset;
+  display: block;
+  margin: clamp(8px, 2vw, 10px) 0 0;
+  font-size: clamp(12.5px, 2.6vw, 14px);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ==========================================================================
+   Legend chip — nổi trực tiếp trên ảnh, toạ độ lấy từ labelTop/labelLeft
+   trong data.js (set qua inline style top/left ở JSX).
+   ========================================================================== */
+.mbt__legend-chip {
+  all: unset;
+  box-sizing: border-box;
+  position: absolute !important;
+  z-index: 15;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(4px, 1vw, 6px);
+  min-height: 40px;
+  padding: clamp(5px, 1.4vw, 6px) clamp(9px, 2.4vw, 12px);
+  border-radius: 0.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(11, 42, 61, 0.55);
+  backdrop-filter: blur(10px);
+  color: var(--mbt-white);
+  font-family: var(--mbt-font-body);
+  font-size: clamp(10.5px, 2.6vw, 12.5px);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    background var(--mbt-chip-speed) ease,
+    box-shadow var(--mbt-chip-speed) ease,
+    transform 0.15s ease,
+    border-color var(--mbt-chip-speed) ease;
+}
+
+.mbt__legend-chip:hover,
+.mbt__legend-chip:focus-visible,
+.mbt__legend-chip.is-active {
+  border-color: var(--zone-color);
+  background: rgba(11, 42, 61, 0.85);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--zone-color) 30%, transparent),
+    0 0 16px var(--zone-color);
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+.mbt__legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--zone-color);
+  box-shadow: 0 0 6px var(--zone-color);
+  flex: none;
+}
+
+/* ==========================================================================
+   Responsive
+   Luôn giữ layout 2 CỘT ở mọi kích thước màn hình (ảnh cố định tỉ lệ 3:4,
+   960x1280) — không chuyển về xếp dọc trên mobile nữa. Cột ảnh co giãn theo
+   --mbt-popup-image-width (đã là clamp() theo vw ở phần tokens), cột chữ tự
+   giãn theo chiều cao ảnh (align-items: stretch mặc định của grid) và cuộn
+   riêng nếu nội dung dài hơn.
+   - <=480px: giảm padding/kích thước nút đóng cho khung hẹp
+   - <=360px: stats chuyển 1 cột để tránh vỡ chữ
+   ========================================================================== */
+
+@media (max-width: 480px) {
+  .mbt__popup-body {
+    padding: 14px 16px 18px;
+  }
+
+  .mbt__popup-close {
+    width: 36px;
+    height: 36px;
+    top: 4px;
+    right: 4px;
+  }
+
+  .mbt__legend-chip {
+    min-height: 36px;
   }
 }
 
-.mbt-gallery-single {
-  width: 100%;
+@media (max-width: 360px) {
+  .mbt__popup-stats {
+    grid-template-columns: 1fr !important;
+  }
+
+  .mbt__popup-stat--price {
+    grid-column: 1 / -1 !important;
+  }
+
+  .mbt__popup-body {
+    padding: 12px 14px 16px;
+  }
 }
 
-.mbt-gallery-item {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.mbt-gallery-item.show {
-  opacity: 1;
-}
-
-.mbt-gallery-item img {
-  width: 100%;
-  height: auto;
-  display: block;
-  cursor: pointer;
-}
-
-/* ---- GHI CHÚ ---- */
-.mbt-notes {
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.mbt-note-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  color: #1c2b18;
-  font-size: 1rem;
-  line-height: 1.5;
-  margin: 0;
-}
-
-.mbt-note-icon {
-  flex-shrink: 0;
-  width: 10px;
-  height: 10px;
-  margin-top: 0.4rem;
-  background: #1c2b18;
-  transform: rotate(45deg);
-}
-
-@media (max-width: 576px) {
-  .mbt-note-item {
-    font-size: 0.9rem;
+@media (prefers-reduced-motion: reduce) {
+  .mbt__zone,
+  .mbt__legend-chip,
+  .mbt__popup {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
   }
 }

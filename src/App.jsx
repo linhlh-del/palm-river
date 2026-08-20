@@ -58,7 +58,7 @@ function HomePage({ onOpenModal }) {
       <Position />
       <TongThe />
       <MatbangTang />
-      <Layout />
+      {/* <Layout /> */}
       <TienIch />
       <HinhAnh />
       <News />
