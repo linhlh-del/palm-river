@@ -191,7 +191,7 @@ export default function Header({ onOpenModal, variant = "full" }) {
 
           {/* Footer: logo + hotline */}
           <div className="hd__mobile-footer">
-            <img src={logoRever} alt="Rever" />
+            {/* <img src={logoRever} alt="Rever" /> */}
             {/* <div className="hd__mobile-hotline">
               <span>Hotline</span>
               <a href="tel:0939535111">0939 535 111</a>

@@ -50,7 +50,7 @@
   position: relative;
   width: 100%;
   line-height: 0;
-  border-radius: var(--mbt-radius);
+  /* border-radius: var(--mbt-radius); */
   overflow: hidden;
   isolation: isolate;
   z-index: 0;
@@ -374,6 +374,43 @@
    - <=480px: giảm padding/kích thước nút đóng cho khung hẹp
    - <=360px: stats chuyển 1 cột để tránh vỡ chữ
    ========================================================================== */
+
+/* Legend chip trên mobile: bỏ nền/blur/viền (đang che mất ảnh mặt bằng),
+   chữ nhỏ lại, chỉ giữ chấm màu + text-shadow để vẫn đọc được trên nền ảnh
+   phức tạp. Khi hover/focus/active mới hiện lại nền — để người dùng chạm
+   vào biết mình đang chọn đúng chip nào, không tap nhầm trên mobile. */
+@media (max-width: 768px) {
+  .mbt__legend-chip {
+    background: transparent !important;
+    border-color: transparent !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+    min-height: unset;
+    padding: 2px 4px;
+    gap: 3px;
+    font-size: clamp(8px, 2.1vw, 10px);
+    text-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.85),
+      0 0 6px rgba(0, 0, 0, 0.6);
+  }
+
+  .mbt__legend-chip:hover,
+  .mbt__legend-chip:focus-visible,
+  .mbt__legend-chip.is-active {
+    background: rgba(11, 42, 61, 0.85) !important;
+    border-color: var(--zone-color) !important;
+    backdrop-filter: blur(10px);
+    box-shadow:
+      0 0 0 3px color-mix(in srgb, var(--zone-color) 30%, transparent),
+      0 0 16px var(--zone-color);
+    padding: clamp(5px, 1.4vw, 6px) clamp(9px, 2.4vw, 12px);
+  }
+
+  .mbt__legend-dot {
+    width: 7px;
+    height: 7px;
+  }
+}
 
 @media (max-width: 480px) {
   .mbt__popup-body {

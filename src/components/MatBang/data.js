@@ -15,6 +15,24 @@ import layout2pnDb from "../../assets/images/layout/2pn-db.jpg";
 export const IMAGE_WIDTH = 5000;
 export const IMAGE_HEIGHT = 3335;
 
+// ============================================================================
+// "Crop ảo" cho mobile — KHÔNG cắt file ảnh, KHÔNG vẽ lại toạ độ zones/chip.
+// Component (MatBangTang.jsx) sẽ tự đồng bộ SVG viewBox + <img> theo đúng
+// 4 số dưới đây, nên mọi polygon & legend chip tự trôi về đúng vị trí tương
+// ứng trên vùng ảnh đã zoom. Truyền vào prop `mobileCrop`:
+//   <MatBangTang mobileCrop={MOBILE_CROP} ... />
+// Giá trị 0..1 = % muốn cắt bỏ ở mỗi cạnh (đã kiểm tra: với bộ ZONES + 12
+// legend chip hiện tại, cắt trái 20% / trên-dưới 5% không đụng zone/chip
+// nào). Nếu áp dụng cho view riêng từng tháp (TOWER_3/TOWER_4, có chip
+// "2pn-goc" đặt ở left 17%) thì PHẢI chỉnh lại labelLeft của chip đó trước,
+// nếu không chip sẽ bị crop cắt mất.
+export const MOBILE_CROP = {
+  left: 0.15,
+  right: 0,
+  top: 0.15,
+  bottom: 0.075,
+};
+
 // 6 nhóm loại hình căn hộ — mỗi nhóm 1 màu riêng để phân biệt trên mặt bằng & chú giải.
 // -> Đổi label/màu/ảnh đại diện tại đây.
 // labelTop / labelLeft: toạ độ % để đặt "chip" chú giải NỔI TRÊN ẢNH (giống
@@ -167,30 +185,30 @@ export const T3_2PN_GOC_CHIP = {
   image: layout2pnGoc,
   desc: "Căn góc 2 phòng ngủ, ban công rộng, view kép.",
   area: 84.9,
-  labelTop: "29%",
-  labelLeft: "64%",
+  labelTop: "31%",
+  labelLeft: "65%",
 };
 export const T3_2PN_GOC_2_CHIP = {
   id: "t3-2pn-goc-2",
-  label: "Căn hộ 2PN Góc 2 | 84,9m²",
-  short: "2PN Góc 2 | 84,9m²",
+  label: "Căn hộ 2PN Góc | 84,9m²",
+  short: "2PN Góc | 84,9m²",
   color: "#BB86FC",
   image: layout2pnGoc,
   desc: "Căn góc 2 phòng ngủ, ban công rộng, view kép.",
   area: 84.9,
-  labelTop: "60%",
-  labelLeft: "57%",
+  labelTop: "59%",
+  labelLeft: "58%",
 };
 export const T3_2PN_GOC_120M_CHIP = {
   id: "t3-2pn-goc-120m",
-  label: "Căn hộ 2PN Góc 120m² | 120,2m²",
-  short: "2PN Góc 120m² | 120,2m²",
+  label: "Căn hộ 2PN Góc | 120,2m²",
+  short: "2PN Góc | 120,2m²",
   color: "#E6DEA7",
   image: layout2pnGoc,
   desc: "Căn góc 2 phòng ngủ, ban công rộng, view kép.",
   area: 120.2,
-  labelTop: "47%",
-  labelLeft: "74%",
+  labelTop: "48%",
+  labelLeft: "72%",
 };
 export const T3_2PN_CHIP = {
   id: "t3-2pn",
@@ -222,10 +240,10 @@ export const T3_3PN_GOC_CHIP = {
   image: layout3pnGoc,
   desc: "Căn góc 3 phòng ngủ, 2 mặt thoáng, đón trọn tầm nhìn sông.",
   area: 125.3,
-  labelTop: "40%",
-  labelLeft: "49%",
+  labelTop: "41%",
+  labelLeft: "50%",
 };
-
+// Chip T4
 export const T4_2PN_GOC_CHIP = {
   id: "t4-2pn-goc",
   label: "Căn hộ 2PN Góc | 84,9m²",
@@ -249,7 +267,7 @@ export const T4_2PN_CHIP = {
   labelLeft: "80%",
 };
 export const T4_2PN_DB_CHIP = {
-  id: "t4-2pn-db",
+  id: "t4-2pn-db-121",
   label: "Căn hộ 2PN Đặc Biệt | 121,9m²",
   short: "2PN Đặc Biệt | 121,9m²",
   color: "#767667",
@@ -260,9 +278,9 @@ export const T4_2PN_DB_CHIP = {
   labelLeft: "89%",
 };
 export const T4_2PN_DB_2_CHIP = {
-  id: "t4-2pn-db-2",
-  label: "Căn hộ 2PN Đặc Biệt 2 | 120,2m²",
-  short: "2PN Đặc Biệt 2 | 120,2m²",
+  id: "t4-2pn-db-120",
+  label: "Căn hộ 2PN Đặc Biệt | 120,2m²",
+  short: "2PN Đặc Biệt | 120,2m²",
   color: "#DAC2A8",
   image: layout2pnDb,
   desc: "Phiên bản giới hạn 2 phòng ngủ, layout độc bản trong tòa.",
@@ -296,25 +314,27 @@ export const T4_3PN_DB_CHIP = {
 export const ZONES = [
   {
     id: "layout-1",
-    code: "Căn hộ 2PN",
-    typeId: "2pn",
+    code: "Căn hộ 2PN Góc | 84.9m²",
+    typeId: "2pn-goc",
     area: 62,
     ratio: 14,
     priceFrom: 2.8,
     priceTo: 3.1,
     points:
       "3628.5,2071.7 3521.4,2018.1 3504.9,2009.9 3484.3,2009.9 3463.8,2022.2 3410.2,2108.7 3451.4,2137.6 3418.5,2195.2 3492.6,2244.7 3504.9,2219.9 3542.0,2232.3",
+    chipId: "t4-2pn-goc",
   },
   {
     id: "layout-2",
-    code: "Căn hộ 3PN",
-    typeId: "3pn",
+    code: "Căn hộ 2PN | 85.9m²",
+    typeId: "2pn",
     area: 86,
     ratio: 11,
     priceFrom: 3.6,
     priceTo: 3.9,
     points:
       "3826.2,2187.0 3764.4,2298.2 3805.6,2327.0 3785.0,2364.1 3888.0,2417.6 3978.6,2265.2",
+    chipId: "t4-2pn",
   },
   {
     id: "layout-3",
@@ -326,6 +346,7 @@ export const ZONES = [
     priceTo: 4.5,
     points:
       "3982.7,2273.5 3896.2,2421.8 3958.0,2458.8 4040.4,2500.0 4073.3,2471.2 4122.7,2491.8 4168.0,2409.4 4180.4,2388.8 4172.2,2368.2 4139.2,2351.7",
+    chipId: "t4-2pn-db-121", // 2pn db 121
   },
   {
     id: "layout-4",
@@ -337,6 +358,7 @@ export const ZONES = [
     priceTo: 3.3,
     points:
       "3336.1,2166.4 3278.4,2277.6 3274.3,2322.9 3303.1,2355.9 3509.1,2454.7 3599.7,2298.2",
+    chipId: "t4-3pn-db", // 3pn
   },
   {
     id: "layout-5",
@@ -348,6 +370,7 @@ export const ZONES = [
     priceTo: 5.8,
     points:
       "3607.9,2306.4 3521.4,2462.9 3723.2,2561.8 3793.2,2462.9 3731.5,2421.8 3747.9,2380.6",
+    chipId: "t4-3pn",
   },
   {
     id: "layout-6",
@@ -359,6 +382,7 @@ export const ZONES = [
     priceTo: 3.7,
     points:
       "3888.0,2458.8 3805.6,2611.2 3892.1,2664.8 3999.2,2710.1 4081.5,2570.0",
+    chipId: "t4-2pn-db-120", //done t4
   },
   {
     id: "layout-7",
@@ -370,9 +394,10 @@ export const ZONES = [
     priceTo: 3.0,
     points:
       "3319.6,1544.5 3171.3,1643.3 3286.7,1828.7 3311.4,1836.9 3332.0,1828.7 3422.6,1779.3 3430.8,1750.4 3426.7,1713.4",
+    chipId: "t3-2pn-goc-120m",
   },
   {
-    id: "layout-8",
+    id: "layout-8", // cần fix lại màu zone
     code: "Căn hộ 3PN",
     typeId: "3pn",
     area: 88,
@@ -380,6 +405,7 @@ export const ZONES = [
     priceFrom: 3.7,
     priceTo: 4.0,
     points: "3311.4,1536.3 3204.3,1367.4 3051.9,1462.1 3163.1,1635.1",
+    chipId: "t3-2pn",
   },
   {
     id: "layout-9",
@@ -391,6 +417,7 @@ export const ZONES = [
     priceTo: 4.6,
     points:
       "3138.4,1280.9 3027.2,1091.4 3014.8,1079.1 2994.2,1062.6 2948.9,1075.0 2891.3,1112.0 2916.0,1161.5 2878.9,1186.2 2924.2,1260.3 2998.4,1371.5",
+    chipId: "t3-2pn-goc",
   },
   {
     id: "layout-10",
@@ -402,9 +429,9 @@ export const ZONES = [
     priceTo: 3.4,
     points:
       "3134.3,1663.9 2986.0,1754.5 3093.1,1931.6 3117.8,1944.0 3154.9,1931.6 3220.8,1882.2 3200.2,1836.9 3233.1,1812.2",
+    chipId: "t3-2pn-goc-2",
   },
   {
-    // 3PN | 157m²
     id: "layout-11",
     code: "Căn hộ 3PN Đặc Biệt",
     typeId: "3pn-db",
@@ -414,6 +441,7 @@ export const ZONES = [
     priceTo: 6.0,
     points:
       "2973.6,1404.5 2829.5,1499.2 2965.4,1717.5 3076.6,1651.6 3035.4,1577.4 3072.5,1565.1",
+    chipId: "t3-3pn",
   },
   {
     id: "layout-12",
@@ -425,5 +453,6 @@ export const ZONES = [
     priceTo: 3.8,
     points:
       "2870.7,1252.1 2837.7,1268.5 2796.5,1210.9 2718.3,1260.3 2705.9,1272.7 2697.7,1293.3 2710.0,1322.1 2751.2,1379.7 2821.3,1495.1 2965.4,1400.3",
+    chipId: "t3-3pn-goc",
   },
 ];

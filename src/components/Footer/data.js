@@ -10,7 +10,7 @@ export const FOOTER_CONTACT = [
     socialHref: "https://www.youtube.com/@rever.vn",
   },
   {
-    label: "(E): sale@rever.vn",
+    label: "(E): sale@canho-palmriver.com.vn",
     socialLabel: "Instagram",
     socialHref: "https://www.instagram.com/palmcityofficial.hvp/",
   },

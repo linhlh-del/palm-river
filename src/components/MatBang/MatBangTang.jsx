@@ -82,6 +82,27 @@ function useForceImportant(ref, styles, deps = []) {
   }, deps);
 }
 
+// Theo dõi breakpoint mobile bằng matchMedia — chỉ dùng để bật/tắt chế độ
+// "crop ảo" (mobileCrop). Không ảnh hưởng gì nếu component không truyền
+// prop mobileCrop.
+function useIsMobile(breakpoint) {
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia(`(max-width: ${breakpoint}px)`).matches;
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mql = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    const onChange = (e) => setIsMobile(e.matches);
+    setIsMobile(mql.matches);
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, [breakpoint]);
+
+  return isMobile;
+}
+
 export default function MatBangTang({
   imageSrc = matBangTongThe,
   imageSrcSet,
@@ -119,7 +140,14 @@ export default function MatBangTang({
   onSelectType,
   imageWidth = IMAGE_WIDTH,
   imageHeight = IMAGE_HEIGHT,
+  // "Crop ảo" cho mobile: { left, right, top, bottom } (0..1). Truyền
+  // MOBILE_CROP từ data.js (hoặc tự định nghĩa) để tự động zoom vào phần
+  // mặt bằng chính giữa/bên phải trên màn hình hẹp — không cần cắt ảnh,
+  // không cần vẽ lại zones. Để null/undefined = giữ nguyên hành vi cũ.
+  mobileCrop = null,
+  mobileBreakpoint = 768,
 }) {
+  const isMobile = useIsMobile(mobileBreakpoint);
   const [hoverZoneId, setHoverZoneId] = useState(null);
   const [hoverTypeId, setHoverTypeId] = useState(null);
   const [pinned, setPinned] = useState(false);
@@ -138,17 +166,74 @@ export default function MatBangTang({
     ? legendTypes.map((type) => [type.id, type])
     : Object.entries(legendTypes);
   const legendTypeMap = Object.fromEntries(legendEntries);
-  const activeType = activeZone
-    ? types[activeZone.typeId]
-    : hoverTypeId
-      ? types[hoverTypeId] || legendTypeMap[hoverTypeId]
-      : null;
+  const activeChip = activeZone?.chipId
+    ? legendTypeMap[activeZone.chipId]
+    : null;
+  const activeType = activeChip
+    ? activeChip
+    : activeZone
+      ? types[activeZone.typeId]
+      : hoverTypeId
+        ? types[hoverTypeId] || legendTypeMap[hoverTypeId]
+        : null;
 
-  const activeTypeId = activeZone ? activeZone.typeId : hoverTypeId;
+  const activeTypeId = activeZone
+    ? activeZone.chipId || activeZone.typeId
+    : hoverTypeId;
   const isSelectionActive = Boolean(hoverZoneId || hoverTypeId);
 
+  // --- "Crop ảo" cho mobile -------------------------------------------------
+  // Chỉ bật khi có truyền mobileCrop VÀ đang ở mobile. Toán học ở đây đảm
+  // bảo ảnh không bị méo (scale đều 2 chiều) — xem giải thích trong data.js.
+  const activeCrop = mobileCrop && isMobile ? mobileCrop : null;
+  const cropLeftFrac = activeCrop?.left ?? 0;
+  const cropRightFrac = activeCrop?.right ?? 0;
+  const cropTopFrac = activeCrop?.top ?? 0;
+  const cropBottomFrac = activeCrop?.bottom ?? 0;
+  const cropWidthFrac = 1 - cropLeftFrac - cropRightFrac;
+  const cropHeightFrac = 1 - cropTopFrac - cropBottomFrac;
+
+  // SVG chỉ "nhìn thấy" đúng vùng đã crop -> mọi polygon tự trôi theo đúng
+  // vị trí tương ứng, không cần sửa 1 toạ độ nào trong ZONES.
+  const viewBox = activeCrop
+    ? `${cropLeftFrac * imageWidth} ${cropTopFrac * imageHeight} ${cropWidthFrac * imageWidth} ${cropHeightFrac * imageHeight}`
+    : `0 0 ${imageWidth} ${imageHeight}`;
+
+  // Khung stage được ép theo đúng tỉ lệ khung hình của vùng crop, ảnh gốc
+  // sẽ được phóng to + dịch chuyển đúng bằng số học để lấp đầy khung này.
+  const stageStyle = activeCrop
+    ? {
+        aspectRatio: `${cropWidthFrac * imageWidth} / ${cropHeightFrac * imageHeight}`,
+      }
+    : undefined;
+
+  const imgStyle = activeCrop
+    ? {
+        position: "absolute",
+        top: `${-(cropTopFrac / cropHeightFrac) * 100}%`,
+        left: `${-(cropLeftFrac / cropWidthFrac) * 100}%`,
+        width: `${(1 / cropWidthFrac) * 100}%`,
+        maxWidth: "none",
+        height: "auto",
+      }
+    : undefined;
+
+  // Quy đổi lại vị trí % của 1 chip từ hệ toạ độ ẢNH GỐC sang hệ toạ độ
+  // VÙNG ĐÃ CROP. Chip rơi ra ngoài vùng crop (visible=false) sẽ không
+  // render trên mobile thay vì hiện sai vị trí/lệch khung.
+  const remapForCrop = (percentStr, startFrac, sizeFrac) => {
+    if (!activeCrop) return { value: percentStr, visible: true };
+    const num = Number.parseFloat(percentStr);
+    if (Number.isNaN(num)) return { value: percentStr, visible: true };
+    const fraction = (num / 100 - startFrac) / sizeFrac;
+    return {
+      value: `${fraction * 100}%`,
+      visible: fraction >= -0.03 && fraction <= 1.03,
+    };
+  };
+
   const typeZones = hoverTypeId
-    ? zones.filter((z) => z.typeId === hoverTypeId)
+    ? zones.filter((z) => z.typeId === hoverTypeId || z.chipId === hoverTypeId)
     : [];
   const typeSummary = typeZones.length
     ? {
@@ -166,10 +251,7 @@ export default function MatBangTang({
   // activeType có dữ liệu là hiện, không cần tìm zone để lấy vị trí nữa.
   const showPopup =
     Boolean(activeType) && (Boolean(activeZone) || Boolean(hoverTypeId));
-  const popupImg =
-    (activeZone ? activeZone.image : null) ||
-    (activeType && activeType.image) ||
-    "";
+  const popupImg = activeType?.image || "";
 
   // Ép cứng khung popup — chống mọi CSS/element khác đè lên.
   // (nền bg-web.jpg giờ nằm ở cột chữ — xem popupBodyRef bên dưới)
@@ -287,7 +369,7 @@ export default function MatBangTang({
 
   return (
     <div className="mbt" style={rootStyle}>
-      <div ref={stageRef} className="mbt__stage">
+      <div ref={stageRef} className="mbt__stage" style={stageStyle}>
         <img
           className="mbt__img"
           src={imageSrc}
@@ -299,25 +381,28 @@ export default function MatBangTang({
           decoding="async"
           fetchPriority="high"
           draggable={false}
+          style={imgStyle}
         />
 
         <svg
           className="mbt__overlay"
-          viewBox={`0 0 ${imageWidth} ${imageHeight}`}
+          viewBox={viewBox}
           preserveAspectRatio="none"
         >
           {zones.map((zone) => {
             const type = types[zone.typeId];
+            const chipType = zone.chipId ? legendTypeMap[zone.chipId] : type;
             const isActive =
               hoverZoneId === zone.id ||
-              (!hoverZoneId && hoverTypeId === zone.typeId);
+              (!hoverZoneId &&
+                (hoverTypeId === zone.typeId || hoverTypeId === zone.chipId));
             const isDimmed = isSelectionActive && !isActive;
             return (
               <polygon
                 key={zone.id}
                 points={zone.points}
                 className={`mbt__zone${isActive ? " is-active" : ""}${isDimmed ? " is-dimmed" : ""}`}
-                style={{ "--zone-color": type.color }}
+                style={{ "--zone-color": chipType?.color || type.color }}
                 tabIndex={0}
                 role="button"
                 aria-label={`${type.label} — ${zone.code}`}
@@ -348,35 +433,6 @@ export default function MatBangTang({
             <div ref={popupBodyRef} className="mbt__popup-body">
               <h4 className="mbt__popup-title">{activeType.label}</h4>
 
-              {(activeZone || typeSummary) && (
-                <div ref={statsRef} className="mbt__popup-stats">
-                  <div className="mbt__popup-stat">
-                    <span className="mbt__popup-stat-label">Diện tích</span>
-                    <span className="mbt__popup-stat-value">
-                      {activeZone
-                        ? fmtArea(activeZone.area)
-                        : `${typeSummary.areaMin} – ${typeSummary.areaMax} m²`}
-                    </span>
-                  </div>
-                  <div className="mbt__popup-stat">
-                    <span className="mbt__popup-stat-label">Tỷ lệ căn hộ</span>
-                    <span className="mbt__popup-stat-value">
-                      {activeZone
-                        ? `${activeZone.ratio}%`
-                        : `${typeSummary.ratio}%`}
-                    </span>
-                  </div>
-                  <div className="mbt__popup-stat mbt__popup-stat--price">
-                    <span className="mbt__popup-stat-label">Giá dự kiến</span>
-                    <span className="mbt__popup-stat-value">
-                      {activeZone
-                        ? fmtPrice(activeZone.priceFrom, activeZone.priceTo)
-                        : fmtPrice(typeSummary.priceMin, typeSummary.priceMax)}
-                    </span>
-                  </div>
-                </div>
-              )}
-
               <p className="mbt__popup-desc">{activeType.desc}</p>
             </div>
           </div>
@@ -384,6 +440,19 @@ export default function MatBangTang({
 
         {legendEntries.map(([id, type]) => {
           const isActive = hoverTypeId === id || activeTypeId === id;
+          const top = remapForCrop(
+            toImagePercent(type.labelTop, imageHeight),
+            cropTopFrac,
+            cropHeightFrac,
+          );
+          const left = remapForCrop(
+            toImagePercent(type.labelLeft, imageWidth),
+            cropLeftFrac,
+            cropWidthFrac,
+          );
+          // Chip nằm ngoài vùng đã crop trên mobile -> không render, tránh
+          // hiện sai vị trí hoặc lòi ra ngoài khung ảnh.
+          if (!top.visible || !left.visible) return null;
           return (
             <button
               key={id}
@@ -391,8 +460,8 @@ export default function MatBangTang({
               className={`mbt__legend-chip${isActive ? " is-active" : ""}`}
               style={{
                 "--zone-color": type.color,
-                top: toImagePercent(type.labelTop, imageHeight),
-                left: toImagePercent(type.labelLeft, imageWidth),
+                top: top.value,
+                left: left.value,
               }}
               onMouseEnter={handleLegendEnter(id)}
               onMouseLeave={handleLegendLeave}

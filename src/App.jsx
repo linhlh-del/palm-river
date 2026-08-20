@@ -6,6 +6,7 @@ import Hero from "./components/Hero/Hero.jsx";
 import TongQuan from "./components/TongQuan/TongQuan.jsx";
 import Position from "./components/Position/Position.jsx";
 import MatbangTang from "./components/MatBang/MatBangTang.jsx";
+import { MOBILE_CROP } from "./components/MatBang/data.js";
 import GetInfor from "./components/Getinfor/GetInfor.jsx";
 import CanHo from "./components/CanHo/CanHo.jsx";
 import Chinhsachuudai from "./components/ChinhSachUuDai/ChinhSachUuDai.jsx";
@@ -57,7 +58,7 @@ function HomePage({ onOpenModal }) {
       <TongQuan />
       <Position />
       <TongThe />
-      <MatbangTang />
+      <MatbangTang mobileCrop={MOBILE_CROP} />
       {/* <Layout /> */}
       <TienIch />
       <HinhAnh />
