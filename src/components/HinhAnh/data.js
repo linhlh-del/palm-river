@@ -15,6 +15,11 @@ export const FILTERS = [
   { key: "canhquan", label: "Cảnh Quan" },
   { key: "congvien", label: "Công Viên" },
   { key: "phoicanh", label: "Phối Cảnh" },
+  { key: "onsen-hoboi", label: "Onsen - Hồ bơi" },
+  { key: "thugian", label: "Thư giãn" },
+  { key: "thethao", label: "Thể thao" },
+  { key: "lobby", label: "Lobby" },
+  { key: "other", label: "Khác" },
 ];
 
 export const GALLERY_ITEMS = [

@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import "./MatBangTang.css";
 import {
   IMAGE_WIDTH,
@@ -19,14 +20,15 @@ import {
   ZONES,
 } from "./data";
 import matBangTongThe from "../../assets/images/matbang/mat-bang-tong-the.webp";
-import bgWeb from "../../assets/images/bg-web.jpg";
 
-const fmtArea = (m2) => `${m2} m²`;
-const fmtPrice = (from, to) => `${from.toFixed(1)} – ${to.toFixed(1)} tỷ`;
 const toDur = (v) =>
   v == null ? undefined : typeof v === "number" ? `${v}s` : v;
 const toSize = (v) =>
   v == null ? undefined : typeof v === "number" ? `${v}px` : v;
+
+// Chip luôn được kẹp cách mép khung crop tối thiểu 1 khoảng (0..1) để không
+// bao giờ bị .mbt__stage (overflow:hidden) cắt mất — xem remapForCrop.
+const CHIP_EDGE_PAD = 0.035;
 
 // Tọa độ trong data.js có thể giữ theo hệ pixel gốc của ảnh.
 // Khi render, pixel gốc được đổi sang % để overlay/chip/popup scale
@@ -62,6 +64,21 @@ const toImagePercent = (value, total) => {
   }
 
   return value;
+};
+
+// Tính tâm (trung bình cộng các đỉnh) của 1 polygon "x1,y1 x2,y2 ..." theo hệ
+// pixel gốc của ảnh — dùng làm điểm neo cho leader-line nối chip -> zone.
+// Không cần chính xác tuyệt đối (centroid hình học thật), trung bình cộng đã
+// đủ tốt cho mục đích trỏ đường dẫn tới giữa căn hộ.
+const getPolygonCentroid = (pointsStr) => {
+  const pts = pointsStr
+    .trim()
+    .split(/\s+/)
+    .map((pair) => pair.split(",").map(Number))
+    .filter(([x, y]) => Number.isFinite(x) && Number.isFinite(y));
+  if (!pts.length) return null;
+  const sum = pts.reduce((acc, [x, y]) => [acc[0] + x, acc[1] + y], [0, 0]);
+  return { x: sum[0] / pts.length, y: sum[1] / pts.length };
 };
 
 // Ép style thắng tuyệt đối mọi CSS bên ngoài (kể cả !important của site),
@@ -131,12 +148,20 @@ export default function MatBangTang({
   breatheSpeed,
   transitionSpeed,
   popupSpeed,
-  // Kích thước popup: số (px) hoặc chuỗi CSS ("360px", "42%"...)
-  // popupImageWidth: bề rộng cột ảnh (trái) trong popup 2 cột — ảnh luôn
-  // tỉ lệ dọc 3:4 (960x1280), cover full chiều cao popup.
+  // Kích thước popup: số (px) hoặc chuỗi CSS ("360px", "42%"...). Popup giờ
+  // chỉ còn 1 ảnh layout căn hộ (không còn cột chữ) nên chỉ cần popupWidth —
+  // popupImageWidth vẫn được giữ lại để tương thích ngược, không dùng nữa.
   popupWidth,
   popupImageWidth,
+  // z-index của popup SAU KHI đã portal ra document.body (thoát khỏi mọi
+  // stacking context bị "nhốt" bởi isolation/transform của các component
+  // cha) — mặc định rất cao để luôn nổi trên hầu hết mọi thứ. Nếu site có
+  // 1 popup "báo giá"/CTA khác cần đứng trên popup này, hãy set z-index của
+  // popup đó CAO HƠN giá trị dưới đây, hoặc truyền popupZIndex thấp hơn.
+  popupZIndex = 999999,
   renderPopup = true,
+  // Bật/tắt leader-line nối chip chú giải -> zone tương ứng trên ảnh.
+  showLeaderLines = true,
   onSelectType,
   imageWidth = IMAGE_WIDTH,
   imageHeight = IMAGE_HEIGHT,
@@ -155,8 +180,6 @@ export default function MatBangTang({
   const stageRef = useRef(null);
   const popupRef = useRef(null);
   const popupImageRef = useRef(null);
-  const popupBodyRef = useRef(null);
-  const statsRef = useRef(null);
 
   const activeZone = zones.find((z) => z.id === hoverZoneId) || null;
   // Tra type theo cả `types` (6 loại của mặt bằng đang hiển thị) lẫn
@@ -181,6 +204,29 @@ export default function MatBangTang({
     ? activeZone.chipId || activeZone.typeId
     : hoverTypeId;
   const isSelectionActive = Boolean(hoverZoneId || hoverTypeId);
+
+  // Zone nào ứng với 1 legend id (chipId nếu có, fallback về typeId) — dùng
+  // để vẽ leader-line từ chip sang đúng (các) zone của nó.
+  const zonesByLegendId = useMemo(() => {
+    const map = {};
+    zones.forEach((zone) => {
+      const key = zone.chipId || zone.typeId;
+      if (!key) return;
+      if (!map[key]) map[key] = [];
+      map[key].push(zone);
+    });
+    return map;
+  }, [zones]);
+
+  // Tâm của từng zone theo pixel gốc — tính 1 lần, dùng chung cho leader-line.
+  const zoneCentroids = useMemo(() => {
+    const map = {};
+    zones.forEach((zone) => {
+      const c = getPolygonCentroid(zone.points);
+      if (c) map[zone.id] = c;
+    });
+    return map;
+  }, [zones]);
 
   // --- "Crop ảo" cho mobile -------------------------------------------------
   // Chỉ bật khi có truyền mobileCrop VÀ đang ở mobile. Toán học ở đây đảm
@@ -218,33 +264,40 @@ export default function MatBangTang({
       }
     : undefined;
 
-  // Quy đổi lại vị trí % của 1 chip từ hệ toạ độ ẢNH GỐC sang hệ toạ độ
-  // VÙNG ĐÃ CROP. Chip rơi ra ngoài vùng crop (visible=false) sẽ không
-  // render trên mobile thay vì hiện sai vị trí/lệch khung.
+  // Quy đổi vị trí % của 1 chip từ hệ toạ độ ẢNH GỐC sang hệ toạ độ VÙNG ĐÃ
+  // CROP. `fraction` luôn được KẸP trong [CHIP_EDGE_PAD, 1-CHIP_EDGE_PAD] nên
+  // chip KHÔNG BAO GIỜ bị crop/overflow:hidden cắt mất hay lệch ra ngoài khung
+  // — trước đây chip nằm ngoài vùng crop bị ẩn hẳn (return null), giờ được
+  // "ghim" vào sát mép khung hình gần nhất và luôn có leader-line nối sang
+  // đúng zone để không mất chỉ dẫn. Khi không có crop (desktop / không truyền
+  // mobileCrop), startFrac=0 và sizeFrac=1 nên công thức này là phép đồng
+  // nhất — không ảnh hưởng gì tới hành vi cũ.
   const remapForCrop = (percentStr, startFrac, sizeFrac) => {
-    if (!activeCrop) return { value: percentStr, visible: true };
     const num = Number.parseFloat(percentStr);
-    if (Number.isNaN(num)) return { value: percentStr, visible: true };
+    if (Number.isNaN(num)) {
+      return { value: percentStr, visible: true, fraction: 0.5 };
+    }
     const fraction = (num / 100 - startFrac) / sizeFrac;
+    // "visible" = có nằm trong vùng crop hay không (dùng để biết chip có bị
+    // ghim/kẹp lại hay không), khác với việc chip có được RENDER hay không —
+    // giờ luôn render, chỉ đổi vị trí hiển thị.
+    const visible = fraction >= 0 && fraction <= 1;
+    const clampedFraction = Math.min(
+      1 - CHIP_EDGE_PAD,
+      Math.max(CHIP_EDGE_PAD, fraction),
+    );
     return {
-      value: `${fraction * 100}%`,
-      visible: fraction >= -0.03 && fraction <= 1.03,
+      value: `${clampedFraction * 100}%`,
+      visible,
+      fraction: clampedFraction,
     };
   };
 
-  const typeZones = hoverTypeId
-    ? zones.filter((z) => z.typeId === hoverTypeId || z.chipId === hoverTypeId)
-    : [];
-  const typeSummary = typeZones.length
-    ? {
-        count: typeZones.length,
-        areaMin: Math.min(...typeZones.map((z) => z.area)),
-        areaMax: Math.max(...typeZones.map((z) => z.area)),
-        priceMin: Math.min(...typeZones.map((z) => z.priceFrom)),
-        priceMax: Math.max(...typeZones.map((z) => z.priceTo)),
-        ratio: typeZones.reduce((s, z) => s + z.ratio, 0),
-      }
-    : null;
+  // Đổi 1 fraction (0..1, theo hệ toạ độ vùng đã crop) trên 1 trục thành toạ
+  // độ pixel gốc của ảnh — để vẽ leader-line trong cùng hệ toạ độ với các
+  // polygon zone (vốn đang ở pixel gốc) bên trong 1 <svg> duy nhất.
+  const fractionToImagePx = (fraction, startFrac, sizeFrac, total) =>
+    (startFrac + fraction * sizeFrac) * total;
 
   // Popup không còn neo theo toạ độ của 1 zone cụ thể — nó cố định 1 chỗ
   // (bên trái, giữa màn hình, canh bằng CSS position: fixed) nên chỉ cần
@@ -254,12 +307,11 @@ export default function MatBangTang({
   const popupImg = activeType?.image || "";
 
   // Ép cứng khung popup — chống mọi CSS/element khác đè lên.
-  // (nền bg-web.jpg giờ nằm ở cột chữ — xem popupBodyRef bên dưới)
   useForceImportant(
     popupRef,
     {
       position: "fixed",
-      display: "grid",
+      display: "block",
       "z-index": "999",
       "background-color": "#0b2a3d",
       overflow: "hidden",
@@ -267,8 +319,8 @@ export default function MatBangTang({
     [showPopup, hoverZoneId, hoverTypeId],
   );
 
-  // Ép cứng ảnh layout trong popup (cột trái) — chỗ hay bị "lòi" ảnh/nội
-  // dung khác đè lên.
+  // Ép cứng ảnh layout trong popup — chỗ hay bị "lòi" ảnh/nội dung khác đè
+  // lên. Popup giờ CHỈ còn ảnh (không còn cột chữ/mô tả).
   useForceImportant(
     popupImageRef,
     {
@@ -278,29 +330,6 @@ export default function MatBangTang({
       "background-repeat": "no-repeat",
     },
     [showPopup, popupImg],
-  );
-
-  // Ép cứng nền cột chữ (bg-web.jpg + lớp phủ tối) — thắng tuyệt đối mọi
-  // CSS global của site, cùng cách làm với popupImageRef.
-  useForceImportant(
-    popupBodyRef,
-    {
-      "background-image": `url(${bgWeb})`,
-      "background-size": "cover",
-      "background-position": "center",
-      "background-repeat": "no-repeat",
-    },
-    [showPopup, hoverZoneId, hoverTypeId],
-  );
-
-  // Ép cứng lưới 2 cột của các chỉ số (diện tích / tỷ lệ / giá) — chỗ bị chồng chữ.
-  useForceImportant(
-    statsRef,
-    {
-      display: "grid",
-      "grid-template-columns": "1fr 1fr",
-    },
-    [showPopup, hoverZoneId, hoverTypeId],
   );
 
   const handleZoneEnter = (zone) => () => {
@@ -367,6 +396,82 @@ export default function MatBangTang({
       : {}),
   };
 
+  // Trước tiên tính vị trí (đã kẹp trong khung) của TẤT CẢ legend chip sẽ
+  // render, để (a) đặt chip bằng CSS % và (b) dùng lại đúng toạ độ đó (quy
+  // đổi ngược ra pixel gốc) làm điểm đầu cho leader-line — đảm bảo đường nối
+  // luôn bám đúng vị trí chip đang hiển thị trên màn hình, kể cả khi bị ghim
+  // sát mép do crop mobile.
+  const legendChips = legendEntries.map(([id, type]) => {
+    const top = remapForCrop(
+      toImagePercent(type.labelTop, imageHeight),
+      cropTopFrac,
+      cropHeightFrac,
+    );
+    const left = remapForCrop(
+      toImagePercent(type.labelLeft, imageWidth),
+      cropLeftFrac,
+      cropWidthFrac,
+    );
+    const isActive = hoverTypeId === id || activeTypeId === id;
+    const isDimmed = isSelectionActive && !isActive;
+    const isPinned = !top.visible || !left.visible; // bị ghim sát mép do crop
+    const targets = zonesByLegendId[id] || [];
+    const anchorPx = {
+      x: fractionToImagePx(
+        left.fraction,
+        cropLeftFrac,
+        cropWidthFrac,
+        imageWidth,
+      ),
+      y: fractionToImagePx(
+        top.fraction,
+        cropTopFrac,
+        cropHeightFrac,
+        imageHeight,
+      ),
+    };
+    return {
+      id,
+      type,
+      top,
+      left,
+      isActive,
+      isDimmed,
+      isPinned,
+      targets,
+      anchorPx,
+    };
+  });
+
+  // Popup được portal thẳng ra document.body: KHÔNG nằm trong DOM con của
+  // .mbt nữa nên không thể bị bất kỳ stacking context nào của các component
+  // cha (isolation, transform, overflow...) "nhốt" lại làm che khuất trên
+  // mobile. Bọc lại 1 lớp .mbt (dùng chung mọi CSS token/màu sắc/tốc độ có
+  // sẵn) + .mbt__popup-portal (chỉ lo z-index, không chiếm layout) để popup
+  // vẫn styled đúng như cũ dù đã tách khỏi cây DOM gốc.
+  const popupPortal =
+    renderPopup && showPopup && typeof document !== "undefined"
+      ? createPortal(
+          <div
+            className="mbt mbt__popup-portal"
+            style={{ ...rootStyle, "--mbt-popup-z-index": popupZIndex }}
+          >
+            <div ref={popupRef} className="mbt__popup">
+              <button
+                className="mbt__popup-close"
+                onClick={closePopup}
+                aria-label="Đóng"
+              >
+                ×
+              </button>
+
+              <div ref={popupImageRef} className="mbt__popup-image" />
+            </div>
+          </div>,
+          document.body,
+        )
+      : null;
+
   return (
     <div className="mbt" style={rootStyle}>
       <div ref={stageRef} className="mbt__stage" style={stageStyle}>
@@ -416,48 +521,34 @@ export default function MatBangTang({
               </polygon>
             );
           })}
+
+          {showLeaderLines &&
+            legendChips.map(
+              ({ id, type, isActive, isDimmed, targets, anchorPx }) =>
+                targets.map((zone) => {
+                  const centroid = zoneCentroids[zone.id];
+                  if (!centroid) return null;
+                  return (
+                    <line
+                      key={`${id}-${zone.id}`}
+                      x1={anchorPx.x}
+                      y1={anchorPx.y}
+                      x2={centroid.x}
+                      y2={centroid.y}
+                      className={`mbt__leader-line${isActive ? " is-active" : ""}${isDimmed ? " is-dimmed" : ""}`}
+                      style={{ "--zone-color": type.color }}
+                    />
+                  );
+                }),
+            )}
         </svg>
 
-        {renderPopup && showPopup && (
-          <div ref={popupRef} className="mbt__popup">
-            <button
-              className="mbt__popup-close"
-              onClick={closePopup}
-              aria-label="Đóng"
-            >
-              ×
-            </button>
-
-            <div ref={popupImageRef} className="mbt__popup-image" />
-
-            <div ref={popupBodyRef} className="mbt__popup-body">
-              <h4 className="mbt__popup-title">{activeType.label}</h4>
-
-              <p className="mbt__popup-desc">{activeType.desc}</p>
-            </div>
-          </div>
-        )}
-
-        {legendEntries.map(([id, type]) => {
-          const isActive = hoverTypeId === id || activeTypeId === id;
-          const top = remapForCrop(
-            toImagePercent(type.labelTop, imageHeight),
-            cropTopFrac,
-            cropHeightFrac,
-          );
-          const left = remapForCrop(
-            toImagePercent(type.labelLeft, imageWidth),
-            cropLeftFrac,
-            cropWidthFrac,
-          );
-          // Chip nằm ngoài vùng đã crop trên mobile -> không render, tránh
-          // hiện sai vị trí hoặc lòi ra ngoài khung ảnh.
-          if (!top.visible || !left.visible) return null;
-          return (
+        {legendChips.map(
+          ({ id, type, top, left, isActive, isDimmed, isPinned }) => (
             <button
               key={id}
               type="button"
-              className={`mbt__legend-chip${isActive ? " is-active" : ""}`}
+              className={`mbt__legend-chip${isActive ? " is-active" : ""}${isDimmed ? " is-dimmed" : ""}${isPinned ? " is-pinned" : ""}`}
               style={{
                 "--zone-color": type.color,
                 top: top.value,
@@ -483,9 +574,11 @@ export default function MatBangTang({
               <span className="mbt__legend-dot" />
               {type.short}
             </button>
-          );
-        })}
+          ),
+        )}
       </div>
+
+      {popupPortal}
     </div>
   );
 }

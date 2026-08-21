@@ -23,11 +23,19 @@
   --mbt-popup-in-speed: 0.16s;
   --mbt-chip-speed: 0.2s;
 
-  /* Kích thước popup — chỉnh qua prop popupWidth / popupImageWidth.
-     Popup là 2 CỘT: cột ảnh (trái, tỉ lệ CỐ ĐỊNH 960x1280 = 3:4, chiều cao
-     tự tính theo width) + cột chữ (phải, giãn theo chiều cao của ảnh). */
-  --mbt-popup-width: clamp(280px, 94vw, 860px);
-  --mbt-popup-image-width: clamp(112px, 36vw, 420px);
+  /* Kích thước popup — giờ popup CHỈ còn 1 ảnh layout căn hộ (đã bỏ hẳn cột
+     chữ/mô tả). Popup luôn giữ đúng tỉ lệ ảnh gốc 960x1280 = 3:4 (aspect-ratio
+     bên dưới) và LUÔN co giãn theo % kích thước cửa sổ:
+       - chiều cao tối đa = 1/2 chiều cao cửa sổ (50vh)
+       - chiều rộng tối đa = ~92% chiều rộng cửa sổ (92vw)
+     --mbt-popup-height dùng min() để lấy giá trị nhỏ hơn giữa "50vh" và
+     "92vw quy đổi theo tỉ lệ 3:4" — nhờ vậy dù màn hình cao/hẹp (mobile dọc)
+     hay thấp/rộng (mobile ngang) thì popup cũng không bao giờ tràn màn hình
+     theo cả 2 chiều, mà vẫn luôn giữ đúng tỉ lệ ảnh. Override qua prop
+     popupWidth (đổi --mbt-popup-width, đặt lại chiều rộng cố định) nếu cần. */
+  --mbt-popup-aspect: 3 / 4;
+  --mbt-popup-height: min(50vh, calc(92vw * 4 / 3), 620px);
+  --mbt-popup-width: auto;
 
   position: relative;
   width: 100%;
@@ -133,29 +141,45 @@
 }
 
 /* ==========================================================================
-   Popup card — the signature element: a glass "concierge card".
+   Popup card — giờ CHỈ còn ảnh layout căn hộ (đã bỏ hẳn cột chữ/mô tả).
    Vị trí CỐ ĐỊNH: luôn neo bên TRÁI, canh giữa theo chiều dọc MÀN HÌNH
    (position: fixed so với viewport, không phụ thuộc zone/chip nào đang
    được chọn hay vị trí cuộn trang) — ảnh mặt bằng dồn nội dung sang phải
    nên đặt cố định 1 chỗ bên trái sẽ không bao giờ bị đè/tràn.
-   Layout 2 CỘT: cột ảnh (trái, tỉ lệ CỐ ĐỊNH 960x1280 = 3:4, chiều cao tự
-   tính theo width qua aspect-ratio) + cột chữ (phải, nền bg-web.jpg + lớp
-   phủ tối, giãn theo chiều cao của ảnh — cùng tinh thần với .modal bên
-   ProjectModal).
+   Kích thước: LUÔN co giãn theo % cửa sổ — chiều cao tối đa = 50% chiều cao
+   cửa sổ (--mbt-popup-height), chiều rộng tự tính theo aspect-ratio 3:4 của
+   ảnh gốc (960x1280) nên popup không bao giờ bị méo dù màn hình to/nhỏ.
    Lưu ý: các thuộc tính layout cốt lõi (background, size) còn được ép lại
    bằng JS (setProperty ... "important") ở component để thắng tuyệt đối mọi
    CSS global của site — xem hook useForceImportant trong MatBangTang.jsx.
    ========================================================================== */
+/* Wrapper của popup SAU KHI portal ra document.body (xem createPortal trong
+   MatBangTang.jsx). Bản thân wrapper này KHÔNG chiếm layout/click gì trên
+   trang (width/height 0, pointer-events none) — nó chỉ tồn tại để (a) tái sử
+   dụng các CSS token của .mbt (màu, tốc độ animation...) và (b) làm điểm neo
+   z-index NẰM NGOÀI mọi stacking context của các component cha, nhờ vậy
+   z-index đặt ở đây so sánh trực tiếp với các phần tử khác trong <body> (ví
+   dụ popup "báo giá") thay vì bị "nhốt" bên trong 1 component con nào đó. */
+.mbt__popup-portal {
+  position: fixed;
+  inset: 0;
+  width: 0;
+  height: 0;
+  overflow: visible;
+  pointer-events: none;
+  z-index: var(--mbt-popup-z-index, 999999);
+}
+
 .mbt__popup {
   position: fixed !important;
   top: 50%;
-  left: clamp(12px, 3vw, 32px);
-  z-index: 999 !important;
+  left: clamp(1rem, 12vw, 16rem);
+  z-index: var(--mbt-popup-z-index, 999999) !important;
   isolation: isolate;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  width: min(var(--mbt-popup-width), calc(100vw - 48px));
-  max-width: calc(100vw - 48px);
+  height: var(--mbt-popup-height);
+  aspect-ratio: var(--mbt-popup-aspect);
+  width: var(--mbt-popup-width);
+  max-width: 92vw;
   border-radius: var(--mbt-radius);
   border: 1px solid rgba(201, 161, 90, 0.35);
   box-shadow:
@@ -202,112 +226,17 @@
   background: rgba(0, 0, 0, 0.55);
 }
 
-/* CỘT TRÁI — ảnh layout căn hộ, LUÔN tỉ lệ 960x1280 (3:4). Chiều cao tự
-   tính theo chiều rộng cột (aspect-ratio), KHÔNG co theo cột chữ — ngược
-   lại, cột chữ bên phải sẽ giãn (align-items: stretch mặc định của grid)
-   để bằng chiều cao này. */
+/* Ảnh layout căn hộ — giờ lấp đầy TOÀN BỘ popup (không còn cột chữ bên
+   cạnh). Kích thước/tỉ lệ do chính .mbt__popup quyết định (height 50vh +
+   aspect-ratio 3:4), ảnh chỉ cần cover đầy khung. */
 .mbt__popup-image {
-  align-self: start;
   width: 100%;
-  aspect-ratio: 3 / 4;
+  height: 100%;
   background-image: var(--mbt-popup-img, none) !important;
   background-size: cover !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
   background-color: var(--mbt-navy-2) !important;
-}
-
-/* CỘT PHẢI — nền bg-web.jpg + lớp phủ tối (navy) để chữ luôn đọc rõ,
-   cùng cách làm với .modal trong ProjectModal.module.css. Mặc định
-   align-items: stretch của .mbt__popup sẽ giãn cột này bằng chiều cao
-   của ảnh bên trái. */
-.mbt__popup-body {
-  position: relative;
-  padding: clamp(16px, 4vw, 28px) clamp(16px, 4.5vw, 32px)
-    clamp(18px, 4.5vw, 32px);
-  max-height: min(80vh, 640px);
-  overflow-y: auto;
-  background-image: url(../../assets/images/bg-web.jpg);
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-}
-
-.mbt__popup-eyebrow {
-  display: inline-block;
-  font-size: clamp(10px, 2.4vw, 11px);
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--zone-color, var(--mbt-gold));
-}
-
-.mbt__popup-title {
-  all: unset;
-  display: block;
-  margin: clamp(3px, 1vw, 4px) 0 clamp(6px, 1.6vw, 8px);
-  font-family: var(--mbt-font-display);
-  font-size: clamp(16px, 4.2vw, 22px);
-  font-weight: 700;
-  line-height: 1.25;
-  overflow-wrap: anywhere;
-  padding-bottom: clamp(6px, 1.6vw, 8px);
-  border-bottom: 1px solid rgba(201, 161, 90, 0.45);
-  color: var(--mbt-white);
-}
-
-.mbt__popup-stats {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: clamp(6px, 1.6vw, 8px) clamp(8px, 2vw, 10px);
-  margin: clamp(8px, 2vw, 10px) 0 0;
-}
-
-.mbt__popup-stat {
-  display: flex !important;
-  flex-direction: column !important;
-  position: static !important;
-  gap: 2px;
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-.mbt__popup-stat-label {
-  display: block;
-  font-size: clamp(9.5px, 2vw, 10.5px);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.55);
-  font-family: var(--mbt-font-body);
-}
-
-.mbt__popup-stat-value {
-  display: block;
-  font-weight: 600;
-  font-size: clamp(13px, 2.8vw, 15px);
-  line-height: 1.35;
-  white-space: normal;
-  overflow-wrap: anywhere;
-  font-family: var(--mbt-font-body);
-}
-
-.mbt__popup-stat--price {
-  grid-column: 1 / -1 !important;
-}
-.mbt__popup-stat--price .mbt__popup-stat-value {
-  font-family: var(--mbt-font-display);
-  font-size: clamp(16px, 3.6vw, 20px);
-  color: var(--mbt-gold);
-}
-
-.mbt__popup-desc {
-  all: unset;
-  display: block;
-  margin: clamp(8px, 2vw, 10px) 0 0;
-  font-size: clamp(12.5px, 2.6vw, 14px);
-  line-height: 1.5;
-  overflow-wrap: anywhere;
-  color: rgba(255, 255, 255, 0.7);
 }
 
 /* ==========================================================================
@@ -364,29 +293,75 @@
   flex: none;
 }
 
+/* Chip bị "ghim" sát mép khung crop (vị trí gốc nằm ngoài vùng đang hiển thị
+   trên mobile) — vẫn hiện đầy đủ, chỉ viền nhẹ chấm màu để gợi ý "còn tiếp
+   tục theo hướng này", leader-line lo phần chỉ đúng vị trí căn hộ. */
+.mbt__legend-chip.is-pinned .mbt__legend-dot {
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--zone-color) 35%, transparent),
+    0 0 6px var(--zone-color);
+}
+
+/* ==========================================================================
+   Leader-line — đường dẫn mảnh nối 1 legend chip tới (các) zone tương ứng
+   trên mặt bằng, để người dùng luôn biết chip nào ứng với căn nào, kể cả khi
+   chip nằm cách xa zone (bố cục legend) hoặc bị ghim sát mép do crop mobile.
+   Vẽ trong CÙNG hệ toạ độ pixel gốc với các <polygon> zone (bên trong
+   .mbt__overlay) nên luôn khớp chính xác vị trí, mọi kích thước màn hình.
+   ========================================================================== */
+.mbt__leader-line {
+  stroke: var(--zone-color);
+  stroke-width: clamp(2px, 0.4vw, 3px);
+  stroke-dasharray: 7 6;
+  opacity: 0.9;
+  fill: none;
+  pointer-events: none;
+  vector-effect: non-scaling-stroke;
+  transition:
+    opacity var(--mbt-transition-speed) ease,
+    stroke-width var(--mbt-transition-speed) ease,
+    filter var(--mbt-transition-speed) ease;
+}
+
+/* Active: sáng rực, cùng "ngôn ngữ" phát sáng với .mbt__zone:hover/.is-active
+   (2 lớp drop-shadow gần + xa) để leader-line và zone trông như 1 khối chỉ
+   dẫn liền mạch khi được hover/click. */
+.mbt__leader-line.is-active {
+  opacity: 1;
+  stroke-width: clamp(2px, 0.42vw, 3px);
+  stroke-dasharray: none;
+  filter: drop-shadow(0 0 6px var(--zone-color))
+    drop-shadow(0 0 16px var(--zone-color));
+}
+
+.mbt__leader-line.is-dimmed {
+  opacity: 0.65 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mbt__leader-line {
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* ==========================================================================
    Responsive
-   Luôn giữ layout 2 CỘT ở mọi kích thước màn hình (ảnh cố định tỉ lệ 3:4,
-   960x1280) — không chuyển về xếp dọc trên mobile nữa. Cột ảnh co giãn theo
-   --mbt-popup-image-width (đã là clamp() theo vw ở phần tokens), cột chữ tự
-   giãn theo chiều cao ảnh (align-items: stretch mặc định của grid) và cuộn
-   riêng nếu nội dung dài hơn.
-   - <=480px: giảm padding/kích thước nút đóng cho khung hẹp
-   - <=360px: stats chuyển 1 cột để tránh vỡ chữ
+   Popup giờ chỉ còn 1 ảnh, luôn giữ tỉ lệ 3:4 và scale theo % cửa sổ (xem
+   token --mbt-popup-height ở đầu file) nên không cần rule riêng theo từng
+   breakpoint cho nó nữa — chỉ còn legend chip (đổi diện mạo trên mobile để
+   không che ảnh) và nút đóng (thu nhỏ trên màn hẹp) cần chỉnh riêng.
    ========================================================================== */
 
-/* Legend chip trên mobile: bỏ nền/blur/viền (đang che mất ảnh mặt bằng),
-   chữ nhỏ lại, chỉ giữ chấm màu + text-shadow để vẫn đọc được trên nền ảnh
-   phức tạp. Khi hover/focus/active mới hiện lại nền — để người dùng chạm
-   vào biết mình đang chọn đúng chip nào, không tap nhầm trên mobile. */
-@media (max-width: 768px) {
+/* Legend chip trên tablet/mobile: giữ chữ và chấm màu nhưng không phủ nền lên
+  ảnh mặt bằng. */
+@media (max-width: 1199px) {
   .mbt__legend-chip {
     background: transparent !important;
-    border-color: transparent !important;
-    backdrop-filter: none !important;
-    box-shadow: none !important;
+    border-color: rgba(255, 255, 255, 0.22) !important;
+    backdrop-filter: none;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35) !important;
     min-height: unset;
-    padding: 2px 4px;
+    padding: 3px 6px;
     gap: 3px;
     font-size: clamp(8px, 2.1vw, 10px);
     text-shadow:
@@ -397,12 +372,12 @@
   .mbt__legend-chip:hover,
   .mbt__legend-chip:focus-visible,
   .mbt__legend-chip.is-active {
-    background: rgba(11, 42, 61, 0.85) !important;
+    background: transparent !important;
     border-color: var(--zone-color) !important;
-    backdrop-filter: blur(10px);
+    backdrop-filter: none;
     box-shadow:
       0 0 0 3px color-mix(in srgb, var(--zone-color) 30%, transparent),
-      0 0 16px var(--zone-color);
+      0 0 16px var(--zone-color) !important;
     padding: clamp(5px, 1.4vw, 6px) clamp(9px, 2.4vw, 12px);
   }
 
@@ -413,10 +388,6 @@
 }
 
 @media (max-width: 480px) {
-  .mbt__popup-body {
-    padding: 14px 16px 18px;
-  }
-
   .mbt__popup-close {
     width: 36px;
     height: 36px;
@@ -429,24 +400,11 @@
   }
 }
 
-@media (max-width: 360px) {
-  .mbt__popup-stats {
-    grid-template-columns: 1fr !important;
-  }
-
-  .mbt__popup-stat--price {
-    grid-column: 1 / -1 !important;
-  }
-
-  .mbt__popup-body {
-    padding: 12px 14px 16px;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .mbt__zone,
   .mbt__legend-chip,
-  .mbt__popup {
+  .mbt__popup,
+  .mbt__leader-line {
     animation: none !important;
     transition-duration: 0.01ms !important;
   }

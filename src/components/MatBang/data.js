@@ -27,10 +27,10 @@ export const IMAGE_HEIGHT = 3335;
 // "2pn-goc" đặt ở left 17%) thì PHẢI chỉnh lại labelLeft của chip đó trước,
 // nếu không chip sẽ bị crop cắt mất.
 export const MOBILE_CROP = {
-  left: 0.15,
+  left: 0.125,
   right: 0,
-  top: 0.15,
-  bottom: 0.075,
+  top: 0.1,
+  bottom: 0.05,
 };
 
 // 6 nhóm loại hình căn hộ — mỗi nhóm 1 màu riêng để phân biệt trên mặt bằng & chú giải.
@@ -185,8 +185,8 @@ export const T3_2PN_GOC_CHIP = {
   image: layout2pnGoc,
   desc: "Căn góc 2 phòng ngủ, ban công rộng, view kép.",
   area: 84.9,
-  labelTop: "31%",
-  labelLeft: "65%",
+  labelTop: "29.5%",
+  labelLeft: "63.5%",
 };
 export const T3_2PN_GOC_2_CHIP = {
   id: "t3-2pn-goc-2",
@@ -196,8 +196,8 @@ export const T3_2PN_GOC_2_CHIP = {
   image: layout2pnGoc,
   desc: "Căn góc 2 phòng ngủ, ban công rộng, view kép.",
   area: 84.9,
-  labelTop: "59%",
-  labelLeft: "58%",
+  labelTop: "58%",
+  labelLeft: "57%",
 };
 export const T3_2PN_GOC_120M_CHIP = {
   id: "t3-2pn-goc-120m",
@@ -207,8 +207,8 @@ export const T3_2PN_GOC_120M_CHIP = {
   image: layout2pnGoc,
   desc: "Căn góc 2 phòng ngủ, ban công rộng, view kép.",
   area: 120.2,
-  labelTop: "48%",
-  labelLeft: "72%",
+  labelTop: "49%",
+  labelLeft: "73%",
 };
 export const T3_2PN_CHIP = {
   id: "t3-2pn",
@@ -218,8 +218,8 @@ export const T3_2PN_CHIP = {
   image: layout2pn,
   desc: "Căn 2 phòng ngủ tiêu chuẩn, bố cục vuông vắn, tối ưu công năng.",
   area: 85.9,
-  labelTop: "40%",
-  labelLeft: "68%",
+  labelTop: "41.5%",
+  labelLeft: "69%",
 };
 export const T3_3PN_CHIP = {
   id: "t3-3pn",
@@ -229,8 +229,8 @@ export const T3_3PN_CHIP = {
   image: layout3pn,
   desc: "Căn 3 phòng ngủ, phù hợp gia đình nhiều thế hệ.",
   area: 126.1,
-  labelTop: "49%",
-  labelLeft: "54%",
+  labelTop: "48%",
+  labelLeft: "53%",
 };
 export const T3_3PN_GOC_CHIP = {
   id: "t3-3pn-goc",
@@ -240,8 +240,8 @@ export const T3_3PN_GOC_CHIP = {
   image: layout3pnGoc,
   desc: "Căn góc 3 phòng ngủ, 2 mặt thoáng, đón trọn tầm nhìn sông.",
   area: 125.3,
-  labelTop: "41%",
-  labelLeft: "50%",
+  labelTop: "40%",
+  labelLeft: "49%",
 };
 // Chip T4
 export const T4_2PN_GOC_CHIP = {
@@ -252,9 +252,10 @@ export const T4_2PN_GOC_CHIP = {
   image: layout2pnGoc,
   desc: "Căn góc 2 phòng ngủ, ban công rộng, view kép.",
   area: 84.9,
-  labelTop: "57%",
+  labelTop: "58%",
   labelLeft: "74%",
 };
+
 export const T4_2PN_CHIP = {
   id: "t4-2pn",
   label: "Căn hộ 2PN | 85,9m²",
@@ -263,8 +264,8 @@ export const T4_2PN_CHIP = {
   image: layout2pn,
   desc: "Căn 2 phòng ngủ tiêu chuẩn, bố cục vuông vắn, tối ưu công năng.",
   area: 85.9,
-  labelTop: "63%",
-  labelLeft: "80%",
+  labelTop: "64%",
+  labelLeft: "81%",
 };
 export const T4_2PN_DB_CHIP = {
   id: "t4-2pn-db-121",
@@ -274,8 +275,8 @@ export const T4_2PN_DB_CHIP = {
   image: layout2pnDb,
   desc: "Phiên bản giới hạn 2 phòng ngủ, layout độc bản trong tòa.",
   area: 121.9,
-  labelTop: "69%",
-  labelLeft: "89%",
+  labelTop: "68.5%",
+  labelLeft: "88%",
 };
 export const T4_2PN_DB_2_CHIP = {
   id: "t4-2pn-db-120",
@@ -285,8 +286,8 @@ export const T4_2PN_DB_2_CHIP = {
   image: layout2pnDb,
   desc: "Phiên bản giới hạn 2 phòng ngủ, layout độc bản trong tòa.",
   area: 120.2,
-  labelTop: "86%",
-  labelLeft: "78%",
+  labelTop: "84%",
+  labelLeft: "80%",
 };
 export const T4_3PN_CHIP = {
   id: "t4-3pn",
@@ -296,8 +297,8 @@ export const T4_3PN_CHIP = {
   image: layout3pn,
   desc: "Căn 3 phòng ngủ, phù hợp gia đình nhiều thế hệ.",
   area: 126.1,
-  labelTop: "79%",
-  labelLeft: "68%",
+  labelTop: "78%",
+  labelLeft: "69.5%",
 };
 export const T4_3PN_DB_CHIP = {
   id: "t4-3pn-db",
@@ -308,7 +309,7 @@ export const T4_3PN_DB_CHIP = {
   desc: "Phiên bản giới hạn - diện tích lớn, mặt tiền hướng sông.",
   area: 157.0,
   labelTop: "70%",
-  labelLeft: "58%",
+  labelLeft: "60%",
 };
 
 export const ZONES = [
