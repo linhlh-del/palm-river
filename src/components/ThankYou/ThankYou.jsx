@@ -1,10 +1,18 @@
-import React from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./ThankYou.module.css";
 import logo from "../../assets/images/logo.png";
 
 export default function ThankYou() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (typeof window.gtag !== "function") return;
+
+    window.gtag("event", "conversion", {
+      send_to: "AW-18110702521/-Ew3CIv2suYcELnH7btD",
+    });
+  }, []);
 
   const handleBackHome = () => {
     navigate("/");
