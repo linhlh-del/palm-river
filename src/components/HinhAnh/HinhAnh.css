@@ -6,7 +6,7 @@
 
 .tinb-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 20px;
   text-align: center;
@@ -30,7 +30,7 @@
   color: #e0edc9;
   margin: 0 auto 1.5rem;
   font-size: 1.05rem;
-  max-width: 800px;
+  /* max-width: 800px; */
   line-height: 1.6;
   text-align: justify;
 }
@@ -77,19 +77,34 @@
   }
 }
 
+/* ==========================
+   FILTER BUTTONS
+   Mặc định: tối đa 4 nút / hàng (grid).
+   Màn hình đủ rộng (>=1400px): cho phép cả 8 nút nằm 1 hàng.
+   Mobile nhỏ (<=576px): 2 nút / hàng cho gọn.
+   ========================== */
 .tinb-filters {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(140px, 1fr));
+  gap: 1rem 1.25rem;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 2rem;
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
+  justify-items: stretch;
+  max-width: 900px;
+  margin: 1.5rem auto 1rem;
   width: 100%;
+}
+
+@media (min-width: 1400px) {
+  .tinb-filters {
+    grid-template-columns: repeat(8, minmax(110px, 1fr));
+    max-width: 1300px;
+  }
 }
 
 @media (max-width: 576px) {
   .tinb-filters {
-    gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
   }
 }
 
@@ -97,13 +112,14 @@
   /* background: #E0EDC9; */
   color: var(--text-dark, #0d234a);
   border: 2px solid var(--border-color, #d2b57c);
-  padding: 0.5rem 2rem;
+  padding: 0.5rem 1.25rem;
   border-radius: 0.5rem;
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.25s ease;
   font-family: "DVNBeaufort-Regular", sans-serif;
+  white-space: nowrap;
 }
 
 .tinb-filter-btn:hover {
@@ -120,8 +136,8 @@
 
 @media (max-width: 576px) {
   .tinb-filter-btn {
-    padding: 8px 16px;
-    font-size: 0.8rem;
+    padding: 8px 10px;
+    font-size: 0.78rem;
   }
 }
 
@@ -333,12 +349,13 @@
 
 /* ==========================
    GRID VIEW (tablet / desktop)
+   Tối đa 4 ảnh / hàng ở desktop, ảnh nhỏ lại theo tỉ lệ.
    ========================== */
 .tinb-gallery-grid {
   margin-top: 2rem;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  max-width: 1200px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -346,6 +363,12 @@
 @media (min-width: 769px) and (max-width: 1023px) {
   .tinb-gallery-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .tinb-gallery-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
