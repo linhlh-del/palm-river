@@ -19,7 +19,7 @@ export const FILTERS = [
   { key: "thugian", label: "Thư giãn" },
   { key: "thethao", label: "Thể thao" },
   { key: "lobby", label: "Lobby" },
-  { key: "other", label: "Khác" },
+  { key: "others", label: "Khác" },
 ];
 
 export const GALLERY_ITEMS = [
@@ -159,4 +159,180 @@ export const GALLERY_ITEMS = [
     alt: "Phòng Gym hiện đại tiêu chuẩn quốc tế",
     label: "Phòng Gym hiện đại chuẩn quốc tế",
   },
+
+  // Onsen-hồ bơi
+  {
+    category: "onsen-hoboi",
+    src: getImageSrc("onsen-hoboi/1.webp"),
+    alt: "Hồ bơi thư giãn",
+    label: "Hồ bơi thư giãn",
+  },
+  {
+    category: "onsen-hoboi",
+    src: getImageSrc("onsen-hoboi/2.webp"),
+    alt: "Hồ bơi thư giãn",
+    label: "Hồ bơi thư giãn",
+  },
+  {
+    category: "onsen-hoboi",
+    src: getImageSrc("onsen-hoboi/4.webp"),
+    alt: "Hồ bơi thư giãn",
+    label: "Hồ bơi thư giãn",
+  },
+  {
+    category: "onsen-hoboi",
+    src: getImageSrc("onsen-hoboi/3.webp"),
+    alt: "Hồ bơi thư giãn",
+    label: "Hồ bơi thư giãn",
+  },
+  {
+    category: "onsen-hoboi",
+    src: getImageSrc("onsen-hoboi/5.webp"),
+    alt: "Hồ bơi thư giãn",
+    label: "Hồ bơi thư giãn",
+  },
+  {
+    category: "onsen-hoboi",
+    src: getImageSrc("onsen-hoboi/6.webp"),
+    alt: "Hồ bơi thư giãn",
+    label: "Hồ bơi thư giãn",
+  },
+
+  // ==========================
+  // THƯ GIÃN
+  // ==========================
+  {
+    category: "thugian",
+    src: getImageSrc("thugian/1.webp"),
+    alt: "Không gian thư giãn",
+    label: "Không gian thư giãn",
+  },
+  {
+    category: "thugian",
+    src: getImageSrc("thugian/2.webp"),
+    alt: "Không gian thư giãn",
+    label: "Không gian thư giãn",
+  },
+  {
+    category: "thugian",
+    src: getImageSrc("thugian/3.webp"),
+    alt: "Không gian thư giãn",
+    label: "Không gian thư giãn",
+  },
+
+  // ==========================
+  // THỂ THAO
+  // ==========================
+  {
+    category: "thethao",
+    src: getImageSrc("thethao/0.webp"),
+    alt: "Không gian thể thao",
+    label: "Không gian thể thao",
+  },
+  {
+    category: "thethao",
+    src: getImageSrc("thethao/1.webp"),
+    alt: "Không gian thể thao",
+    label: "Không gian thể thao",
+  },
+  {
+    category: "thethao",
+    src: getImageSrc("thethao/2.webp"),
+    alt: "Không gian thể thao",
+    label: "Không gian thể thao",
+  },
+  {
+    category: "thethao",
+    src: getImageSrc("thethao/3.webp"),
+    alt: "Không gian thể thao",
+    label: "Không gian thể thao",
+  },
+
+  // ==========================
+  // LOBBY
+  // ==========================
+  {
+    category: "lobby",
+    src: getImageSrc("lobby/1.webp"),
+    alt: "Không gian lobby",
+    label: "Không gian lobby",
+  },
+  {
+    category: "lobby",
+    src: getImageSrc("lobby/2.webp"),
+    alt: "Không gian lobby",
+    label: "Không gian lobby",
+  },
+  {
+    category: "lobby",
+    src: getImageSrc("lobby/3.webp"),
+    alt: "Không gian lobby",
+    label: "Không gian lobby",
+  },
+  {
+    category: "lobby",
+    src: getImageSrc("lobby/4.webp"),
+    alt: "Không gian lobby",
+    label: "Không gian lobby",
+  },
+  {
+    category: "lobby",
+    src: getImageSrc("lobby/5.webp"),
+    alt: "Không gian lobby",
+    label: "Không gian lobby",
+  },
+
+  // ==========================
+  // KHÁC
+  // ==========================
+  {
+    category: "others",
+    src: getImageSrc("others/1.webp"),
+    alt: "Tiện ích khác",
+    label: "Tiện ích khác",
+  },
+  {
+    category: "others",
+    src: getImageSrc("others/2.webp"),
+    alt: "Tiện ích khác",
+    label: "Tiện ích khác",
+  },
+  {
+    category: "others",
+    src: getImageSrc("others/3.webp"),
+    alt: "Tiện ích khác",
+    label: "Tiện ích khác",
+  },
+  {
+    category: "others",
+    src: getImageSrc("others/4.webp"),
+    alt: "Tiện ích khác",
+    label: "Tiện ích khác",
+  },
+  {
+    category: "others",
+    src: getImageSrc("others/5.webp"),
+    alt: "Tiện ích khác",
+    label: "Tiện ích khác",
+  },
+  {
+    category: "others",
+    src: getImageSrc("others/6.webp"),
+    alt: "Tiện ích khác",
+    label: "Tiện ích khác",
+  },
+  {
+    category: "others",
+    src: getImageSrc("others/7.webp"),
+    alt: "Tiện ích khác",
+    label: "Tiện ích khác",
+  },
+  {
+    category: "others",
+    src: getImageSrc("others/8.webp"),
+    alt: "Tiện ích khác",
+    label: "Tiện ích khác",
+  },
+
+  //
 ];

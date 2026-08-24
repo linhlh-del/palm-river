@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import "./HinhAnh.css";
 import { FILTERS, GALLERY_ITEMS } from "./data";
 import arrowLeft from "../../assets/images/arrow-left.png";
@@ -7,6 +7,9 @@ import arrowRight from "../../assets/images/arrow-right.png";
 export default function HinhAnh({ onOpenModal }) {
   const [activeCategory, setActiveCategory] = useState("canhquan");
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  // Lưu lại những ảnh đã load xong (theo src) để không bị chớp lại
+  // khi quay về category đã xem trước đó.
+  const [loadedImages, setLoadedImages] = useState(() => new Set());
 
   const handleOpenModal = () => {
     if (typeof onOpenModal === "function") {
@@ -14,13 +17,24 @@ export default function HinhAnh({ onOpenModal }) {
     }
   };
 
-  const gallery = GALLERY_ITEMS.filter(
-    (item) => item.category === activeCategory,
+  const gallery = useMemo(
+    () => GALLERY_ITEMS.filter((item) => item.category === activeCategory),
+    [activeCategory],
   );
 
   const currentItem = gallery[activeImageIndex] ?? null;
 
+  const handleImageLoad = useCallback((src) => {
+    setLoadedImages((prev) => {
+      if (prev.has(src)) return prev;
+      const next = new Set(prev);
+      next.add(src);
+      return next;
+    });
+  }, []);
+
   const handleCategoryChange = (category) => {
+    if (category === activeCategory) return;
     setActiveCategory(category);
     setActiveImageIndex(0);
   };
@@ -64,15 +78,26 @@ export default function HinhAnh({ onOpenModal }) {
 
         {/* MOBILE: carousel */}
         <div className="tinb-gallery-carousel tinb-carousel-view">
-          {/* Ảnh + nút mũi tên giờ nằm chung 1 khối, mũi tên đè lên trên ảnh */}
           <div className="tinb-carousel-main">
-            <div className="tinb-gallery-item show">
+            {/* key theo category+index để trigger lại animation fade khi đổi ảnh */}
+            <div
+              className="tinb-gallery-item show"
+              key={`${activeCategory}-${activeImageIndex}`}
+            >
               {currentItem ? (
                 <>
+                  {!loadedImages.has(currentItem.src) && (
+                    <div className="tinb-img-skeleton" aria-hidden="true" />
+                  )}
                   <img
                     src={currentItem.src}
                     alt={currentItem.alt}
-                    loading="lazy"
+                    loading="eager"
+                    decoding="async"
+                    className={`tinb-img ${
+                      loadedImages.has(currentItem.src) ? "is-loaded" : ""
+                    }`}
+                    onLoad={() => handleImageLoad(currentItem.src)}
                   />
 
                   <div className="tinb-gallery-overlay">
@@ -105,10 +130,25 @@ export default function HinhAnh({ onOpenModal }) {
         </div>
 
         {/* TABLET / DESKTOP: grid */}
-        <div className="tinb-gallery-grid tinb-grid-view">
+        <div
+          className="tinb-gallery-grid tinb-grid-view tinb-grid-fade"
+          key={activeCategory}
+        >
           {gallery.map((item, index) => (
             <div className="tinb-grid-item" key={`${item.category}-${index}`}>
-              <img src={item.src} alt={item.alt} loading="lazy" />
+              {!loadedImages.has(item.src) && (
+                <div className="tinb-img-skeleton" aria-hidden="true" />
+              )}
+              <img
+                src={item.src}
+                alt={item.alt}
+                loading="lazy"
+                decoding="async"
+                className={`tinb-img ${
+                  loadedImages.has(item.src) ? "is-loaded" : ""
+                }`}
+                onLoad={() => handleImageLoad(item.src)}
+              />
               <div className="tinb-grid-overlay">
                 {/* <span>{item.label}</span> */}
               </div>

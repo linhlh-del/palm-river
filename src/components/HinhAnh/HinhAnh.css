@@ -222,7 +222,75 @@
   height: 100%;
   display: block;
   object-fit: contain;
-  transition: transform 0.4s ease;
+  transition:
+    transform 0.4s ease,
+    opacity 0.45s ease;
+}
+
+/* ==========================
+   IMAGE LOADING EFFECT (skeleton + fade-in)
+   ========================== */
+.tinb-img {
+  opacity: 0;
+  transform: scale(1.02);
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s ease;
+}
+
+.tinb-img.is-loaded {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.tinb-img-skeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    rgba(224, 237, 201, 0.06) 30%,
+    rgba(224, 237, 201, 0.16) 45%,
+    rgba(224, 237, 201, 0.06) 60%
+  );
+  background-color: rgba(13, 35, 74, 0.35);
+  background-size: 200% 100%;
+  animation: tinb-shimmer 1.3s ease-in-out infinite;
+}
+
+@keyframes tinb-shimmer {
+  0% {
+    background-position: 150% 0;
+  }
+  100% {
+    background-position: -50% 0;
+  }
+}
+
+/* Đổi category: fade nhẹ cả khối grid/carousel thay vì giật cục */
+.tinb-grid-fade {
+  animation: tinb-fade-in 0.35s ease;
+}
+
+@keyframes tinb-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tinb-img,
+  .tinb-img-skeleton,
+  .tinb-grid-fade {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 .tinb-gallery-item:hover img {
@@ -294,7 +362,9 @@
   height: 100%;
   display: block;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  transition:
+    transform 0.4s ease,
+    opacity 0.45s ease;
 }
 
 .tinb-grid-item:hover img {
