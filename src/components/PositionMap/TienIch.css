@@ -145,6 +145,17 @@
   z-index: 5;
 }
 
+/* .point-infor có z-index:10 nhưng đó chỉ là z-index NỘI BỘ bên trong
+   .point-element cha của nó — vì mọi .point-element khác đều cùng z-index:5
+   nên phần tử nào đứng SAU trong DOM vẫn đè lên toàn bộ (kể cả popup) của
+   phần tử đứng trước, dù popup có z-index cao hơn con số 10 bao nhiêu đi
+   nữa. Phải nâng z-index của CHÍNH .point-element đang hover/active thì
+   popup bên trong nó mới thực sự nổi lên trên tất cả .number khác. */
+.amen_site .point-element.is-active,
+.amen_site .point-element:hover {
+  z-index: 100;
+}
+
 .amen_site .point-element .number {
   width: 1.25rem;
   height: 1.25rem;
@@ -473,6 +484,32 @@
   align-items: center;
   text-decoration: none;
   cursor: pointer;
+  padding: 6px 8px;
+  margin: -6px -8px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+/* Highlight cả nền của dòng (không chỉ text) khi tương ứng với điểm ghim
+   đang được hover/click trên bản đồ — dễ nhận diện hơn hẳn so với chỉ đổi
+   màu chữ. */
+.amen_site
+  .table_amenities
+  .amen-scroll-wrapper
+  .list-amen
+  .section-amenities
+  ul
+  li.is-active
+  a,
+.amen_site
+  .table_amenities
+  .amen-scroll-wrapper
+  .list-amen
+  .section-amenities
+  ul
+  li:hover
+  a {
+  background-color: rgba(210, 181, 124, 0.18);
 }
 
 .amen_site

@@ -13,7 +13,6 @@ export const SCENE_HEIGHT = 900;
 
 // Hệ số zoom (nhân thêm vào fitScale — tỉ lệ scene đang fit vừa khung hiển thị)
 const ZOOM_LEVEL_PALM_RIVER = 2.2;
-const ZOOM_LEVEL_BUILDING = 4;
 const ZOOM_ANIMATION_MS = 550;
 
 // Thời gian hiển thị tooltip "đang cập nhật" khi click vào toà chưa có mặt bằng
@@ -132,24 +131,96 @@ export function useTienIchMap() {
     });
     panzoomRef.current = panzoom;
 
+    // Một khi người dùng đã thao tác tay THẬT (kéo/lăn chuột) thì KHÔNG bao
+    // giờ được tự ý fit/pan lại nữa — tôn trọng vị trí họ đang xem.
+    let userInteracted = false;
+    const markUserInteracted = () => {
+      userInteracted = true;
+    };
+    const viewportEl = viewportRef.current;
+    viewportEl.addEventListener("pointerdown", markUserInteracted, {
+      passive: true,
+    });
+    viewportEl.addEventListener("wheel", markUserInteracted, {
+      passive: true,
+    });
+
+    // `force: true` bỏ qua việc Panzoom tự "constrain/contain" theo bounds nó
+    // đang cache — bounds này dễ bị sai ngay sau khi layout của TRANG (không
+    // chỉ riêng component này) còn đang dịch chuyển (web-font load muộn,
+    // ảnh phía trên load xong đổi chiều cao trang, hoặc hiệu ứng "hiện dần
+    // khi cuộn tới" mà trang đang dùng cho section này).
     const applyFitScale = () => {
       const viewport = viewportRef.current;
       if (!viewport) return;
       const fit = viewport.clientWidth / SCENE_WIDTH;
+      if (!fit) return; // container chưa có kích thước thật (chưa layout xong)
       fitScaleRef.current = fit;
       panzoom.setOptions({ minScale: fit, maxScale: fit * 5 });
+      if (userInteracted) return; // người dùng đã tự kéo -> không can thiệp nữa
       // chỉ auto re-fit khi đang ở view tổng, tránh giật hình khi user đang zoom sâu
       if (!isZoomedToPalmRiver && !activeBuildingId) {
-        panzoom.zoom(fit, { animate: false });
-        panzoom.pan(0, 0, { animate: false });
+        panzoom.zoom(fit, { animate: false, force: true });
+        panzoom.pan(0, 0, { animate: false, force: true });
       }
     };
 
     applyFitScale();
-    const resizeObserver = new ResizeObserver(applyFitScale);
+
+    // "Settle loop": đo + fit lại LIÊN TỤC bằng rAF trong một khoảng thời
+    // gian ngắn — rẻ và luôn idempotent (không đổi gì nếu đã đúng), nhưng
+    // bắt được MỌI kiểu dịch layout muộn, kể cả những kiểu không bắn ra sự
+    // kiện DOM rõ ràng (vd thư viện animation cuộn set style bằng JS mỗi
+    // frame thay vì dùng CSS transition). Tự dừng ngay khi user thao tác
+    // tay, hoặc hết thời gian chờ.
+    const runSettleLoop = (durationMs) => {
+      let frame = null;
+      const stopAt = performance.now() + durationMs;
+      const loop = (now) => {
+        if (userInteracted || now > stopAt) return;
+        applyFitScale();
+        frame = requestAnimationFrame(loop);
+      };
+      frame = requestAnimationFrame(loop);
+      return () => frame && cancelAnimationFrame(frame);
+    };
+
+    // 1) Settle ngay sau mount — phòng trường hợp component nằm ngay trong
+    //    khung nhìn đầu trang (không cần cuộn) mà layout vẫn còn dịch nhẹ.
+    const stopMountSettle = runSettleLoop(1200);
+
+    // 2) Settle lại MỖI LẦN component thật sự cuộn vào khung nhìn — đây là
+    //    nguyên nhân chính của lỗi "phải kéo đến component mới bị lệch":
+    //    hiệu ứng hiện-khi-cuộn (nếu trang đang dùng) chỉ chạy tại thời
+    //    điểm này, xảy ra trễ hơn nhiều so với lúc mount nên các mốc canh
+    //    theo thời gian mount (rAF/window load) phía trên không bắt kịp.
+    let stopIntersectSettle = null;
+    const intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        if (userInteracted) return;
+        const entry = entries[0];
+        if (entry?.isIntersecting) {
+          if (stopIntersectSettle) stopIntersectSettle();
+          stopIntersectSettle = runSettleLoop(1200);
+        }
+      },
+      { threshold: 0.15 },
+    );
+    intersectionObserver.observe(rootRef.current ?? viewportEl);
+
+    const handleWindowLoad = () => applyFitScale();
+    window.addEventListener("load", handleWindowLoad);
+
+    const resizeObserver = new ResizeObserver(() => applyFitScale());
     resizeObserver.observe(viewportRef.current);
 
     return () => {
+      stopMountSettle();
+      if (stopIntersectSettle) stopIntersectSettle();
+      intersectionObserver.disconnect();
+      viewportEl.removeEventListener("pointerdown", markUserInteracted);
+      viewportEl.removeEventListener("wheel", markUserInteracted);
+      window.removeEventListener("load", handleWindowLoad);
       resizeObserver.disconnect();
       panzoom.destroy();
     };
@@ -163,61 +234,15 @@ export function useTienIchMap() {
     panzoom.setOptions({ disablePan: locked, disableZoom: locked });
   };
 
-  // Zoom tới tâm phần tử. Nhận cả trường hợp targetEl là chính path/polygon
-  // (building click truyền thẳng polygon) lẫn trường hợp là group cha chứa path/polygon.
-  const zoomToElement = (targetEl, scaleMultiplier, onDone) => {
+  // Zoom về ĐÚNG tâm khu Palm River (area id=3), dùng chung cho cả click vào
+  // vùng "PALM RIVER" lẫn click vào toà 3/4 bên trong nó. Trước đây click
+  // building dùng zoomToElement() lấy tâm theo bbox riêng của từng toà nên
+  // mỗi toà zoom lệch một hướng khác nhau (toà nằm bên phải tâm Palm River
+  // sẽ kéo camera dịch sang phải...). Giờ luôn cố định 1 target duy nhất.
+  const focusPalmRiver = (onDone) => {
     const panzoom = panzoomRef.current;
     const viewport = viewportRef.current;
-    if (!targetEl) return null;
-
-    const pathEl = targetEl.matches?.("path, polygon")
-      ? targetEl
-      : targetEl.querySelector?.("path, polygon");
-    if (!panzoom || !viewport || !pathEl) return null;
-
-    const bbox = pathEl.getBBox();
-    const targetX = bbox.x + bbox.width / 2;
-    const targetY = bbox.y + bbox.height / 2;
-    const targetScale = Math.min(
-      fitScaleRef.current * scaleMultiplier,
-      fitScaleRef.current * 5,
-    );
-
-    const targetPanX = viewport.clientWidth / 2 - targetX * targetScale;
-    const targetPanY = viewport.clientHeight / 2 - targetY * targetScale;
-
-    setMapLocked(false);
-    panzoom.zoom(targetScale, { animate: true });
-    panzoom.pan(targetPanX, targetPanY, { animate: true });
-
-    window.setTimeout(() => {
-      setMapLocked(true);
-      onDone?.({
-        targetX,
-        targetY,
-        targetScale,
-        panX: targetPanX,
-        panY: targetPanY,
-      });
-    }, ZOOM_ANIMATION_MS);
-
-    return {
-      targetX,
-      targetY,
-      targetScale,
-      panX: targetPanX,
-      panY: targetPanY,
-    };
-  };
-
-  const handleAreaClick = (area) => (e) => {
-    e.stopPropagation();
-    toggleClickedArea(area.id);
-    if (area.id !== PALM_RIVER_AREA_ID || isZoomedToPalmRiver) return;
-
-    const panzoom = panzoomRef.current;
-    const viewport = viewportRef.current;
-    if (!panzoom || !viewport) return;
+    if (!panzoom || !viewport) return null;
 
     const targetX = PALM_RIVER_FOCUS_X;
     const targetY = PALM_RIVER_FOCUS_Y;
@@ -235,18 +260,29 @@ export function useTienIchMap() {
     panzoom.zoom(targetScale, { animate: true });
     panzoom.pan(targetPanX, targetPanY, { animate: true });
 
-    window.setTimeout(() => {
-      setIsZoomedToPalmRiver(true);
-      setMapLocked(true);
-    }, ZOOM_ANIMATION_MS);
-
-    palmRiverTargetRef.current = {
+    const target = {
       targetX,
       targetY,
       targetScale,
       panX: targetPanX,
       panY: targetPanY,
     };
+    palmRiverTargetRef.current = target;
+
+    window.setTimeout(() => {
+      setMapLocked(true);
+      onDone?.(target);
+    }, ZOOM_ANIMATION_MS);
+
+    return target;
+  };
+
+  const handleAreaClick = (area) => (e) => {
+    e.stopPropagation();
+    toggleClickedArea(area.id);
+    if (area.id !== PALM_RIVER_AREA_ID || isZoomedToPalmRiver) return;
+
+    focusPalmRiver(() => setIsZoomedToPalmRiver(true));
   };
 
   const handleBackToOverview = (e) => {
@@ -296,21 +332,23 @@ export function useTienIchMap() {
 
     setComingSoonId(null);
 
-    // Nếu đã zoom sẵn vào đúng toà này thì mở modal ngay.
-    if (zoomedBuildingId === building.id) {
+    // Map đã zoom vào đúng khu Palm River rồi (dù đang "chọn" toà nào) ->
+    // camera KHÔNG cần di chuyển nữa, chỉ cần mở popup chi tiết của toà vừa
+    // click ngay lập tức.
+    if (isZoomedToPalmRiver) {
+      setZoomedBuildingId(building.id);
       setActiveBuildingId(building.id);
       return;
     }
 
-    // Click lần đầu (hoặc đang zoom toà khác) -> zoom rồi mở modal.
-    const target = zoomToElement(e.currentTarget, ZOOM_LEVEL_BUILDING, () => {
+    // Click từ toàn cảnh (chưa zoom Palm River) -> zoom về ĐÚNG tâm khu Palm
+    // River (area id=3), rồi mở popup. KHÔNG zoom theo bbox riêng của toà để
+    // tránh camera bị lệch/dịch sang phải hoặc trái tuỳ vị trí từng toà.
+    focusPalmRiver(() => {
+      setIsZoomedToPalmRiver(true);
       setZoomedBuildingId(building.id);
       setActiveBuildingId(building.id);
     });
-    if (!target) {
-      setZoomedBuildingId(building.id);
-      setActiveBuildingId(building.id);
-    }
   };
 
   const closeBuildingDetail = () => {
