@@ -10,7 +10,8 @@ export default function ThankYou() {
     if (typeof window.gtag !== "function") return;
 
     window.gtag("event", "conversion", {
-      send_to: "AW-18110702521/-Ew3CIv2suYcELnH7btD",
+      // send_to: "AW-18110702521/-Ew3CIv2suYcELnH7btD",
+      send_to: "AW-18452592122/gLvNCK6mlIIdEPrr8N5E",
     });
   }, []);
 
