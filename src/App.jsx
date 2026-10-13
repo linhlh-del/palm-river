@@ -24,6 +24,7 @@ import News from "./components/News/News.jsx";
 import NewsPage from "./components/News/NewsPage/NewsPage.jsx";
 import NewsDetailPage from "./components/News/NewsDetailPage/NewsDetailPage.jsx";
 import Layout from "./components/Layout/Layout.jsx";
+import useRouteTracking from "./utils/useRouteTracking.js";
 
 function HomePage({ onOpenModal }) {
   const location = useLocation();
@@ -78,6 +79,9 @@ function HomePage({ onOpenModal }) {
 
 function App() {
   const [showModal, setShowModal] = useState(false);
+
+  // Tracker: bắn pageview mỗi khi đổi route (không render gì)
+  useRouteTracking();
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);

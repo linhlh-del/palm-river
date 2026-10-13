@@ -4,6 +4,7 @@
 
 const LEAD_WEBHOOK_URL = import.meta.env.VITE_LEAD_WEBHOOK_URL;
 import { getTrackingData } from "../utils/leadTracking";
+import { track, getTrackingIds } from "../utils/tracker";
 
 /**
  * Gửi thông tin lead từ form (PopUp, GetInfor, CSBH...) lên Cloudflare Worker.
@@ -61,6 +62,10 @@ export async function submitLead(leadData) {
         utm_medium: tracking.utm_medium || null,
         utm_content: tracking.utm_content || null,
         utm_term: tracking.utm_term || null,
+
+        // (Tuỳ chọn) visitor_id/session_id để nối lead <-> hành trình.
+        // Mặc định là {} (không thêm field nào) trừ khi bật VITE_TRACK_ATTACH_IDS=1.
+        ...getTrackingIds(),
       }),
     });
 
@@ -76,6 +81,9 @@ export async function submitLead(leadData) {
       }
       return { success: false, error: errorMessage };
     }
+
+    // Tracker: đúng 1 sự kiện "lead" cho mỗi lần gửi THÀNH CÔNG (chỉ gửi form_type, không PII)
+    track("lead", { label: leadData.formType ?? "unknown" });
 
     return { success: true };
   } catch (err) {
