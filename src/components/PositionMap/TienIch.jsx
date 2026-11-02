@@ -1,4 +1,6 @@
 import React, { useMemo, useState } from "react";
+import { cmsText, cmsImage } from "../../cms/content";
+import { COPY } from "../../cms/copy";
 import { AREAS, AMENITY_GROUPS, POINTS } from "./TienIchData.js";
 import { PALM_RIVER_BUILDINGS } from "./PalmRiverBuildingsData.js";
 import MatBangTang from "../MatBang/MatBangTang";
@@ -372,7 +374,7 @@ export default function TienIch() {
 
           {/* ================= ẢNH NỀN BẢN ĐỒ ================= */}
           <img
-            src={mapImage}
+            src={cmsImage('amenities.map', mapImage)}
             className="img-fluid"
             alt="Sơ đồ tiện ích Palm City"
             draggable={false}
@@ -463,10 +465,10 @@ export default function TienIch() {
               style={{ lineHeight: "1.2em" }}
               className="f-title text-uppercase cl-gold fs-48 fw-400"
             >
-              Hệ sinh thái tiện ích
+              {cmsText('amenities.title', COPY['amenities.title'])}
             </h3>
             <p className="fs-16 fw-400 mb-0 text-uppercase f-title">
-              Chuẩn nghỉ dưỡng giữa lòng thành phố
+              {cmsText('amenities.subtitle', COPY['amenities.subtitle'])}
             </p>
           </div>
         </div>

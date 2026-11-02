@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node scripts/fetch-cms.mjs && node scripts/build-cms-schema.mjs && vite build && node scripts/apply-cms-html.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },

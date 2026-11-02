@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import styles from "./GetInfor.module.css";
 import toast from "react-hot-toast";
 import { submitLead } from "../../services/leadService";
+import { cmsText } from "../../cms/content";
+import { COPY } from "../../cms/copy";
 
 const APARTMENT_TYPES = [
   "Studio",
@@ -93,7 +95,7 @@ export default function GetInfor({
         <div className={cx(styles.container)}>
           {showTitle && (
             <div className={cx(styles.title)}>
-              {title || "Đăng ký nhận báo giá và chính sách ưu đãi mới nhất"}
+              {title || cmsText('lead.title', COPY['lead.title'])}
             </div>
           )}
 

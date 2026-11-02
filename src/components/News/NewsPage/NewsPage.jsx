@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./NewsPage.css";
 import Header from "../../Header/Header.jsx";
+import { cmsText } from "../../../cms/content";
+import { COPY } from "../../../cms/copy";
 import Footer from "../../Footer/Footer.jsx";
 import {
   fetchNewsList,
@@ -85,10 +87,9 @@ export default function NewsPage() {
       {/* Hero */}
       <section className="pn-hero">
         <div className="pn-container">
-          <h1 className="pn-hero-title">Tin tức &amp; sự kiện</h1>
+          <h1 className="pn-hero-title">{cmsText('news.title', COPY['news.title'])}</h1>
           <p className="pn-hero-desc">
-            Cập nhật những thông báo mới nhất, các cột mốc quan trọng của dự án
-            và những sự kiện độc quyền từ Palm City.
+            {cmsText('news.description', COPY['news.description'])}
           </p>
         </div>
       </section>

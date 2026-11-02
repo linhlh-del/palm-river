@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { captureTrackingData } from "./utils/leadTracking";
 import { initTracker } from "./utils/tracker";
+import { initCmsTracker, cmsPageView } from './cms/tracker';
 import { BrowserRouter } from "react-router-dom";
 import "./styles/variables.css";
 import "./index.css";
@@ -20,6 +21,8 @@ createRoot(document.getElementById("root")).render(
 const startTracker = () => {
   try {
     initTracker();
+    initCmsTracker({ clicks: true });
+    cmsPageView(window.location.pathname);
   } catch {
     /* tracker lỗi thì bỏ qua */
   }

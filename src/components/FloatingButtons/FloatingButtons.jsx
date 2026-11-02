@@ -1,8 +1,9 @@
 import styles from "./FloatingButtons.module.css";
+import { cmsSetting } from "../../cms/content";
 
-const PHONE_NUMBER = "0877191940";
-const PHONE_DISPLAY = "0877 191 940";
-const ZALO_URL = "https://zalo.me/1717736678695240623";
+const PHONE_HREF = cmsSetting('site.contact.hotlineHref', 'tel:0877191940');
+const PHONE_DISPLAY = cmsSetting('site.contact.hotline', '0877 191 940');
+const ZALO_URL = cmsSetting('site.contact.zaloUrl', 'https://zalo.me/1717736678695240623');
 const PRICE_URL = "/bang-gia"; // TODO: đổi thành link Bảng Giá thực tế
 
 import zaloLogo from "../../assets/images/logo-zalo.webp";
@@ -55,7 +56,7 @@ export default function FloatingButtons({ onOpenModal }) {
       {/* ── Phone ── */}
 
       <a
-        href={`tel:${PHONE_NUMBER}`}
+        href={PHONE_HREF}
         className={`${styles.fb__btn} ${styles["fb__btn--phone"]}`}
         title={`Gọi ngay ${PHONE_DISPLAY}`}
         aria-label={`Gọi ${PHONE_DISPLAY}`}

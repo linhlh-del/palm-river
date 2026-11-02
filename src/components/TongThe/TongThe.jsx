@@ -3,6 +3,8 @@ import { useState } from "react";
 import matBangImg from "../../assets/images/masterplan.jpg";
 import arrowImg from "../../assets/images/arrow-icon.png";
 import { BUILDINGS } from "./data";
+import { cmsText, cmsImage } from "../../cms/content";
+import { COPY } from "../../cms/copy";
 
 // Kích thước pixel THẬT của ảnh masterplan.jpg gốc — dùng để quy đổi
 // viewBox (đơn vị pixel trên ảnh gốc) sang % hiển thị tương ứng.
@@ -46,14 +48,12 @@ export default function TongThe() {
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-xl-6 col-md-8">
-              <p className="mb__cate">Khám phá</p>
+              <p className="mb__cate">{cmsText('masterplan.kicker', COPY['masterplan.kicker'])}</p>
 
-              <h2 className="mb__title">MẶT BẰNG TỔNG THỂ</h2>
+              <h2 className="mb__title">{cmsText('masterplan.title', COPY['masterplan.title'])}</h2>
 
               <p className="mb__desc">
-                Khám phá quy hoạch tổng thể được thiết kế đầy tâm huyết, nơi
-                thiên nhiên, không gian sống và các tiện ích phong cách sống kết
-                nối hài hòa trong một cộng đồng đô thị sôi động.
+                {cmsText('masterplan.description', COPY['masterplan.description'])}
               </p>
             </div>
           </div>
@@ -64,7 +64,7 @@ export default function TongThe() {
       <div
         className="mb__image-block"
         style={{
-          backgroundImage: `url(${matBangImg})`,
+          backgroundImage: `url(${cmsImage('masterplan.image', matBangImg)})`,
         }}
       >
         <div className="mb__buildings">

@@ -2,7 +2,9 @@
 // Gửi lead (form liên hệ) tới Cloudflare Worker (lead-webhook-worker),
 // Worker sẽ forward dữ liệu sang Google Sheet (Apps Script webhook) đứng phía sau.
 
-const LEAD_WEBHOOK_URL = import.meta.env.VITE_LEAD_WEBHOOK_URL;
+import { cmsLeadEndpoint } from '../cms/content';
+import { cmsTrack } from '../cms/tracker';
+const LEAD_WEBHOOK_URL = cmsLeadEndpoint || import.meta.env.VITE_LEAD_WEBHOOK_URL;
 import { getTrackingData } from "../utils/leadTracking";
 import { track, getTrackingIds } from "../utils/tracker";
 
@@ -85,6 +87,7 @@ export async function submitLead(leadData) {
     // Tracker: đúng 1 sự kiện "lead" cho mỗi lần gửi THÀNH CÔNG (chỉ gửi form_type, không PII)
     track("lead", { label: leadData.formType ?? "unknown" });
 
+    cmsTrack('lead', leadData.formType ?? 'unknown');
     return { success: true };
   } catch (err) {
     // Lỗi mạng (Worker down, mất kết nối...)

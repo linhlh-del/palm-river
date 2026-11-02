@@ -4,6 +4,8 @@ import "./News.css";
 import arrowLeft from "../../assets/images/arrow-left.png";
 import arrowRight from "../../assets/images/arrow-right.png";
 import { fetchNewsList, getHref, formatDate } from "../../services/newsService";
+import { cmsText } from "../../cms/content";
+import { COPY } from "../../cms/copy";
 
 function ArrowIcon({ direction = "right" }) {
   const src = direction === "left" ? arrowLeft : arrowRight;
@@ -18,8 +20,8 @@ function ArrowIcon({ direction = "right" }) {
  */
 export default function News({
   items,
-  heading = "Tin tức & Sự kiện",
-  subheading = "Cập nhật những thông báo mới nhất, các cột mốc quan trọng của dự án và những sự kiện độc quyền từ Palm City.",
+  heading = cmsText('news.title', COPY['news.title']),
+  subheading = cmsText('news.description', COPY['news.description']),
   moreHref = "/tin-tuc",
 }) {
   const [fetchedItems, setFetchedItems] = useState(null);

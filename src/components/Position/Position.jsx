@@ -4,6 +4,8 @@ import "./Position.css";
 import GetInfor from "../Getinfor/GetInfor.jsx";
 import markerIcon from "../../assets/images/marker-main.png";
 import MapPrimeLocation from "../MapPrime/MapPrimeLocation.jsx";
+import { cmsText } from "../../cms/content";
+import { COPY } from "../../cms/copy";
 
 const renderDecoratedTitle = (label) => (
   <span className="title-line">
@@ -62,13 +64,11 @@ export default function Position() {
       <div className="vitri-header">
         <div className="container">
           <h2 className="title">
-            <span>TÂM ĐIỂM</span>
-            <span>KẾT NỐI</span>
+            <span>{cmsText('location.title1', COPY['location.title1'])}</span>
+            <span>{cmsText('location.title2', COPY['location.title2'])}</span>
           </h2>
           <p className="desc">
-            Lợi thế tọa lạc trong khu vực phát triển trọng điểm của khu Đông
-            thành phố, Palm City có hạ tầng giao thông hiện đại, thuận tiện kết
-            nối mọi tiện ích một cách nhanh chóng.
+            {cmsText('location.description', COPY['location.description'])}
           </p>
         </div>
       </div>

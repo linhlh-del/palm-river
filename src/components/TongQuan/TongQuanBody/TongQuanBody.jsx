@@ -1,6 +1,8 @@
 import React from "react";
 import "./TongQuanBody.css";
 import imgbanner from "../../../assets/images/tongquanbody.jpg";
+import { cmsText, cmsImage } from "../../../cms/content";
+import { COPY } from "../../../cms/copy";
 /**
  * TongQuanBody
  * Section "TỔNG QUAN PALM RIVER" — mô tả dự án + bảng thông số nhanh.
@@ -49,23 +51,17 @@ const TongQuanBody = () => {
     <section id="tongquan" className="section section-tongquan">
       <div className="container content-container">
         <div className="text-content">
-          <p className="tagline">PALM RIVER</p>
+          <p className="tagline">{cmsText('overview.kicker', COPY['overview.kicker'])}</p>
           <h1 className="section-title">
-            NƠI CÂN BẰNG GIỮA THIÊN NHIÊN VÀ THỊNH VƯỢNG
+            {cmsText('overview.title', COPY['overview.title'])}
           </h1>
 
           <p className="description">
-            Palm River là dự án căn hộ cao tầng hạng sang với quy mô 1,9ha, tọa
-            lạc trong khu đô thị 30,2 ha – Palm City tại khu Nam Rạch Chiếc, mặt
-            tiền đường Song Hành Cao tốc TP.HCM – Long Thành – Dầu Giây, TP. Thủ
-            Đức, do Hướng Việt Properties phát triển.
+            {cmsText('overview.description1', COPY['overview.description1'])}
           </p>
 
           <p className="description">
-            Dự án sở hữu vị trí chiến lược tại phía Đông TP.HCM, liền kề nút
-            giao An Phú, Ga Metro Bình Trưng tuyến Bến Thành - Sân bay QT Long
-            Thành, với lợi thế ba mặt giáp sông, chiều dài bờ sông lên đến
-            2,7km.
+            {cmsText('overview.description2', COPY['overview.description2'])}
           </p>
 
           {/* <a href="#tien-ich" className="btn btn-primary mt-3 mb-4">
@@ -75,7 +71,7 @@ const TongQuanBody = () => {
 
         <div className="image-content">
           <img
-            src={imgbanner}
+            src={cmsImage('overview.image', imgbanner)}
             alt="Palm River Tổng Quan"
             className="content-img"
           />
@@ -85,7 +81,7 @@ const TongQuanBody = () => {
               <thead>
                 <tr>
                   <th colSpan={2} className="overview-table-heading">
-                    TỔNG QUAN DỰ ÁN
+                    {cmsText('overview.tableTitle', COPY['overview.tableTitle'])}
                   </th>
                 </tr>
               </thead>

@@ -1,5 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import "./HinhAnh.css";
+import { cmsText } from "../../cms/content";
+import { COPY } from "../../cms/copy";
 import { FILTERS, GALLERY_ITEMS } from "./data";
 import arrowLeft from "../../assets/images/arrow-left.png";
 import arrowRight from "../../assets/images/arrow-right.png";
@@ -52,14 +54,9 @@ export default function HinhAnh({ onOpenModal }) {
   return (
     <section id="hinhanh" className="tinb-section tinb-bg-light">
       <div className="tinb-container">
-        <h2 className="tinb-section-title">TIỆN ÍCH NỔI BẬT</h2>
+        <h2 className="tinb-section-title">{cmsText('gallery.title', COPY['gallery.title'])}</h2>
         <p className="tinb-description">
-          Palm River được phát triển theo mô hình "đô thị nghỉ dưỡng giữa lòng
-          thành phố", tích hợp với các phân khu nhà ở cao tầng và thấp tầng,
-          thương mại – dịch vụ, trường học quốc tế, bệnh viện quốc tế cùng hệ
-          thống tiện ích cộng đồng. Dự án hướng đến việc hình thành môi trường
-          sống đồng bộ, đáp ứng nhu cầu ở, học tập, làm việc và sử dụng dịch vụ
-          trong cùng khu đô thị.
+          {cmsText('gallery.description', COPY['gallery.description'])}
         </p>
         <div className="tinb-filters">
           {FILTERS.map((filter) => (

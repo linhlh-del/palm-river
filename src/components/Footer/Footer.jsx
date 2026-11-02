@@ -1,5 +1,7 @@
 import React from "react";
 import "./Footer.css";
+import { cmsText } from "../../cms/content";
+import { COPY } from "../../cms/copy";
 import { FOOTER_CONTACT } from "./data";
 
 function ArrowIcon() {
@@ -78,7 +80,7 @@ export default function Footer({ onOpenModal }) {
         <div className="pn-footer-grid">
           <div>
             <h3 className="pn-footer-heading">
-              Đăng ký nhận <br /> thông tin
+              {cmsText('footer.title', COPY['footer.title'])}
             </h3>
             <a
               className="pn-subscribe-btn"
@@ -117,10 +119,9 @@ export default function Footer({ onOpenModal }) {
           <div className="pn-footer-right">
             <p>
               <span className="pn-gold-text">
-                Không chỉ là nơi để ở, Palm City là nơi mọi giá trị sống được
-                cân bằng trọn vẹn -{" "}
+                {cmsText('footer.highlight', COPY['footer.highlight'])}{" "}
               </span>
-              một Đô thị nghỉ dưỡng giữa lòng thành phố
+              {cmsText('footer.suffix', COPY['footer.suffix'])}
             </p>
 
             <div className="pn-footer-bottom">
