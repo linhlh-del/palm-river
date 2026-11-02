@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { basename, dirname, join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadCmsEnv } from './load-cms-env.mjs';
 import { buildCmsSchema } from '../src/cms/schema.js';
@@ -10,7 +10,7 @@ loadCmsEnv(root);
 const dist = join(root, 'dist');
 const contentFile = join(root, 'src/generated/cms-content.json');
 const cms = existsSync(contentFile) ? JSON.parse(readFileSync(contentFile, 'utf8')) : {};
-const schema = buildCmsSchema(basename(root));
+const schema = buildCmsSchema('palm-river-mkt');
 const original = readFileSync(join(dist, 'index.html'), 'utf8');
 const siteUrl = (process.env.CMS_SITE_URL || original.match(/<link\s+rel="canonical"\s+href="([^"]+)"/i)?.[1] || '').replace(/\/$/, '');
 const esc = (value) => String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');

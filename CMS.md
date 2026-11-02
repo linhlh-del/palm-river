@@ -11,11 +11,10 @@ Biến môi trường Production:
 ```text
 CMS_SUPABASE_URL=https://<project-ref>.supabase.co
 CMS_SUPABASE_ANON_KEY=<public-anon-key>
-VITE_CMS_COLLECT_URL=https://<project-ref>.supabase.co/functions/v1/collect
 CMS_SITE_URL=https://canho-palmriver.vn
 ```
 
-`CMS_PROJECT_ID` tự lấy theo tên thư mục, có thể ghi đè khi cần. Bản build xuất `/cms-schema.json` và `/cms-status.json` với CORS để CMS đọc từ domain khác. Đặt `VITE_LEAD_WEBHOOK_URL` như trước hoặc sửa endpoint trong CMS; bản đã đăng sẽ được ưu tiên.
+Project ID được cố định là `palm-river-mkt` (không phụ thuộc tên thư mục VPS). Vite tự tạo URL collect từ `CMS_SUPABASE_URL`; có thể đặt `VITE_CMS_COLLECT_URL` để ghi đè. Bản build xuất `/cms-schema.json` và `/cms-status.json` với CORS để CMS đọc từ domain khác. Đặt `VITE_LEAD_WEBHOOK_URL` như trước hoặc sửa endpoint trong CMS; bản đã đăng sẽ được ưu tiên.
 
 ### Tự build trên VPS sau khi đăng CMS
 

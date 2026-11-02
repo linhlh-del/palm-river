@@ -11,11 +11,11 @@
    tránh đưa lên website bản thiếu nội dung CMS.
    Biến môi trường (CI/VPS; trên VPS có thể đặt trong .env.production):
      CMS_SUPABASE_URL, CMS_SUPABASE_ANON_KEY   (hoặc VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY)
-     CMS_PROJECT_ID (mặc định theo tên thư mục dự án)
+     Project ID được cố định trong mã nguồn theo site, không cấu hình qua env.
    ============================================================ */
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
-import { basename, dirname, join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadCmsEnv } from './load-cms-env.mjs';
 
@@ -28,7 +28,7 @@ const PUBLIC_PREFIX = '/assets/cms/';
 
 const url = (process.env.CMS_SUPABASE_URL || process.env.VITE_SUPABASE_URL || '').replace(/\/+$/, '');
 const key = process.env.CMS_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || '';
-const project = process.env.CMS_PROJECT_ID || basename(root);
+const project = 'palm-river-mkt';
 
 /** Trạng thái build → public/cms-status.json (Vite chép sang dist) */
 function writeStatus(extra) {
